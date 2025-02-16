@@ -3,16 +3,32 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <typeindex>
+
+//------------------|Defines|-----------------
+
 
 //-------------|Typedefs|------------------
 
 // Unique Pointer aliases because typenames get looooong
 
 template<typename T>
-using stdUptr = std::unique_ptr<T>;
+using u_ptr = std::unique_ptr<T>;
 
 template <typename T>
-using stdUptrVec = std::vector<std::unique_ptr<T>>;
+using u_ptr_vec = std::vector<std::unique_ptr<T>>;
 
 template <typename T>
-using stdUptrSet = std::set<std::unique_ptr<T>>;
+using u_ptr_set = std::set<std::unique_ptr<T>>;
+
+template <typename T>
+using ref_vec = std::vector<std::reference_wrapper<T>>;
+
+template <typename T>
+using type_map_unordered = std::unordered_map<std::type_index, T>;
+
+template <typename T>
+using u_ptr_type_map_unordered = std::unordered_map<std::type_index, std::unique_ptr<T>>;
+
+template <typename T>
+using optional_ref = std::optional<std::reference_wrapper<T>>;
