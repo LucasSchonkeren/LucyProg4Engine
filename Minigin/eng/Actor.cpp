@@ -60,19 +60,21 @@ bool Actor::GetFlag(Flags flag) const {
 
 void Actor::Destroy() {
     m_Flags.set(static_cast<int>(Flags::Destroyed));
+    for (auto& child : m_ChildUptrs) {
+        child->Destroy();
+    }
+
     for (auto& [type, comp] : m_CompUptrMap) {
         comp->OnDestroy();
     }
 }
 
-void Actor::Start() {
-    for (auto& [type, comp] : m_CompUptrMap) {
-        comp->Start();
-    }
-}
-
 void Actor::Update() {
     if (GetFlag(Flags::NoUpdate)) return;
+
+    for (auto& child : m_ChildUptrs) {
+        child->Update();
+    }
 
     for (auto& [type, comp] : m_CompUptrMap) {
         comp->Update();
@@ -82,6 +84,10 @@ void Actor::Update() {
 void Actor::LateUpdate() {
     if (GetFlag(Flags::NoUpdate)) return;
 
+    for (auto& child : m_ChildUptrs) {
+        child->LateUpdate();
+    }
+
     for (auto& [type, comp] : m_CompUptrMap) {
         comp->LateUpdate();
     }
@@ -89,6 +95,10 @@ void Actor::LateUpdate() {
 
 void Actor::FixedUpdate() {
     if (GetFlag(Flags::NoUpdate)) return;
+
+    for (auto& child : m_ChildUptrs) {
+        child->FixedUpdate();
+    }
 
     for (auto& [type, comp] : m_CompUptrMap) {
         comp->FixedUpdate();
@@ -101,6 +111,10 @@ void Actor::Render() {
 
     for (auto& [type, comp] : m_CompUptrMap) {
         comp->Render();
+    }
+
+    for (auto& child : m_ChildUptrs) {
+        child->Render();
     }
 }
 

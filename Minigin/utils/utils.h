@@ -4,8 +4,11 @@
 #include <vector>
 #include <set>
 #include <typeindex>
+#include <unordered_map>
 
 //------------------|Defines|-----------------
+
+#define val_get() value().get()
 
 
 //-------------|Typedefs|------------------

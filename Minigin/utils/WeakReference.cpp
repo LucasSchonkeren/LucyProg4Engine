@@ -5,7 +5,7 @@
 //-----------------------------------------------------------------
 
 
-#ifndef NOTEST
+#ifdef NOSDL
 
 #include "../Libs/Catch.hpp"
 
@@ -113,4 +113,4 @@ TEST_CASE("Weak reference testing") {
 	}
 }
 
-#endif // !NOTEST
+#endif // !NOSDL

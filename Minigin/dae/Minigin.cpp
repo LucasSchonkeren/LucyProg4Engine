@@ -10,6 +10,16 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 
+#include "../eng/components/TextureRenderer.h"
+#include "../eng/components/TextRenderer.h"
+#include "../eng/Actor.h"
+#include "../eng/components/Transform.h"
+#include "../eng/components/FpsTracker.h"
+
+#include "../eng/Engine.h"
+
+#include <chrono>
+
 SDL_Window* g_window{};
 
 void PrintSDLVersion()
@@ -79,16 +89,47 @@ void dae::Minigin::Run(const std::function<void()>& load)
 {
 	load();
 
+	// Set up scene root
+	eng::Actor f_Root{};
+
+	// Background/logo
+	eng::Actor& f_BgActor = f_Root.AddChildActor();
+	f_BgActor.AddComponent<cpt::TextureRenderer>().LoadTexture("background.tga");
+	eng::Actor& f_LogoActor = f_BgActor.AddChildActor();
+	f_LogoActor.AddComponent<cpt::TextureRenderer>().LoadTexture("logo.tga");
+	f_LogoActor.AddComponent<cpt::Transform>().SetLocalPosition(216.f, 180.f);
+
+	//Text
+	eng::Actor& f_TitleActor = f_Root.AddChildActor();
+	f_TitleActor.AddComponent<cpt::TextRenderer>(cpt::TextRenderer{ "Programming 4 Assignment", "Lingua.otf", 36 });
+	f_TitleActor.AddComponent<cpt::Transform>().SetLocalPosition(80, 20);
+
+	//Fps tracker
+	eng::Actor& f_FpsActor = f_Root.AddChildActor();
+	f_FpsActor.AddComponent<cpt::TextRenderer>(cpt::TextRenderer{ "fps: ", "Lingua.otf", 36 });
+	f_FpsActor.AddComponent<cpt::Transform>().SetLocalPosition(20, 80);
+	f_FpsActor.AddComponent<cpt::FpsTracker>();
+
+
+
 	auto& renderer = Renderer::GetInstance();
-	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
 	// todo: this update loop could use some work.
+
+	auto lastTime = std::chrono::high_resolution_clock::now();
+
 	bool doContinue = true;
 	while (doContinue)
 	{
+		const auto currentTime = std::chrono::high_resolution_clock::now();
+		eng::deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
+		lastTime = currentTime;
+
 		doContinue = input.ProcessInput();
-		sceneManager.Update();
-		renderer.Render();
+
+		f_Root.Update();
+
+		renderer.Render(f_Root);
 	}
 }

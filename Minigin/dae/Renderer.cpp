@@ -3,6 +3,8 @@
 #include "SceneManager.h"
 #include "Texture2D.h"
 
+#include "../eng/Actor.h"
+
 int GetOpenGLDriverIndex()
 {
 	auto openglIndex = -1;
@@ -27,13 +29,13 @@ void dae::Renderer::Init(SDL_Window* window)
 	}
 }
 
-void dae::Renderer::Render() const
+void dae::Renderer::Render(eng::Actor& root) const
 {
 	const auto& color = GetBackgroundColor();
 	SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderClear(m_renderer);
 
-	SceneManager::GetInstance().Render();
+	root.Render();
 	
 	SDL_RenderPresent(m_renderer);
 }

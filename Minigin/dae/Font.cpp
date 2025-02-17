@@ -1,8 +1,9 @@
 #include <stdexcept>
 #include <SDL_ttf.h>
 #include "Font.h"
+#include <assert.h>
 
-TTF_Font* dae::Font::GetFont() const {
+_TTF_Font* dae::Font::GetFont() const {
 	return m_font;
 }
 
@@ -18,4 +19,9 @@ dae::Font::Font(const std::string& fullPath, unsigned int size) : m_font(nullptr
 dae::Font::~Font()
 {
 	TTF_CloseFont(m_font);
+}
+
+dae::Font::Font(_TTF_Font* font) : m_font{ font }
+{
+	assert(m_font != nullptr);
 }

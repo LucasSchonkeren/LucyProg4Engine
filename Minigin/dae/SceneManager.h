@@ -4,6 +4,7 @@
 #include <memory>
 #include "Singleton.h"
 
+#if 0
 namespace dae
 {
 	class Scene;
@@ -20,3 +21,5 @@ namespace dae
 		std::vector<std::shared_ptr<Scene>> m_scenes;
 	};
 }
+
+#endif

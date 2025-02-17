@@ -1,6 +1,8 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
+#if 0
+
 void dae::SceneManager::Update()
 {
 	for(auto& scene : m_scenes)
@@ -23,3 +25,5 @@ dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 	m_scenes.push_back(scene);
 	return *scene;
 }
+
+#endif

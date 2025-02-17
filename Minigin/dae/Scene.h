@@ -1,6 +1,8 @@
 #pragma once
 #include "SceneManager.h"
 
+#if 0
+
 namespace dae
 {
 	class GameObject;
@@ -31,3 +33,5 @@ namespace dae
 	};
 
 }
+
+#endif

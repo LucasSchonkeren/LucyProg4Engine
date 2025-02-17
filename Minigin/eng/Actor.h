@@ -74,7 +74,7 @@ public: //--------------|Component Methods|-----------------------------
 	/// <summary>
 	/// Add a component of type CompT to this actor. If such a component already exists, instead copies the given component to it.
 	/// </summary>
-	/// <typeparam name="CompT">The Component type. Must derive from AbstractComponent. Must be have valid copy/move constructors and assignment operators in order for the Actor to be able to be cloned</typeparam>
+	/// <typeparam name="CompT">The Component type. Must derive from cpt::AbstractComponent. Must be have valid copy/move constructors and assignment operators in order for the Actor to be able to be cloned</typeparam>
 	/// <returns>A reference to the newly added component</returns>
 	template <std::derived_from<AbstractComponent> CompT> requires requires { std::copyable<CompT>; }
 	CompT&				AddComponent(CompT&& compUptr);
@@ -82,7 +82,7 @@ public: //--------------|Component Methods|-----------------------------
 	/// <summary>
 	/// Alternative AddComponent which calls the default constructor of the component type.
 	/// </summary>
-	/// <typeparam name="CompT">The Component type. Must derive from AbstractComponent. Must be have valid copy/move constructors and assignment operators in order for the Actor to be able to be cloned</typeparam>
+	/// <typeparam name="CompT">The Component type. Must derive from cpt::AbstractComponent. Must be have valid copy/move constructors and assignment operators in order for the Actor to be able to be cloned</typeparam>
 	/// <returns>A reference to the newly added component</returns>
 	template <std::derived_from<AbstractComponent> CompT> requires requires { std::copyable<CompT> && std::default_initializable<CompT>; }
 	CompT&				AddComponent();
@@ -119,7 +119,6 @@ public: //---------------------|Flag Enum/Methods|-----------------------------
 
 public: //--------------------|Gameloop Methods|--------------------------------
 
-	void Start();
 	void Update();
 	void LateUpdate();
 	void FixedUpdate();
@@ -149,7 +148,6 @@ private: //-----------------------|Flag Fields|---------------------------------
 //---------------------|Template implementation|------------------------------------------
 //----------------------------------------------------------------------------------------
 
-
 template <std::derived_from<AbstractComponent> CompT> requires requires { std::copyable<CompT>; }
 CompT& Actor::AddComponent(CompT&& comp) {
 	if (auto pairIt = m_CompUptrMap.find(std::type_index(typeid(CompT))); pairIt != m_CompUptrMap.end()) {
@@ -158,6 +156,8 @@ CompT& Actor::AddComponent(CompT&& comp) {
 	}
 
 	m_CompUptrMap[std::type_index(typeid(CompT))] = std::make_unique<CompT>(comp);
+	m_CompUptrMap[std::type_index(typeid(CompT))]->SetOwner(*this);
+
 	return static_cast<CompT&>(*m_CompUptrMap[std::type_index(typeid(CompT))]);
 }
 

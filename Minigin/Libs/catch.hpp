@@ -14553,7 +14553,8 @@ namespace TestCaseTracking {
             open();
     }
 
-    void SectionTracker::addInitialFilters( std::vector<std::string> const& filters ) {
+    void SectionTracker::add
+        ialFilters( std::vector<std::string> const& filters ) {
         if( !filters.empty() ) {
             m_filters.reserve( m_filters.size() + filters.size() + 2 );
             m_filters.emplace_back(""); // Root - should never be consulted

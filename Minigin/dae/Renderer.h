@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include "Singleton.h"
+#include "../eng/Actor.h"
 
 namespace dae
 {
@@ -15,7 +16,7 @@ namespace dae
 		SDL_Color m_clearColor{};	
 	public:
 		void Init(SDL_Window* window);
-		void Render() const;
+		void Render(eng::Actor&) const;
 		void Destroy();
 
 		void RenderTexture(const Texture2D& texture, float x, float y) const;

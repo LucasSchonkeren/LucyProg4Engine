@@ -2,7 +2,8 @@
 #include <string>
 #include <memory>
 #include "GameObject.h"
-#include "Transform.h"
+
+#if 0
 
 namespace dae
 {
@@ -31,3 +32,5 @@ namespace dae
 		std::shared_ptr<Texture2D> m_textTexture;
 	};
 }
+
+#endif

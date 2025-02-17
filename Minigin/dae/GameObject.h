@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
-#include "Transform.h"
 
+#if 0
 namespace dae
 {
 	class Texture2D;
@@ -29,3 +29,4 @@ namespace dae
 		std::shared_ptr<Texture2D> m_texture{};
 	};
 }
+#endif
