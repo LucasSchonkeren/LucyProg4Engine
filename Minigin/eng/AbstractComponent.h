@@ -15,6 +15,7 @@ class Actor; //forward declaration
 /// </summary>
 class AbstractComponent {
 public: //------------------------|Virtual Destructor|------------------------
+	AbstractComponent(Actor& owner);
 	virtual ~AbstractComponent() = default;
 
 public: //----------------------|Serialization methods|------------------------
@@ -22,6 +23,8 @@ public: //----------------------|Serialization methods|------------------------
 	virtual void Deserialize(std::string serializationString) {};
 
 public: //--------------------|Gameloop methods|-----------------------------
+
+	virtual void Start() {};
 
 	virtual void Update() {};
 	virtual void LateUpdate() {};
@@ -32,21 +35,10 @@ public: //--------------------|Gameloop methods|-----------------------------
 	virtual void OnDestroy() {};
 
 public: //---------------------|Relationship Methods|-------------------------
-	/// <summary>
-	/// Sets the Actor this Component is a part of. Throws an exception if this object already has an owner.
-	/// </summary>
-	void SetOwner(Actor& newOwner);
-
-	optional_ref<Actor> GetOwner();
-
-	//template<std::derived_from<AbstractComponent> CompT>
-	//optional_ref<CompT> GetSibling() {
-	//	if (!m_OwnerPtr) return std::nullopt;
-	//	return m_OwnerPtr->GetComponent<CompT>();
-	//}
+	Actor& GetOwner();
 
 private:
-	Actor* m_OwnerPtr{};
+	Actor& m_Owner;
 }; // !AbstractComponent
 
 } // !cpt

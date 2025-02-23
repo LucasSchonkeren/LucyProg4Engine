@@ -39,18 +39,6 @@
     <ClInclude Include="dae\InputManager.h">
       <Filter>Minigin Files</Filter>
     </ClInclude>
-    <ClInclude Include="dae\GameObject.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dae\Scene.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dae\SceneManager.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dae\TextObject.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
     <ClInclude Include="dae\Font.h">
       <Filter>Minigin Files</Filter>
     </ClInclude>
@@ -69,9 +57,6 @@
     <ClInclude Include="Libs\catch.hpp">
       <Filter>Minigin Files</Filter>
     </ClInclude>
-    <ClInclude Include="utils\WeakReference.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
     <ClInclude Include="eng\components\Transform.h">
       <Filter>Minigin Files</Filter>
     </ClInclude>
@@ -84,7 +69,19 @@
     <ClInclude Include="eng\components\FpsTracker.h">
       <Filter>Minigin Files</Filter>
     </ClInclude>
-    <ClInclude Include="eng\Engine.h">
+    <ClInclude Include="eng\engine\Time.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\AbstractRenderable.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\engine\Resources.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\engine\Scenegraph.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\components\Rotator.h">
       <Filter>Minigin Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -101,19 +98,7 @@
     <ClCompile Include="dae\InputManager.cpp">
       <Filter>Minigin Files\CPP Files</Filter>
     </ClCompile>
-    <ClCompile Include="dae\GameObject.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
     <ClCompile Include="eng\components\Transform.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dae\Scene.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dae\SceneManager.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dae\TextObject.cpp">
       <Filter>Minigin Files\CPP Files</Filter>
     </ClCompile>
     <ClCompile Include="dae\Font.cpp">
@@ -128,9 +113,6 @@
     <ClCompile Include="eng\Actor.cpp">
       <Filter>Minigin Files\CPP Files</Filter>
     </ClCompile>
-    <ClCompile Include="utils\WeakReference.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
     <ClCompile Include="eng\AbstractComponent.cpp">
       <Filter>Minigin Files\CPP Files</Filter>
     </ClCompile>
@@ -143,7 +125,16 @@
     <ClCompile Include="eng\components\FpsTracker.cpp">
       <Filter>Minigin Files\CPP Files</Filter>
     </ClCompile>
-    <ClCompile Include="eng\Engine.cpp">
+    <ClCompile Include="eng\engine\Time.cpp">
+      <Filter>Minigin Files\CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eng\engine\Resources.cpp">
+      <Filter>Minigin Files\CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eng\engine\Scenegraph.cpp">
+      <Filter>Minigin Files\CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eng\components\Rotator.cpp">
       <Filter>Minigin Files\CPP Files</Filter>
     </ClCompile>
   </ItemGroup>

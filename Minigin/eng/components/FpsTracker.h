@@ -1,13 +1,16 @@
 #pragma once
 
 #include "../AbstractComponent.h"
+#include "TextRenderer.h"
+
+class eng::Actor; 
 
 namespace cpt {
 
 class FpsTracker final : public eng::AbstractComponent {
 public: //---------------|Constructor/Destructor/copy/move|--------------
 	
-	FpsTracker()	= default;
+	FpsTracker(eng::Actor& owner) : AbstractComponent(owner) {};
 	~FpsTracker()	= default;
 
 	FpsTracker				(const FpsTracker&)	= default;
@@ -17,13 +20,14 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 	FpsTracker& operator=	(FpsTracker&&)	= default;
 
 public: //------------------|Gameloop Methods|--------------------------
+	void Start() override;
 	void Update() override;
 
 /*##################################|PRIVATE|##################################################*/
 
+private: //---------------------------|Component references|----------------------------
 
-
-private: //---------------------------|Fields|----------------------------
+	TextRenderer* m_TextRendererPtr;
 
 }; // !FpsTracker
 

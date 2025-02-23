@@ -3,10 +3,16 @@
 
 #include <algorithm>
 
+#include <iostream>
+
 namespace eng {
 
+Actor::Actor() {   
+    m_TransformPtr = &AddComponent<cpt::Transform>();
+}
+
 Actor& Actor::AddChildActor() {
-    m_ChildUptrs.push_back(std::make_unique<Actor>());
+    m_ChildUptrs.emplace_back(std::make_unique<Actor>());
 
     m_ChildUptrs.back()->m_ParentPtr = this;
 
@@ -32,7 +38,7 @@ ref_vec<Actor> Actor::GetChildren() const {
 ref_vec<Actor> Actor::GetAllChildren() const {
     ref_vec<Actor> f_Result = GetChildren();
 
-    for (int i{}; i < f_Result.size(); ++i) {
+    for (size_t i{}; i < f_Result.size(); ++i) {
         auto f_ChildChildren{ f_Result[i].get().GetChildren() };
         f_Result.insert(f_Result.end(), f_ChildChildren.begin(), f_ChildChildren.end());
     }
@@ -40,77 +46,118 @@ ref_vec<Actor> Actor::GetAllChildren() const {
     return f_Result;
 }
 
+void Actor::RemoveChildActor(Actor* childPtr) {
+    assert(time::stage == time::Stages::Cleanup or time::stage == time::Stages::None and "Do not call RemoveChildActor outside of cleanup");
+
+    std::erase_if(m_ChildUptrs, [childPtr](const u_ptr<Actor>& child) {
+        return child.get() == childPtr;
+    });
+}
+
 void Actor::SetParent(Actor& newParent) {
-    newParent.AddChildActor(std::move(*this));
+    if (!m_ParentPtr) {
+        newParent.AddChildActor(std::move(*this));
+        return;
+    }
 
-    if (m_ParentPtr) std::erase_if(m_ParentPtr->m_ChildUptrs,  [this](const std::unique_ptr<Actor>& child) {
+    std::unique_ptr<Actor>& f_OwningPointerPtr = *std::ranges::find_if(m_ParentPtr->m_ChildUptrs, [this](const std::unique_ptr<Actor>& child) {
         return child.get() == this; });
+
+    newParent.m_ChildUptrs.push_back(std::move(f_OwningPointerPtr));
+
+    std::erase_if(m_ParentPtr->m_ChildUptrs,  [this](const std::unique_ptr<Actor>& child) {
+        return child.get() == nullptr; });
 }
 
-optional_ref<Actor> eng::Actor::GetParent()
+void Actor::SetParentToRoot() {
+    if (!GetParent()) return;
+
+    Actor* f_RootPtr{ GetParent() };
+
+    while (f_RootPtr->GetParent()) {
+        f_RootPtr = f_RootPtr->GetParent();
+    }
+
+    SetParent(*f_RootPtr);
+}
+
+Actor* eng::Actor::GetParent()
 {
-    if (m_ParentPtr) return *m_ParentPtr;
-
-    return optional_ref<Actor>{};
+    return m_ParentPtr;
 }
 
-bool Actor::GetFlag(Flags flag) const {
+bool Actor::IsFlagged(Flags flag) const {
     return m_Flags[(int)flag];
 }
 
 void Actor::Destroy() {
     m_Flags.set(static_cast<int>(Flags::Destroyed));
+
     for (auto& child : m_ChildUptrs) {
         child->Destroy();
     }
 
-    for (auto& [type, comp] : m_CompUptrMap) {
-        comp->OnDestroy();
+    for (auto& compUptr : m_CompUptrs) {
+        compUptr->OnDestroy();
     }
 }
 
+void Actor::Start() {
+    for (auto& child : m_ChildUptrs) {
+        child->Start();
+    }
+
+    if (IsFlagged(Flags::Started)) return;
+
+    for (auto& compUptr : m_CompUptrs) {
+        compUptr->Start();
+    }
+
+    m_Flags[static_cast<int>(Flags::Started)] = true;
+}
+
 void Actor::Update() {
-    if (GetFlag(Flags::NoUpdate)) return;
+    if (IsFlagged(Flags::NoUpdate)) return;
 
     for (auto& child : m_ChildUptrs) {
         child->Update();
     }
 
-    for (auto& [type, comp] : m_CompUptrMap) {
-        comp->Update();
+    for (auto& compUptr : m_CompUptrs) {
+        compUptr->Update();
     }
 }
 
 void Actor::LateUpdate() {
-    if (GetFlag(Flags::NoUpdate)) return;
+    if (IsFlagged(Flags::NoUpdate)) return;
 
     for (auto& child : m_ChildUptrs) {
         child->LateUpdate();
     }
 
-    for (auto& [type, comp] : m_CompUptrMap) {
-        comp->LateUpdate();
+    for (auto& compUptr : m_CompUptrs) {
+        compUptr->LateUpdate();
     }
 }
 
 void Actor::FixedUpdate() {
-    if (GetFlag(Flags::NoUpdate)) return;
+    if (IsFlagged(Flags::NoUpdate)) return;
 
     for (auto& child : m_ChildUptrs) {
         child->FixedUpdate();
     }
 
-    for (auto& [type, comp] : m_CompUptrMap) {
-        comp->FixedUpdate();
+    for (auto& compUptr : m_CompUptrs) {
+        compUptr->FixedUpdate();
     }
     
 }
 
 void Actor::Render() {
-    if (GetFlag(Flags::NoRender)) return;
+    if (IsFlagged(Flags::NoRender)) return;
 
-    for (auto& [type, comp] : m_CompUptrMap) {
-        comp->Render();
+    for (auto& compUptr : m_CompUptrs) {
+        compUptr->Render();
     }
 
     for (auto& child : m_ChildUptrs) {
@@ -122,11 +169,16 @@ ref_vec<AbstractComponent> Actor::GetAbstractComponents()
 {
     ref_vec<AbstractComponent> f_Result{};
 
-    for (auto& pair : m_CompUptrMap) {
-        f_Result.emplace_back(*pair.second);
+    for (auto& compUptr : m_CompUptrs) {
+        f_Result.emplace_back(*compUptr);
     }
 
     return f_Result;
+}
+
+cpt::Transform& Actor::GetTransform()
+{
+    return *m_TransformPtr;
 }
 
 } // namespace eng

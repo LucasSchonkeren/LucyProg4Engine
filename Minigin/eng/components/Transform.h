@@ -14,36 +14,40 @@ struct TransformData {
 namespace cpt {
 
 /// <summary>
-/// A component that allows Actors to observe their global transform without storing a local transform.
-/// </summary>
-class TransformView : public eng::AbstractComponent {
-	// TODO
-};
-
-/// <summary>
 /// A component that allows Actors to store their local transform and observe their global transform.
 /// </summary>
-class Transform final : public TransformView {
+class Transform final : public eng::AbstractComponent {
 public: //---------------|Constructor/Destructor/copy/move|--------------
 
-	Transform() = default;
+	Transform(eng::Actor& owner) : AbstractComponent(owner) {};
 	~Transform() = default;
 
-	//Transform				(const Transform&)	= default;
-	//Transform& operator=	(const Transform&)	= default;
+	Transform(const Transform&) = delete;
+	Transform& operator=	(const Transform&) = delete;
 
-	//Transform				(const Transform&&)	= default;
-	//Transform& operator=	(const Transform&&)	= default;
+	Transform(const Transform&&) = delete;
+	Transform& operator=	(const Transform&&) = delete;
 
 public: //---------------|General Methods|--------------
 	void SetLocalPosition(float x, float y);
 
+	void FlagForGlobalUpdate();
+
 	eng::TransformData const& GetLocal() const;
+	eng::TransformData const& GetGlobal();
 
 /*##################################|PRIVATE|##################################################*/
 
 private: //---------------------------|Fields|----------------------------
-	eng::TransformData m_TransformData;
+	eng::TransformData m_TransformData{};
+	eng::TransformData m_GlobalTransformData{};
+	bool m_GlobalNeedsUpdate{};
+
 }; // !TransformComponent
 
 } // !cpt
+
+
+//-----------------------------------------|Operators|------------------------------------
+
+eng::TransformData operator+(const eng::TransformData& lhs, const eng::TransformData& rhs);

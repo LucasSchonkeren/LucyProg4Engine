@@ -1,18 +1,20 @@
 #include "TextRenderer.h"
 #include <stdexcept>
 #include <SDL_ttf.h>
-#include "../../dae/TextObject.h"
 #include "../../dae/Renderer.h"
 #include "../../dae/Font.h"
 #include "../../dae/Texture2D.h"
 #include "../components/Transform.h"
+#include <cstdint>
+#include "../engine/Resources.h"
+
 
 #include <filesystem>
 
-cpt::TextRenderer::TextRenderer(const std::string& text, const std::string& fontPath, unsigned int size) :
+cpt::TextRenderer::TextRenderer(eng::Actor& owner, const std::string& text, const std::string& fontPath, unsigned int size) :
+	AbstractComponent(owner),
 	m_Text(text), m_NeedsUpdate(true) {
-	const auto fullPath = std::filesystem::path("../Data/")/fontPath;
-	m_FontUptr = std::make_unique<dae::Font>(fullPath.string(), size);
+	m_FontPtr = eng::resources::LoadFont(fontPath, static_cast<uint8_t>(size));
 }
 
 void cpt::TextRenderer::SetText(const std::string& text) {
@@ -49,7 +51,7 @@ void cpt::TextRenderer::Update() {
 void cpt::TextRenderer::Render() {
 	if (m_TextTextureUptr == nullptr) return;
 
-	const auto& pos = GetOwner() && GetOwner().val_get().GetComponent<Transform>() ? GetOwner().val_get().GetComponent<Transform>().val_get().GetLocal().position : glm::vec2{};
+	const auto& pos = GetOwner().GetTransform().GetLocal().position;
 	dae::Renderer::GetInstance().RenderTexture(*m_TextTextureUptr, pos.x, pos.y);
 
 }

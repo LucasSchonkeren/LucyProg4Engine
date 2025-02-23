@@ -10,19 +10,14 @@ namespace cpt {
 
 class TextRenderer final : public eng::AbstractComponent {
 public: //---------------|Constructor/Destructor/copy/move|--------------
-	
-	TextRenderer(const std::string& text = "", const std::string& fontPath = "Lingua.otf", unsigned int size = 10);
+	TextRenderer(eng::Actor& owner, const std::string& text = "", const std::string& fontPath = "Lingua.otf", unsigned int size = 36);
 	~TextRenderer()	= default;
 
-	TextRenderer(const TextRenderer& other) : 
-		m_NeedsUpdate(true), m_Text(other.m_Text) {
-		m_TextTextureUptr = other.m_TextTextureUptr ? std::make_unique<dae::Texture2D>(other.m_TextTextureUptr->GetSDLTexture()) : nullptr;
-		m_FontUptr = other.m_FontUptr ? std::make_unique<dae::Font>(other.m_FontUptr->GetFont()) : nullptr;
-	}
-	TextRenderer& operator=	(const TextRenderer&)	= default;
+	TextRenderer(const TextRenderer&) = delete;
+	TextRenderer& operator=	(const TextRenderer&)	= delete;
 
-	TextRenderer				( TextRenderer&&)	= default;
-	TextRenderer& operator=	( TextRenderer&&)	= default;
+	TextRenderer				( TextRenderer&&)	= delete;
+	TextRenderer& operator=		( TextRenderer&&)	= delete;
 
 public: //------------------|General methods|--------------------------
 
@@ -38,7 +33,7 @@ public: //------------------|Gameloop methods|--------------------------
 private: //---------------------------|Fields|----------------------------
 	std::string m_Text;
 	bool m_NeedsUpdate{};
-	u_ptr<dae::Font> m_FontUptr;
+	dae::Font* m_FontPtr;
 	u_ptr<dae::Texture2D> m_TextTextureUptr{};
 }; // !TextRenderer
 

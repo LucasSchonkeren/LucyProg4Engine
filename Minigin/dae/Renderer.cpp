@@ -1,6 +1,5 @@
 #include <stdexcept>
 #include "Renderer.h"
-#include "SceneManager.h"
 #include "Texture2D.h"
 
 #include "../eng/Actor.h"

@@ -8,16 +8,15 @@ namespace cpt {
 class TextureRenderer final : public eng::AbstractComponent {
 public: //---------------|Constructor/Destructor/copy/move|--------------
 
-	TextureRenderer() = default;
+	TextureRenderer(eng::Actor& owner) : AbstractComponent(owner) {};
+	TextureRenderer(eng::Actor& owner, std::string texturePath) : AbstractComponent(owner) { LoadTexture(texturePath); };
 	~TextureRenderer() override = default;
 
-	TextureRenderer(const TextureRenderer& other) {
-		m_TextureUptr = other.m_TextureUptr ? std::make_unique<dae::Texture2D>(other.m_TextureUptr->GetSDLTexture()) : nullptr;
-	}
-	TextureRenderer& operator=	(const TextureRenderer&)	= default;
+	TextureRenderer(const TextureRenderer& other) = delete;
+	TextureRenderer& operator=	(const TextureRenderer&) = delete;
 
-	TextureRenderer				(TextureRenderer&&)	= default;
-	TextureRenderer& operator=	(TextureRenderer&&)	= default;
+	TextureRenderer				(TextureRenderer&&) = delete;
+	TextureRenderer& operator=	(TextureRenderer&&) = delete;
 
 public: //------------------------|Texture Methods|-------------------------
 
@@ -31,7 +30,7 @@ public: //------------------------|Gameloop Methods|-------------------------
 
 private: //---------------------------|Fields|----------------------------
 
-	u_ptr<dae::Texture2D> m_TextureUptr{};
+	dae::Texture2D* m_TexturePtr{};
 
 }; // !TextureRenderer
 

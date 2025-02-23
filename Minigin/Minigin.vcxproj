@@ -252,11 +252,16 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="eng\AbstractRenderable.h" />
     <ClInclude Include="eng\Actor.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="eng\components\FpsTracker.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="eng\components\Rotator.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -272,22 +277,19 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="eng\Engine.h">
+    <ClInclude Include="eng\engine\Resources.h" />
+    <ClInclude Include="eng\engine\Scenegraph.h" />
+    <ClInclude Include="eng\engine\Time.h">
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="utils\WeakReference.h" />
     <ClInclude Include="dae\Font.h" />
-    <ClInclude Include="dae\GameObject.h" />
     <ClInclude Include="dae\InputManager.h" />
     <ClInclude Include="Libs\catch.hpp" />
     <ClInclude Include="dae\Minigin.h" />
     <ClInclude Include="dae\Renderer.h" />
     <ClInclude Include="dae\ResourceManager.h" />
-    <ClInclude Include="dae\Scene.h" />
-    <ClInclude Include="dae\SceneManager.h" />
     <ClInclude Include="dae\Singleton.h" />
-    <ClInclude Include="dae\TextObject.h" />
     <ClInclude Include="dae\Texture2D.h" />
     <ClInclude Include="utils\utils.h" />
   </ItemGroup>
@@ -295,22 +297,20 @@
     <ClCompile Include="eng\AbstractComponent.cpp" />
     <ClCompile Include="eng\Actor.cpp" />
     <ClCompile Include="dae\Font.cpp" />
-    <ClCompile Include="dae\GameObject.cpp" />
     <ClCompile Include="dae\InputManager.cpp" />
     <ClCompile Include="dae\Main.cpp" />
     <ClCompile Include="dae\Minigin.cpp" />
     <ClCompile Include="dae\Renderer.cpp" />
     <ClCompile Include="dae\ResourceManager.cpp" />
-    <ClCompile Include="dae\Scene.cpp" />
-    <ClCompile Include="dae\SceneManager.cpp" />
-    <ClCompile Include="dae\TextObject.cpp" />
     <ClCompile Include="dae\Texture2D.cpp" />
     <ClCompile Include="eng\components\FpsTracker.cpp" />
+    <ClCompile Include="eng\components\Rotator.cpp" />
     <ClCompile Include="eng\components\TextRenderer.cpp" />
     <ClCompile Include="eng\components\TextureRenderer.cpp" />
     <ClCompile Include="eng\components\Transform.cpp" />
-    <ClCompile Include="eng\Engine.cpp" />
-    <ClCompile Include="utils\WeakReference.cpp" />
+    <ClCompile Include="eng\engine\Resources.cpp" />
+    <ClCompile Include="eng\engine\Scenegraph.cpp" />
+    <ClCompile Include="eng\engine\Time.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

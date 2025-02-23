@@ -4,21 +4,23 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <chrono>
+#include <thread>
 #include "Minigin.h"
 #include "InputManager.h"
-#include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+#include "../eng/engine/Scenegraph.h"
 
 #include "../eng/components/TextureRenderer.h"
 #include "../eng/components/TextRenderer.h"
 #include "../eng/Actor.h"
 #include "../eng/components/Transform.h"
 #include "../eng/components/FpsTracker.h"
+#include "../eng/components/Rotator.h"
 
-#include "../eng/Engine.h"
-
-#include <chrono>
+#include "../eng/engine/Time.h"
+#include "../eng/engine/Resources.h"
 
 SDL_Window* g_window{};
 
@@ -85,9 +87,9 @@ dae::Minigin::~Minigin()
 	SDL_Quit();
 }
 
-void dae::Minigin::Run(const std::function<void()>& load)
+void dae::Minigin::Run()
 {
-	load();
+	eng::time::stage = eng::time::Stages::None;
 
 	// Set up scene root
 	eng::Actor f_Root{};
@@ -95,41 +97,76 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	// Background/logo
 	eng::Actor& f_BgActor = f_Root.AddChildActor();
 	f_BgActor.AddComponent<cpt::TextureRenderer>().LoadTexture("background.tga");
+
 	eng::Actor& f_LogoActor = f_BgActor.AddChildActor();
 	f_LogoActor.AddComponent<cpt::TextureRenderer>().LoadTexture("logo.tga");
-	f_LogoActor.AddComponent<cpt::Transform>().SetLocalPosition(216.f, 180.f);
+	f_LogoActor.GetTransform().SetLocalPosition(216.f, 180.f);
 
 	//Text
 	eng::Actor& f_TitleActor = f_Root.AddChildActor();
-	f_TitleActor.AddComponent<cpt::TextRenderer>(cpt::TextRenderer{ "Programming 4 Assignment", "Lingua.otf", 36 });
-	f_TitleActor.AddComponent<cpt::Transform>().SetLocalPosition(80, 20);
+	f_TitleActor.AddComponent<cpt::TextRenderer>( std::string("Programming 4 Assignment"), std::string("Lingua.otf"), 36u);
+
+	f_TitleActor.GetTransform().SetLocalPosition(80, 20);
 
 	//Fps tracker
 	eng::Actor& f_FpsActor = f_Root.AddChildActor();
-	f_FpsActor.AddComponent<cpt::TextRenderer>(cpt::TextRenderer{ "fps: ", "Lingua.otf", 36 });
-	f_FpsActor.AddComponent<cpt::Transform>().SetLocalPosition(20, 80);
+	f_FpsActor.AddComponent<cpt::TextRenderer>( "fps: ", "Lingua.otf", 36 );
+	f_FpsActor.GetTransform().SetLocalPosition(20, 80);
 	f_FpsActor.AddComponent<cpt::FpsTracker>();
+
+
+	//Rotating sprites
+	eng::Actor& f_RotationCenter = f_Root.AddChildActor();
+	f_RotationCenter.GetTransform().SetLocalPosition(300, 300);
+
+	eng::Actor& f_GuyStandingActor = f_RotationCenter.AddChildActor();
+	f_GuyStandingActor.AddComponent<cpt::TextureRenderer>("BomberManStanding.png");
+	f_GuyStandingActor.AddComponent<cpt::Rotator>(65.f, 2.f);
+
+	eng::Actor& f_BombActor = f_GuyStandingActor.AddChildActor();
+	f_BombActor.AddComponent<cpt::TextureRenderer>("BigBomb.png");
+	f_BombActor.AddComponent<cpt::Rotator>(30.f, 3.f);
 
 
 
 	auto& renderer = Renderer::GetInstance();
 	auto& input = InputManager::GetInstance();
 
-	// todo: this update loop could use some work.
+	eng::resources::Init();
 
 	auto lastTime = std::chrono::high_resolution_clock::now();
 
 	bool doContinue = true;
 	while (doContinue)
 	{
-		const auto currentTime = std::chrono::high_resolution_clock::now();
-		eng::deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
-		lastTime = currentTime;
+		eng::time::UpdateDeltaTime(lastTime);
+		lastTime = std::chrono::high_resolution_clock::now();
 
+		eng::time::stage = eng::time::Stages::Start;
+		f_Root.Start();
+
+
+		eng::time::stage = eng::time::Stages::Input;
 		doContinue = input.ProcessInput();
 
-		f_Root.Update();
 
+		eng::time::stage = eng::time::Stages::Update;
+		f_Root.Update();
+		f_Root.LateUpdate();
+			// Todo if needed: Add Fixed Update
+
+		eng::time::stage = eng::time::Stages::Render;
 		renderer.Render(f_Root);
+
+
+		eng::time::stage = eng::time::Stages::Cleanup;
+		eng::scenegraph::Cleanup(f_Root);
+
+
+		eng::time::stage = eng::time::Stages::None;
+		std::this_thread::sleep_for(lastTime + std::chrono::nanoseconds(eng::time::MinNanoSecPerFrame()) - std::chrono::high_resolution_clock::now());
 	}
+
+	// Free any remainig resources
+	eng::resources::ClearAllResources();
 }
