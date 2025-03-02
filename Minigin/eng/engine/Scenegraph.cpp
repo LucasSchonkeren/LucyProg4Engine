@@ -9,12 +9,17 @@ namespace eng::scenegraph {
 
 // variables
 
-std::queue<std::pair<Actor*, Actor*>> actorsToMove;
+struct ActorMoveInfo {
+	Actor& child, & parent;
+	bool keepWorldTransform;
+};
+
+std::queue<ActorMoveInfo> actorsToMove;
 
 void RemoveDestroyedChildren(eng::Actor& parent) {
 	for (auto child : parent.GetChildren()) {
 		if (child.get().IsFlagged(eng::Actor::Flags::Destroyed)) {
-			parent.RemoveChildActor(&child.get());
+			parent.DestroyChildActor(&child.get());
 		}
 		else RemoveDestroyedChildren(child);
 	}
@@ -23,17 +28,15 @@ void RemoveDestroyedChildren(eng::Actor& parent) {
 void Cleanup(eng::Actor& sceneRoot) {
 
 	while (not actorsToMove.empty()) {
-		actorsToMove.front().first->SetParent(*actorsToMove.front().second);
+		actorsToMove.front().child.SetParent(actorsToMove.front().parent, actorsToMove.front().keepWorldTransform);
 		actorsToMove.pop();
 	}
 
 	RemoveDestroyedChildren(sceneRoot);
 }
 
-//--------------------------|Scenegraph control|----------------------------
-
-void ChangeParent(Actor& child, Actor& parent) {
-	actorsToMove.emplace(std::make_pair<Actor*, Actor*>(&child, &parent));
+void SetParentInCleanup(Actor& child, Actor& parent, bool keepWorldTransform) {
+	actorsToMove.emplace(ActorMoveInfo{ child, parent, keepWorldTransform });
 }
 
 }

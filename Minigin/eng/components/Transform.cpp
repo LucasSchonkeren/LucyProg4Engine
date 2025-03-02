@@ -11,6 +11,9 @@ void Transform::SetLocalPosition(float x, float y) {
 		child.get().GetTransform().FlagForGlobalUpdate();
 	}
 }
+void Transform::SetLocalPosition(glm::vec2 newPosition) {
+	SetLocalPosition(newPosition.x, newPosition.y);
+}
 void Transform::FlagForGlobalUpdate() {
 	m_GlobalNeedsUpdate = true;
 }

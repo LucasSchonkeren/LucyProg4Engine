@@ -47,11 +47,11 @@ public: //--------------|Child Actor Methods|------------------
 	/// <returns> a reference to the created child actor</returns>
 	Actor&			AddChildActor();
 
-	/// <summary>
-	/// Move construct a child actor
-	/// </summary>
-	/// <returns> a reference to the created child actor</returns>
-	Actor&			AddChildActor(Actor&& child);
+	///// <summary>
+	///// Move construct a child actor
+	///// </summary>
+	///// <returns> a reference to the created child actor</returns>
+	//Actor&			AddChildActor(Actor&& child);
 
 	/// <returns>
 	/// Shallow search, gets only the children of this object. Empty if this Actor has no children.
@@ -66,18 +66,18 @@ public: //--------------|Child Actor Methods|------------------
 	/// <summary>
 	/// Remove a child actor. This destroys the child. May only be used during cleanup.
 	/// </summary>
-	void RemoveChildActor(Actor* childPtr);
+	void DestroyChildActor(Actor* childPtr);
 
 public: //---------------|Parent Actor Methods|-------------------------
 
 	/// <returns>
-	/// An optional reference to this Actor's parent Actor. If it has no parent, the optional is empty.
+	/// A pointer to this Actor's parent Actor. If it has no parent, returns nullptr.
 	///	</returns>
 	Actor*	GetParent();
 	/// <summary>
 	/// Move ownership of this Actor to a different parent Actor. Do not call this during the Update loop. Consider using eng::scenegraph::ChangeParent() instead
 	/// </summary>
-	void	SetParent(Actor&);
+	void	SetParent(Actor& newParent, bool keepWorldTransform = true);
 	/// <summary>
 	/// Set the root Actor of this Actor's tree as this Actor's parent.
 	/// </summary>

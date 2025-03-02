@@ -29,7 +29,9 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 	Transform& operator=	(const Transform&&) = delete;
 
 public: //---------------|General Methods|--------------
+
 	void SetLocalPosition(float x, float y);
+	void SetLocalPosition(glm::vec2 newPosition);
 
 	void FlagForGlobalUpdate();
 

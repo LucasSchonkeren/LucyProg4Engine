@@ -8,6 +8,6 @@ namespace eng::scenegraph {
 /// </summary>
 void Cleanup(eng::Actor& sceneRoot);
 
-void ChangeParent(Actor& child, Actor& parent);
+void SetParentInCleanup(Actor& child, Actor& parent, bool keepWorldTransform);
 
 }

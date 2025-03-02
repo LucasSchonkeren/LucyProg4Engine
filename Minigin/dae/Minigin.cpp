@@ -139,6 +139,7 @@ void dae::Minigin::Run()
 	bool doContinue = true;
 	while (doContinue)
 	{
+
 		eng::time::UpdateDeltaTime(lastTime);
 		lastTime = std::chrono::high_resolution_clock::now();
 

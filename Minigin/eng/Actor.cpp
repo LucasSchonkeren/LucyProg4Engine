@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+#include "../eng/engine/Scenegraph.h"
+
 namespace eng {
 
 Actor::Actor() {   
@@ -12,20 +14,20 @@ Actor::Actor() {
 }
 
 Actor& Actor::AddChildActor() {
-    m_ChildUptrs.emplace_back(std::make_unique<Actor>());
+    auto& f_NewChild{ m_ChildUptrs.emplace_back(std::make_unique<Actor>()) };
 
-    m_ChildUptrs.back()->m_ParentPtr = this;
-
-    return *m_ChildUptrs.back();
-}
-
-Actor& Actor::AddChildActor(Actor&& child) {
-    m_ChildUptrs.push_back(std::make_unique<Actor>(std::move(child)));
-    
-    m_ChildUptrs.back()->m_ParentPtr = this;
+    f_NewChild->m_ParentPtr = this;
 
     return *m_ChildUptrs.back();
 }
+
+//Actor& Actor::AddChildActor(Actor&& child) {
+//    m_ChildUptrs.push_back(std::make_unique<Actor>(std::move(child)));
+//    
+//    m_ChildUptrs.back()->m_ParentPtr = this;
+//
+//    return *m_ChildUptrs.back();
+//}
 
 ref_vec<Actor> Actor::GetChildren() const {
     ref_vec<Actor> f_Result{};
@@ -46,7 +48,7 @@ ref_vec<Actor> Actor::GetAllChildren() const {
     return f_Result;
 }
 
-void Actor::RemoveChildActor(Actor* childPtr) {
+void Actor::DestroyChildActor(Actor* childPtr) {
     assert(time::stage == time::Stages::Cleanup or time::stage == time::Stages::None and "Do not call RemoveChildActor outside of cleanup");
 
     std::erase_if(m_ChildUptrs, [childPtr](const u_ptr<Actor>& child) {
@@ -54,23 +56,43 @@ void Actor::RemoveChildActor(Actor* childPtr) {
     });
 }
 
-void Actor::SetParent(Actor& newParent) {
-    if (!m_ParentPtr) {
-        newParent.AddChildActor(std::move(*this));
-        return;
+void Actor::SetParent(Actor& newParent, bool keepWorldTransform) {
+    if (eng::time::stage != eng::time::Stages::Cleanup and eng::time::stage != eng::time::Stages::None)
+        eng::scenegraph::SetParentInCleanup(*this, newParent, keepWorldTransform);
+
+    // Assert that this call is valid
+    assert(m_ParentPtr          and "Root Actors cannot be assigned the child of another actor.");
+    assert(&newParent != this   and "An actor cannot be its own parent");
+
+    auto f_Children{ GetAllChildren() };
+    while (!f_Children.empty()) {
+        assert(&f_Children.back().get() != this and "An actor cannot be a child of its children");
+        f_Children.pop_back();
     }
 
-    std::unique_ptr<Actor>& f_OwningPointerPtr = *std::ranges::find_if(m_ParentPtr->m_ChildUptrs, [this](const std::unique_ptr<Actor>& child) {
+    // Allow world transform to be kept consistent
+    if (keepWorldTransform) {
+        GetTransform().SetLocalPosition(GetTransform().GetGlobal().position - newParent.GetTransform().GetGlobal().position);
+    }
+
+    // Fetch the unique pointer that owns this actor and move it into the new parent
+    std::unique_ptr<Actor>& f_OwningPointer = *std::ranges::find_if(m_ParentPtr->m_ChildUptrs, [this](const std::unique_ptr<Actor>& child) {
         return child.get() == this; });
+    newParent.m_ChildUptrs.emplace_back(std::move(f_OwningPointer));
 
-    newParent.m_ChildUptrs.push_back(std::move(f_OwningPointerPtr));
-
+    // Erase the now empty unique pointer in our old parent
     std::erase_if(m_ParentPtr->m_ChildUptrs,  [this](const std::unique_ptr<Actor>& child) {
         return child.get() == nullptr; });
+
+    // Inform this actor of its new parent
+    m_ParentPtr = &newParent;
+
+    // Flag this actor's transform as dirty
+    GetTransform().FlagForGlobalUpdate();
 }
 
 void Actor::SetParentToRoot() {
-    if (!GetParent()) return;
+    assert(m_ParentPtr and "This actor is itself root actor");
 
     Actor* f_RootPtr{ GetParent() };
 
