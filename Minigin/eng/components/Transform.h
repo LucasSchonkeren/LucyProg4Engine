@@ -1,7 +1,7 @@
 #pragma once
 #include <glm.hpp>
 
-#include "../AbstractComponent.h"
+#include "../abstract/AbstractComponent.h"
 
 namespace eng {
 
@@ -28,10 +28,12 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 	Transform(const Transform&&) = delete;
 	Transform& operator=	(const Transform&&) = delete;
 
-public: //---------------|General Methods|--------------
+public: //---------------|Transform Methods|--------------
 
 	void SetLocalPosition(float x, float y);
 	void SetLocalPosition(glm::vec2 newPosition);
+
+	void TranslatePosition(glm::vec2 translateVector);
 
 	void FlagForGlobalUpdate();
 

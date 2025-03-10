@@ -17,10 +17,14 @@
 #include "../eng/Actor.h"
 #include "../eng/components/Transform.h"
 #include "../eng/components/FpsTracker.h"
-#include "../eng/components/Rotator.h"
+#include "../game/components/Rotator.h"
 
 #include "../eng/engine/Time.h"
 #include "../eng/engine/Resources.h"
+#include "../eng/input/InputProcessor.h"
+
+#include "../game/Components/TrashCache.h"
+#include "../eng/commands/MoveCommand.h"
 
 SDL_Window* g_window{};
 
@@ -115,22 +119,82 @@ void dae::Minigin::Run()
 	f_FpsActor.AddComponent<cpt::FpsTracker>();
 
 
-	//Rotating sprites
-	eng::Actor& f_RotationCenter = f_Root.AddChildActor();
-	f_RotationCenter.GetTransform().SetLocalPosition(300, 300);
+	////Rotating sprites
+	//eng::Actor& f_RotationCenter = f_Root.AddChildActor();
+	//f_RotationCenter.GetTransform().SetLocalPosition(300, 300);
 
-	eng::Actor& f_GuyStandingActor = f_RotationCenter.AddChildActor();
+	//eng::Actor& f_GuyStandingActor = f_RotationCenter.AddChildActor();
+	//f_GuyStandingActor.AddComponent<cpt::TextureRenderer>("BomberManStanding.png");
+	//f_GuyStandingActor.AddComponent<cpt::Rotator>(65.f, 2.f);
+
+	//eng::Actor& f_BombActor = f_GuyStandingActor.AddChildActor();
+	//f_BombActor.AddComponent<cpt::TextureRenderer>("BigBomb.png");
+	//f_BombActor.AddComponent<cpt::Rotator>(30.f, 3.f);
+
+	//eng::Actor& f_TrashCacheActor = f_Root.AddChildActor();
+	//f_TrashCacheActor.AddComponent<cpt::TrashCacheImgui1>();
+	//f_TrashCacheActor.AddComponent<cpt::TrashCacheImgui2>();
+
+	
+	// Move sprites
+	eng::Actor& f_GuyStandingActor = f_Root.AddChildActor();
 	f_GuyStandingActor.AddComponent<cpt::TextureRenderer>("BomberManStanding.png");
-	f_GuyStandingActor.AddComponent<cpt::Rotator>(65.f, 2.f);
+	f_GuyStandingActor.GetTransform().SetLocalPosition(100,400);
 
-	eng::Actor& f_BombActor = f_GuyStandingActor.AddChildActor();
+	eng::Actor& f_BombActor = f_Root.AddChildActor();
 	f_BombActor.AddComponent<cpt::TextureRenderer>("BigBomb.png");
-	f_BombActor.AddComponent<cpt::Rotator>(30.f, 3.f);
-
+	f_BombActor.GetTransform().SetLocalPosition(150, 400);
 
 
 	auto& renderer = Renderer::GetInstance();
-	auto& input = InputManager::GetInstance();
+
+	int f_Speed{ 50 };
+
+	eng::input::CommandBindings p1Binds{&f_GuyStandingActor};
+
+	p1Binds.NewCommand<eng::cmd::MoveCommand>(
+		std::string{ "MoveUpCommand" },
+		eng::input::Keystate{ eng::input::KeyboardKeys::W, eng::input::KeyPhase::Pressed },
+		glm::vec2{ 0, -f_Speed });
+
+	p1Binds.NewCommand<eng::cmd::MoveCommand>(
+		std::string{ "MoveDownCommand" },
+		eng::input::Keystate{ eng::input::KeyboardKeys::S, eng::input::KeyPhase::Pressed },
+		glm::vec2{ 0, f_Speed });
+
+	p1Binds.NewCommand<eng::cmd::MoveCommand>(
+		std::string{ "MoveLeftCommand" },
+		eng::input::Keystate{ eng::input::KeyboardKeys::A, eng::input::KeyPhase::Pressed },
+		glm::vec2{ -f_Speed, 0 });
+
+	p1Binds.NewCommand<eng::cmd::MoveCommand>(
+		std::string{ "MoveRightCommand" },
+		eng::input::Keystate{ eng::input::KeyboardKeys::D, eng::input::KeyPhase::Pressed },
+		glm::vec2{ f_Speed, 0 });
+
+	eng::input::CommandBindings p2Binds{&f_BombActor};
+
+	p2Binds.NewCommand<eng::cmd::MoveCommand>(
+		std::string{ "MoveUpCommand" },
+		eng::input::Keystate{ eng::input::GamepadKeys::Up, eng::input::KeyPhase::Pressed },
+		glm::vec2{ 0, -2 * f_Speed });
+
+	p2Binds.NewCommand<eng::cmd::MoveCommand>(
+		std::string{ "MoveDownCommand" },
+		eng::input::Keystate{ eng::input::GamepadKeys::Down, eng::input::KeyPhase::Pressed },
+		glm::vec2{ 0, 2 * f_Speed });
+
+	p2Binds.NewCommand<eng::cmd::MoveCommand>(
+		std::string{ "MoveLeftCommand" },
+		eng::input::Keystate{ eng::input::GamepadKeys::Left, eng::input::KeyPhase::Pressed },
+		glm::vec2{ -2 * f_Speed, 0 });
+
+	p2Binds.NewCommand<eng::cmd::MoveCommand>(
+		std::string{ "MoveRightCommand" },
+		eng::input::Keystate{ eng::input::GamepadKeys::Right, eng::input::KeyPhase::Pressed },
+		glm::vec2{ 2 * f_Speed, 0 });
+
+	eng::input::InputProcessor processInput{ std::vector<eng::input::CommandBindings*>{&p1Binds,& p2Binds} };
 
 	eng::resources::Init();
 
@@ -148,7 +212,7 @@ void dae::Minigin::Run()
 
 
 		eng::time::stage = eng::time::Stages::Input;
-		doContinue = input.ProcessInput();
+		doContinue = processInput();
 
 
 		eng::time::stage = eng::time::Stages::Update;
@@ -158,7 +222,6 @@ void dae::Minigin::Run()
 
 		eng::time::stage = eng::time::Stages::Render;
 		renderer.Render(f_Root);
-
 
 		eng::time::stage = eng::time::Stages::Cleanup;
 		eng::scenegraph::Cleanup(f_Root);

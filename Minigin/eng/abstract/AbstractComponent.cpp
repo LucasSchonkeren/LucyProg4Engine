@@ -1,5 +1,5 @@
 #include "AbstractComponent.h"
-#include "Actor.h"
+#include "../Actor.h"
 
 namespace eng {
 

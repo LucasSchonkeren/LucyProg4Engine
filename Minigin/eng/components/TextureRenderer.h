@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../AbstractComponent.h"
+#include "../abstract/AbstractComponent.h"
 #include "../../dae/Texture2D.h"
 
 namespace cpt {

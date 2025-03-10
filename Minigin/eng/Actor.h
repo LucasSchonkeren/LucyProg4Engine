@@ -10,8 +10,8 @@
 #include <ranges>
 #include <algorithm>
 
-#include "../utils/utils.h"
-#include "AbstractComponent.h"
+#include "utils/utils.h"
+#include "abstract/AbstractComponent.h"
 #include "components/Transform.h"
 #include "../eng/engine/Time.h"
 
@@ -141,6 +141,7 @@ public: //--------------------|Gameloop Methods|--------------------------------
 	void LateUpdate();
 	void FixedUpdate();
 	void Render(); 
+	void RenderImgui();
 
 /*##################################|PRIVATE|##################################################*/
 

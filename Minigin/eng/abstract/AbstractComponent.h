@@ -31,6 +31,7 @@ public: //--------------------|Gameloop methods|-----------------------------
 	virtual void FixedUpdate() {};
 
 	virtual void Render() {};
+	virtual void RenderImgui() {};
 
 	virtual void OnDestroy() {};
 

@@ -9,21 +9,26 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Minigin Files\CPP Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Main">
       <UniqueIdentifier>{dc066edf-f712-4cb1-bcc0-384e3c842109}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine Files">
-      <UniqueIdentifier>{883c92ac-6c4f-4ece-bbab-9f1c52fafac9}</UniqueIdentifier>
     </Filter>
     <Filter Include="utils">
       <UniqueIdentifier>{110ba85b-f65e-4b25-97af-b2983f90baef}</UniqueIdentifier>
     </Filter>
     <Filter Include="imgui">
       <UniqueIdentifier>{96f4ecdc-d59f-4845-bf00-9cd33290d475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Eng">
+      <UniqueIdentifier>{5a9ea6b9-92b3-4a51-bb85-ba0849b237ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Eng\Components">
+      <UniqueIdentifier>{b68a4e10-d3bc-450a-bb34-8079978e1c73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Eng\Engine">
+      <UniqueIdentifier>{1af144b7-6e7a-4456-809e-ef04815a95e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Eng\eng">
+      <UniqueIdentifier>{b8c85538-7150-4ba3-b1ab-ab51586cf9d0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,45 +53,6 @@
     <ClInclude Include="dae\Minigin.h">
       <Filter>Minigin Files</Filter>
     </ClInclude>
-    <ClInclude Include="eng\Actor.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\utils.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eng\AbstractComponent.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Libs\catch.hpp">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eng\components\Transform.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eng\components\TextureRenderer.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eng\components\TextRenderer.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eng\components\FpsTracker.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eng\engine\Time.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eng\AbstractRenderable.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eng\engine\Resources.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eng\engine\Scenegraph.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eng\components\Rotator.h">
-      <Filter>Minigin Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\3rdParty\imgui-1.91.8\imconfig.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -108,58 +74,73 @@
     <ClInclude Include="..\3rdParty\imgui-1.91.8\backends\imgui_impl_sdl2.h">
       <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="eng\utils\utils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Libs\catch.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\Actor.h">
+      <Filter>Eng\eng</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\abstract\AbstractComponent.h">
+      <Filter>Eng\eng</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\abstract\AbstractRenderable.h">
+      <Filter>Eng\eng</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\components\FpsTracker.h">
+      <Filter>Eng\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="game\Components\Rotator.h">
+      <Filter>Eng\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\components\TextRenderer.h">
+      <Filter>Eng\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\components\TextureRenderer.h">
+      <Filter>Eng\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\components\Transform.h">
+      <Filter>Eng\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\engine\Resources.h">
+      <Filter>Eng\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\engine\Scenegraph.h">
+      <Filter>Eng\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\engine\Time.h">
+      <Filter>Eng\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\imgui-1.91.8\imgui_plot.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="game\Components\TrashCache.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\input\CommandBindings.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\abstract\AbstractCommand.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\input\InputProcessor.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\input\KeyboardState.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\input\GamepadState.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\commands\MoveCommand.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dae\ResourceManager.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dae\Renderer.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dae\Texture2D.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dae\InputManager.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="eng\components\Transform.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dae\Font.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dae\Minigin.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dae\Main.cpp">
+    <ClCompile Include="eng\Main.cpp">
       <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="eng\Actor.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="eng\AbstractComponent.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="eng\components\TextureRenderer.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="eng\components\TextRenderer.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="eng\components\FpsTracker.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="eng\engine\Time.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="eng\engine\Resources.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="eng\engine\Scenegraph.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
-    </ClCompile>
-    <ClCompile Include="eng\components\Rotator.cpp">
-      <Filter>Minigin Files\CPP Files</Filter>
     </ClCompile>
     <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui.cpp">
       <Filter>imgui</Filter>
@@ -182,5 +163,62 @@
     <ClCompile Include="..\3rdParty\imgui-1.91.8\backends\imgui_impl_sdl2.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="dae\Font.cpp">
+      <Filter>Minigin Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dae\InputManager.cpp">
+      <Filter>Minigin Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dae\Minigin.cpp">
+      <Filter>Minigin Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dae\Renderer.cpp">
+      <Filter>Minigin Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dae\ResourceManager.cpp">
+      <Filter>Minigin Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dae\Texture2D.cpp">
+      <Filter>Minigin Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eng\abstract\AbstractComponent.cpp">
+      <Filter>Eng\eng</Filter>
+    </ClCompile>
+    <ClCompile Include="eng\Actor.cpp">
+      <Filter>Eng\eng</Filter>
+    </ClCompile>
+    <ClCompile Include="eng\components\FpsTracker.cpp">
+      <Filter>Eng\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="game\Components\Rotator.cpp">
+      <Filter>Eng\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="eng\components\TextRenderer.cpp">
+      <Filter>Eng\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="eng\components\TextureRenderer.cpp">
+      <Filter>Eng\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="eng\components\Transform.cpp">
+      <Filter>Eng\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="eng\engine\Resources.cpp">
+      <Filter>Eng\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="eng\engine\Scenegraph.cpp">
+      <Filter>Eng\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="eng\engine\Time.cpp">
+      <Filter>Eng\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_plot.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="game\Components\TrashCache.cpp" />
+    <ClCompile Include="eng\input\CommandBindings.cpp" />
+    <ClCompile Include="eng\input\InputProcessor.cpp" />
+    <ClCompile Include="eng\input\KeyboardState.cpp" />
+    <ClCompile Include="eng\input\GamepadState.cpp" />
+    <ClCompile Include="eng\commands\MoveCommand.cpp" />
   </ItemGroup>
 </Project>

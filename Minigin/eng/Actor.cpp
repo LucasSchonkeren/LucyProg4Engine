@@ -1,5 +1,4 @@
 #include "Actor.h"
-#include "AbstractComponent.h"
 
 #include <algorithm>
 
@@ -184,6 +183,18 @@ void Actor::Render() {
 
     for (auto& child : m_ChildUptrs) {
         child->Render();
+    }
+}
+
+void Actor::RenderImgui() {
+    if (IsFlagged(Flags::NoRender)) return;
+
+    for (auto& compUptr : m_CompUptrs) {
+        compUptr->RenderImgui();
+    }
+
+    for (auto& childUptr : m_ChildUptrs) {
+        childUptr->RenderImgui();
     }
 }
 

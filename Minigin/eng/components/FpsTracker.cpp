@@ -3,6 +3,7 @@
 #include "../Actor.h"
 #include "TextRenderer.h"
 #include <string>
+#include "../input/InputProcessor.h"
 
 void cpt::FpsTracker::Start() {
 	assert(GetOwner().GetComponent<TextRenderer>() && "An FpsTracker Component requirs a Text Renderer");

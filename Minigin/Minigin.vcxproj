@@ -146,7 +146,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Xinput.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -165,7 +165,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Xinput.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -184,7 +184,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Xinput.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -203,7 +203,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Xinput.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -226,7 +226,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Xinput.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -249,7 +249,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Xinput.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -259,14 +259,20 @@
     <ClInclude Include="..\3rdParty\imgui-1.91.8\imconfig.h" />
     <ClInclude Include="..\3rdParty\imgui-1.91.8\imgui.h" />
     <ClInclude Include="..\3rdParty\imgui-1.91.8\imgui_internal.h" />
+    <ClInclude Include="..\3rdParty\imgui-1.91.8\imgui_plot.h" />
     <ClInclude Include="..\3rdParty\imgui-1.91.8\imstb_rectpack.h" />
     <ClInclude Include="..\3rdParty\imgui-1.91.8\imstb_textedit.h" />
-    <ClInclude Include="eng\AbstractComponent.h">
+    <ClInclude Include="eng\abstract\AbstractCommand.h" />
+    <ClInclude Include="eng\abstract\AbstractComponent.h">
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="eng\AbstractRenderable.h" />
+    <ClInclude Include="eng\abstract\AbstractRenderable.h" />
     <ClInclude Include="eng\Actor.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="eng\commands\MoveCommand.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -274,7 +280,17 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="eng\components\Rotator.h">
+    <ClInclude Include="eng\input\CommandBindings.h" />
+    <ClInclude Include="eng\input\InputProcessor.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="eng\input\KeyboardState.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="eng\input\GamepadState.h" />
+    <ClInclude Include="game\Components\Rotator.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -298,13 +314,14 @@
     </ClInclude>
     <ClInclude Include="dae\Font.h" />
     <ClInclude Include="dae\InputManager.h" />
+    <ClInclude Include="game\Components\TrashCache.h" />
     <ClInclude Include="Libs\catch.hpp" />
     <ClInclude Include="dae\Minigin.h" />
     <ClInclude Include="dae\Renderer.h" />
     <ClInclude Include="dae\ResourceManager.h" />
     <ClInclude Include="dae\Singleton.h" />
     <ClInclude Include="dae\Texture2D.h" />
-    <ClInclude Include="utils\utils.h" />
+    <ClInclude Include="eng\utils\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rdParty\imgui-1.91.8\backends\imgui_impl_opengl3.cpp" />
@@ -312,25 +329,32 @@
     <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui.cpp" />
     <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_demo.cpp" />
     <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_draw.cpp" />
+    <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_plot.cpp" />
     <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_tables.cpp" />
     <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_widgets.cpp" />
-    <ClCompile Include="eng\AbstractComponent.cpp" />
+    <ClCompile Include="eng\abstract\AbstractComponent.cpp" />
     <ClCompile Include="eng\Actor.cpp" />
     <ClCompile Include="dae\Font.cpp" />
     <ClCompile Include="dae\InputManager.cpp" />
-    <ClCompile Include="dae\Main.cpp" />
+    <ClCompile Include="eng\commands\MoveCommand.cpp" />
+    <ClCompile Include="eng\Main.cpp" />
     <ClCompile Include="dae\Minigin.cpp" />
     <ClCompile Include="dae\Renderer.cpp" />
     <ClCompile Include="dae\ResourceManager.cpp" />
     <ClCompile Include="dae\Texture2D.cpp" />
     <ClCompile Include="eng\components\FpsTracker.cpp" />
-    <ClCompile Include="eng\components\Rotator.cpp" />
+    <ClCompile Include="eng\input\CommandBindings.cpp" />
+    <ClCompile Include="eng\input\InputProcessor.cpp" />
+    <ClCompile Include="eng\input\KeyboardState.cpp" />
+    <ClCompile Include="eng\input\GamepadState.cpp" />
+    <ClCompile Include="game\Components\Rotator.cpp" />
     <ClCompile Include="eng\components\TextRenderer.cpp" />
     <ClCompile Include="eng\components\TextureRenderer.cpp" />
     <ClCompile Include="eng\components\Transform.cpp" />
     <ClCompile Include="eng\engine\Resources.cpp" />
     <ClCompile Include="eng\engine\Scenegraph.cpp" />
     <ClCompile Include="eng\engine\Time.cpp" />
+    <ClCompile Include="game\Components\TrashCache.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
