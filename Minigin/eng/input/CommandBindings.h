@@ -4,8 +4,10 @@
 #include "../Actor.h"
 #include "KeyboardState.h"
 #include "GamepadState.h"
+#include "KeyState.h"
 
 #include <string>
+#include <string_view>
 #include <ranges>
 #include <map>
 #include <unordered_map>
@@ -28,19 +30,19 @@ public:
 
 	//-------------|Command methods|-------------------------------------
 
-	template <std::derived_from<AbstractCommand> commandT, typename... argsT> /*requires std::derived_from<commandT, AbstractCommand>*/
-	AbstractCommand* NewCommand(std::string commandName, Keystate keystatePtr, argsT... args) {
+	template <std::derived_from<AbstractCommand> commandT, typename... argsT> 
+	AbstractCommand* NewCommand(std::string_view commandName, Keystate keystatePtr, argsT... args) {
 		m_CommandUptrs.emplace(commandName, std::make_unique<commandT>(args...));
 		BindCommand(keystatePtr, commandName);
 		return m_CommandUptrs[commandName].get();
 	};
 
-	void				RemoveCommand(std::string commandName);
+	void				RemoveCommand(std::string_view commandName);
 
 	//--------------|Keybind methods|-----------------------------------
 
-	void				BindCommand(Keystate, std::string commandName);
-	void				UnBindCommand(std::string commandName);
+	void				BindCommand(Keystate, std::string_view commandName);
+	void				UnBindCommand(std::string_view commandName);
 	void				UnbindKey(Keystate keystate);
 
 	const std::map<Keystate, AbstractCommand*>& GetCommandBindings();
@@ -51,7 +53,7 @@ public:
 	Actor*				GetTargetActor();
 private:
 	Actor* m_Target{};
-	std::unordered_map<std::string, u_ptr<AbstractCommand>> m_CommandUptrs{};
+	std::unordered_map<std::string_view, u_ptr<AbstractCommand>> m_CommandUptrs{};
 	std::map<Keystate, AbstractCommand*> m_CommandBindings{};
 };
 

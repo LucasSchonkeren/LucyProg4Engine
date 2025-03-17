@@ -1,5 +1,6 @@
-#include "GamepadState.h"
+#define WIN32_LEAN_AND_MEAN
 
+#include "GamepadState.h"
 #include <windows.h>
 #include <Xinput.h>
 #include <bitset>

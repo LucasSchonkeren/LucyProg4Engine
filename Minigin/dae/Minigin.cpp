@@ -17,14 +17,16 @@
 #include "../eng/Actor.h"
 #include "../eng/components/Transform.h"
 #include "../eng/components/FpsTracker.h"
+#include "../eng/components/ResourceDisplayLogic.h"
 #include "../game/components/Rotator.h"
 
 #include "../eng/engine/Time.h"
 #include "../eng/engine/Resources.h"
-#include "../eng/input/InputProcessor.h"
+#include "../eng/input/Input.h"
 
 #include "../game/Components/TrashCache.h"
-#include "../eng/commands/MoveCommand.h"
+#include "../eng/commands/Move.h"
+#include "../eng/commands/ModifyActorResource.h"
 
 SDL_Window* g_window{};
 
@@ -100,23 +102,53 @@ void dae::Minigin::Run()
 
 	// Background/logo
 	eng::Actor& f_BgActor = f_Root.AddChildActor();
-	f_BgActor.AddComponent<cpt::TextureRenderer>().LoadTexture("background.tga");
+	f_BgActor.AddComponent<eng::cpt::TextureRenderer>().LoadTexture("background.tga");
 
 	eng::Actor& f_LogoActor = f_BgActor.AddChildActor();
-	f_LogoActor.AddComponent<cpt::TextureRenderer>().LoadTexture("logo.tga");
-	f_LogoActor.GetTransform().SetLocalPosition(216.f, 180.f);
+	f_LogoActor.AddComponent<eng::cpt::TextureRenderer>().LoadTexture("logo.tga");
+	f_LogoActor.GetTransform().SetLocalPosition(216.f, 220.f);
 
 	//Text
 	eng::Actor& f_TitleActor = f_Root.AddChildActor();
-	f_TitleActor.AddComponent<cpt::TextRenderer>( std::string("Programming 4 Assignment"), std::string("Lingua.otf"), 36u);
-
+	f_TitleActor.AddComponent<eng::cpt::TextRenderer>( std::string("Programming 4 Assignment"), std::string("Lingua.otf"), 36u);
 	f_TitleActor.GetTransform().SetLocalPosition(80, 20);
+
+	eng::Actor& f_P1ControlsTextActor{ f_Root.AddChildActor() };
+	f_P1ControlsTextActor.AddComponent<eng::cpt::TextRenderer>(std::string("Keyboard player: WASD to move, Q to lose lives, E or SPACEBAR to gain points"), std::string("Lingua.otf"), 17u);
+	f_P1ControlsTextActor.GetTransform().SetLocalPosition(10, 60);
+
+	eng::Actor& f_P2ControlsTextActor{ f_Root.AddChildActor() };
+	f_P2ControlsTextActor.AddComponent<eng::cpt::TextRenderer>(std::string("Gamepad player: D-pad to move, A to lose lives, B or Y to gain points"), std::string("Lingua.otf"), 17u);
+	f_P2ControlsTextActor.GetTransform().SetLocalPosition(10, 78);
+
+	eng::Actor& f_P1LifeCounter{ f_Root.AddChildActor() };
+	f_P1LifeCounter.AddComponent<eng::cpt::TextRenderer>(std::string("Keyboard player lives: 3"), std::string("Lingua.otf"), 24u);
+	f_P1LifeCounter.AddComponent<eng::cpt::ResourceDisplayLogic>("Keyboard player lives: {hp}");
+	f_P1LifeCounter.GetTransform().SetLocalPosition(10, 100);
+
+	eng::Actor& f_P1ScoreCounter{ f_Root.AddChildActor() };
+	f_P1ScoreCounter.AddComponent<eng::cpt::TextRenderer>(std::string("Keyboard player Score: 0"), std::string("Lingua.otf"), 24u);
+	f_P1ScoreCounter.AddComponent<eng::cpt::ResourceDisplayLogic>("Keyboard player Score: {score}");
+
+	f_P1ScoreCounter.GetTransform().SetLocalPosition(10, 125);
+
+	eng::Actor& f_P2LifeCounter{ f_Root.AddChildActor() };
+	f_P2LifeCounter.AddComponent<eng::cpt::TextRenderer>(std::string("Gamepad player lives: 3"), std::string("Lingua.otf"), 24u);
+	f_P2LifeCounter.AddComponent<eng::cpt::ResourceDisplayLogic>("Gamepad player lives: {hp}");
+
+	f_P2LifeCounter.GetTransform().SetLocalPosition(10, 150);
+
+	eng::Actor& f_P2ScoreCounter{ f_Root.AddChildActor() };
+	f_P2ScoreCounter.AddComponent<eng::cpt::TextRenderer>(std::string("Gamepad player Score: 0"), std::string("Lingua.otf"), 24u);
+	f_P2ScoreCounter.AddComponent<eng::cpt::ResourceDisplayLogic>("Gamepad player Score: {score}");
+
+	f_P2ScoreCounter.GetTransform().SetLocalPosition(10, 175);
 
 	//Fps tracker
 	eng::Actor& f_FpsActor = f_Root.AddChildActor();
-	f_FpsActor.AddComponent<cpt::TextRenderer>( "fps: ", "Lingua.otf", 36 );
-	f_FpsActor.GetTransform().SetLocalPosition(20, 80);
-	f_FpsActor.AddComponent<cpt::FpsTracker>();
+	f_FpsActor.AddComponent<eng::cpt::TextRenderer>( "fps: ", "Lingua.otf", 16u );
+	f_FpsActor.GetTransform().SetLocalPosition(10, 10);
+	f_FpsActor.AddComponent<eng::cpt::FpsTracker>();
 
 
 	////Rotating sprites
@@ -138,63 +170,110 @@ void dae::Minigin::Run()
 	
 	// Move sprites
 	eng::Actor& f_GuyStandingActor = f_Root.AddChildActor();
-	f_GuyStandingActor.AddComponent<cpt::TextureRenderer>("BomberManStanding.png");
+	f_GuyStandingActor.AddComponent<eng::cpt::TextureRenderer>("BomberManStanding.png");
+	auto& f_GuyStandingResources{ f_GuyStandingActor.AddComponent<eng::cpt::ResourceTracker>() };
+	f_GuyStandingResources.NewResource("hp", 5u);
+	f_GuyStandingResources.NewResource("score", 0u, true);
+	f_GuyStandingResources.AddObserver(*f_P1LifeCounter.GetComponent<eng::cpt::ResourceDisplayLogic>());
+	f_GuyStandingResources.AddObserver(*f_P1ScoreCounter.GetComponent<eng::cpt::ResourceDisplayLogic>());
 	f_GuyStandingActor.GetTransform().SetLocalPosition(100,400);
 
 	eng::Actor& f_BombActor = f_Root.AddChildActor();
-	f_BombActor.AddComponent<cpt::TextureRenderer>("BigBomb.png");
+	f_BombActor.AddComponent<eng::cpt::TextureRenderer>("BigBomb.png");
+	auto& f_BombActorResources{ f_BombActor.AddComponent<eng::cpt::ResourceTracker>() };
+	f_BombActorResources.NewResource("hp", 3u);
+	f_BombActorResources.NewResource("score", 0u, true);
+	f_BombActorResources.AddObserver(*f_P2LifeCounter.GetComponent<eng::cpt::ResourceDisplayLogic>());
+	f_BombActorResources.AddObserver(*f_P2ScoreCounter.GetComponent<eng::cpt::ResourceDisplayLogic>());
 	f_BombActor.GetTransform().SetLocalPosition(150, 400);
 
 
 	auto& renderer = Renderer::GetInstance();
 
-	int f_Speed{ 50 };
+	int f_Speed{ 100 };
 
 	eng::input::CommandBindings p1Binds{&f_GuyStandingActor};
 
-	p1Binds.NewCommand<eng::cmd::MoveCommand>(
+	p1Binds.NewCommand<eng::cmd::Move>(
 		std::string{ "MoveUpCommand" },
 		eng::input::Keystate{ eng::input::KeyboardKeys::W, eng::input::KeyPhase::Pressed },
 		glm::vec2{ 0, -f_Speed });
 
-	p1Binds.NewCommand<eng::cmd::MoveCommand>(
+	p1Binds.NewCommand<eng::cmd::Move>(
 		std::string{ "MoveDownCommand" },
 		eng::input::Keystate{ eng::input::KeyboardKeys::S, eng::input::KeyPhase::Pressed },
 		glm::vec2{ 0, f_Speed });
 
-	p1Binds.NewCommand<eng::cmd::MoveCommand>(
+	p1Binds.NewCommand<eng::cmd::Move>(
 		std::string{ "MoveLeftCommand" },
 		eng::input::Keystate{ eng::input::KeyboardKeys::A, eng::input::KeyPhase::Pressed },
 		glm::vec2{ -f_Speed, 0 });
 
-	p1Binds.NewCommand<eng::cmd::MoveCommand>(
+	p1Binds.NewCommand<eng::cmd::Move>(
 		std::string{ "MoveRightCommand" },
 		eng::input::Keystate{ eng::input::KeyboardKeys::D, eng::input::KeyPhase::Pressed },
 		glm::vec2{ f_Speed, 0 });
 
+	p1Binds.NewCommand<eng::cmd::ModifyActorResource>(
+		std::string{"LoseALife"},
+		eng::input::Keystate{ eng::input::KeyboardKeys::Q, eng::input::KeyPhase::Down },
+		"hp", -1
+	);
+
+	p1Binds.NewCommand<eng::cmd::ModifyActorResource>(
+		std::string{ "gainSomeScore" },
+		eng::input::Keystate{ eng::input::KeyboardKeys::E, eng::input::KeyPhase::Down },
+		"score", 10
+	);
+
+	p1Binds.NewCommand<eng::cmd::ModifyActorResource>(
+		std::string{ "gainALotOfScore" },
+		eng::input::Keystate{ eng::input::KeyboardKeys::Space, eng::input::KeyPhase::Down },
+		"score", 100
+	);
+
 	eng::input::CommandBindings p2Binds{&f_BombActor};
 
-	p2Binds.NewCommand<eng::cmd::MoveCommand>(
+	p2Binds.NewCommand<eng::cmd::Move>(
 		std::string{ "MoveUpCommand" },
 		eng::input::Keystate{ eng::input::GamepadKeys::Up, eng::input::KeyPhase::Pressed },
 		glm::vec2{ 0, -2 * f_Speed });
 
-	p2Binds.NewCommand<eng::cmd::MoveCommand>(
+	p2Binds.NewCommand<eng::cmd::Move>(
 		std::string{ "MoveDownCommand" },
 		eng::input::Keystate{ eng::input::GamepadKeys::Down, eng::input::KeyPhase::Pressed },
 		glm::vec2{ 0, 2 * f_Speed });
 
-	p2Binds.NewCommand<eng::cmd::MoveCommand>(
+	p2Binds.NewCommand<eng::cmd::Move>(
 		std::string{ "MoveLeftCommand" },
 		eng::input::Keystate{ eng::input::GamepadKeys::Left, eng::input::KeyPhase::Pressed },
 		glm::vec2{ -2 * f_Speed, 0 });
 
-	p2Binds.NewCommand<eng::cmd::MoveCommand>(
+	p2Binds.NewCommand<eng::cmd::Move>(
 		std::string{ "MoveRightCommand" },
 		eng::input::Keystate{ eng::input::GamepadKeys::Right, eng::input::KeyPhase::Pressed },
 		glm::vec2{ 2 * f_Speed, 0 });
 
-	eng::input::InputProcessor processInput{ std::vector<eng::input::CommandBindings*>{&p1Binds,& p2Binds} };
+	p2Binds.NewCommand<eng::cmd::ModifyActorResource>(
+		std::string{ "LoseALife" },
+		eng::input::Keystate{ eng::input::GamepadKeys::A, eng::input::KeyPhase::Down },
+		"hp", -1
+	);
+
+	p2Binds.NewCommand<eng::cmd::ModifyActorResource>(
+		std::string{ "gainSomeScore" },
+		eng::input::Keystate{ eng::input::GamepadKeys::B, eng::input::KeyPhase::Down },
+		"score", 10
+	);
+
+	p2Binds.NewCommand<eng::cmd::ModifyActorResource>(
+		std::string{ "gainALotOfScore" },
+		eng::input::Keystate{ eng::input::GamepadKeys::Y, eng::input::KeyPhase::Down },
+		"score", 100
+	);
+
+	eng::input::RegisterCommandBinding(&p1Binds);
+	eng::input::RegisterCommandBinding(&p2Binds);
 
 	eng::resources::Init();
 
@@ -208,11 +287,12 @@ void dae::Minigin::Run()
 		lastTime = std::chrono::high_resolution_clock::now();
 
 		eng::time::stage = eng::time::Stages::Start;
+		f_Root.Init();
 		f_Root.Start();
 
 
 		eng::time::stage = eng::time::Stages::Input;
-		doContinue = processInput();
+		doContinue = eng::input::ProcessInput();
 
 
 		eng::time::stage = eng::time::Stages::Update;

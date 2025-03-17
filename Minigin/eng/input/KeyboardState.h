@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../utils/Utils.h"
+#include "KeyState.h"
+
 
 #include <bitset>
 

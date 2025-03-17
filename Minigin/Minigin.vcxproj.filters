@@ -86,9 +86,6 @@
     <ClInclude Include="eng\abstract\AbstractComponent.h">
       <Filter>Eng\eng</Filter>
     </ClInclude>
-    <ClInclude Include="eng\abstract\AbstractRenderable.h">
-      <Filter>Eng\eng</Filter>
-    </ClInclude>
     <ClInclude Include="eng\components\FpsTracker.h">
       <Filter>Eng\Components</Filter>
     </ClInclude>
@@ -125,7 +122,7 @@
     <ClInclude Include="eng\abstract\AbstractCommand.h">
       <Filter>Minigin Files</Filter>
     </ClInclude>
-    <ClInclude Include="eng\input\InputProcessor.h">
+    <ClInclude Include="eng\input\Input.h">
       <Filter>Minigin Files</Filter>
     </ClInclude>
     <ClInclude Include="eng\input\KeyboardState.h">
@@ -134,7 +131,25 @@
     <ClInclude Include="eng\input\GamepadState.h">
       <Filter>Minigin Files</Filter>
     </ClInclude>
-    <ClInclude Include="eng\commands\MoveCommand.h">
+    <ClInclude Include="eng\commands\Move.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\input\KeyState.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\components\ResourceTracker.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\abstract\AbstractObserver.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\utils\SdbmHash.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\commands\ModifyActorResource.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\components\ResourceDisplayLogic.h">
       <Filter>Minigin Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -216,9 +231,12 @@
     </ClCompile>
     <ClCompile Include="game\Components\TrashCache.cpp" />
     <ClCompile Include="eng\input\CommandBindings.cpp" />
-    <ClCompile Include="eng\input\InputProcessor.cpp" />
+    <ClCompile Include="eng\input\Input.cpp" />
     <ClCompile Include="eng\input\KeyboardState.cpp" />
     <ClCompile Include="eng\input\GamepadState.cpp" />
-    <ClCompile Include="eng\commands\MoveCommand.cpp" />
+    <ClCompile Include="eng\commands\Move.cpp" />
+    <ClCompile Include="eng\components\ResourceTracker.cpp" />
+    <ClCompile Include="eng\commands\ModifyActorResource.cpp" />
+    <ClCompile Include="eng\components\ResourceDisplayLogic.cpp" />
   </ItemGroup>
 </Project>

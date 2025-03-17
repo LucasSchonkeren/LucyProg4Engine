@@ -19,16 +19,16 @@ CommandBindings::CommandBindings(Actor* target) :
 }
 
 
-void CommandBindings::RemoveCommand(std::string commandName) {
+void CommandBindings::RemoveCommand(std::string_view commandName) {
 	UnBindCommand(commandName);
 	m_CommandUptrs.erase(commandName);
 }
 
-void CommandBindings::BindCommand(Keystate keystate, std::string commandName) {
+void CommandBindings::BindCommand(Keystate keystate, std::string_view commandName) {
 	m_CommandBindings[keystate] = m_CommandUptrs[commandName].get();
 }
 
-void CommandBindings::UnBindCommand(std::string commandName) {
+void CommandBindings::UnBindCommand(std::string_view commandName) {
 	std::erase_if(m_CommandBindings, [&](const auto& pair) {
 		return pair.second == m_CommandUptrs[commandName].get();
 		});

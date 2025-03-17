@@ -267,12 +267,16 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="eng\abstract\AbstractRenderable.h" />
+    <ClInclude Include="eng\abstract\AbstractObserver.h" />
     <ClInclude Include="eng\Actor.h">
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="eng\commands\MoveCommand.h">
+    <ClInclude Include="eng\commands\ModifyActorResource.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="eng\commands\Move.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -280,8 +284,13 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="eng\components\ResourceDisplayLogic.h" />
+    <ClInclude Include="eng\components\ResourceTracker.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="eng\input\CommandBindings.h" />
-    <ClInclude Include="eng\input\InputProcessor.h">
+    <ClInclude Include="eng\input\Input.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -290,6 +299,11 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="eng\input\GamepadState.h" />
+    <ClInclude Include="eng\input\KeyState.h" />
+    <ClInclude Include="eng\utils\SdbmHash.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="game\Components\Rotator.h">
       <SubType>
       </SubType>
@@ -336,7 +350,10 @@
     <ClCompile Include="eng\Actor.cpp" />
     <ClCompile Include="dae\Font.cpp" />
     <ClCompile Include="dae\InputManager.cpp" />
-    <ClCompile Include="eng\commands\MoveCommand.cpp" />
+    <ClCompile Include="eng\commands\ModifyActorResource.cpp" />
+    <ClCompile Include="eng\commands\Move.cpp" />
+    <ClCompile Include="eng\components\ResourceDisplayLogic.cpp" />
+    <ClCompile Include="eng\components\ResourceTracker.cpp" />
     <ClCompile Include="eng\Main.cpp" />
     <ClCompile Include="dae\Minigin.cpp" />
     <ClCompile Include="dae\Renderer.cpp" />
@@ -344,7 +361,7 @@
     <ClCompile Include="dae\Texture2D.cpp" />
     <ClCompile Include="eng\components\FpsTracker.cpp" />
     <ClCompile Include="eng\input\CommandBindings.cpp" />
-    <ClCompile Include="eng\input\InputProcessor.cpp" />
+    <ClCompile Include="eng\input\Input.cpp" />
     <ClCompile Include="eng\input\KeyboardState.cpp" />
     <ClCompile Include="eng\input\GamepadState.cpp" />
     <ClCompile Include="game\Components\Rotator.cpp" />

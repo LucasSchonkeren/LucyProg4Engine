@@ -3,7 +3,7 @@
 #include "../abstract/AbstractComponent.h"
 #include "../../dae/Texture2D.h"
 
-namespace cpt {
+namespace eng::cpt {
 
 class TextureRenderer final : public eng::AbstractComponent {
 public: //---------------|Constructor/Destructor/copy/move|--------------

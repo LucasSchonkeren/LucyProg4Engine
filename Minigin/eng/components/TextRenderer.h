@@ -6,7 +6,7 @@
 
 #include <string>
 
-namespace cpt {
+namespace eng::cpt {
 
 class TextRenderer final : public eng::AbstractComponent {
 public: //---------------|Constructor/Destructor/copy/move|--------------

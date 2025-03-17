@@ -3,6 +3,8 @@
 #include <memory>
 
 #include "../utils/utils.h"
+#include "KeyState.h"
+
 
 namespace eng::input {
 
@@ -32,3 +34,4 @@ private: //---------------|Pimpl|------------------------------------
 };
 
 } // !eng::input
+

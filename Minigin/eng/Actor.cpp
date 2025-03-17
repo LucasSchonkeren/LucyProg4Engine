@@ -123,6 +123,18 @@ void Actor::Destroy() {
     }
 }
 
+void Actor::Init() {
+    for (auto& child : m_ChildUptrs) {
+        child->Init();
+    }
+
+    if (IsFlagged(Flags::Started)) return;
+
+    for (auto& compUptr : m_CompUptrs) {
+        compUptr->Init();
+    }
+}
+
 void Actor::Start() {
     for (auto& child : m_ChildUptrs) {
         child->Start();
@@ -184,7 +196,7 @@ void Actor::Render() {
     for (auto& child : m_ChildUptrs) {
         child->Render();
     }
-}
+}   
 
 void Actor::RenderImgui() {
     if (IsFlagged(Flags::NoRender)) return;
@@ -215,6 +227,11 @@ cpt::Transform& Actor::GetTransform()
 }
 
 } // namespace eng
+
+bool operator==(const eng::Actor& lhs, const eng::Actor& rhs) {
+    return &lhs == &rhs;
+}
+
 
 //---------------------------------------------------------------------------
 //-----------------------------|Unit Tests|----------------------------------
@@ -310,3 +327,4 @@ SCENARIO("Child Actors can be added and references to them retrieved from parent
 }
 
 #endif // !NOSDL
+

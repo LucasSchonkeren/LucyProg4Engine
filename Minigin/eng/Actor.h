@@ -136,6 +136,7 @@ public: //---------------------|Flag Enum/Methods|-----------------------------
 
 public: //--------------------|Gameloop Methods|--------------------------------
 
+	void Init();
 	void Start();
 	void Update();
 	void LateUpdate();
@@ -188,8 +189,6 @@ CompT& Actor::AddComponent(ArgsT... args)
 template<std::derived_from<AbstractComponent> CompT>
 inline CompT* Actor::GetComponent()
 {
-	assert(time::stage == time::Stages::Start or time::stage == time::Stages::None and "Do not call GetComponent on the hotpath");
-
 	CompT* f_Result{};
 
 	for (auto& compUptr : m_CompUptrs) {
@@ -211,3 +210,7 @@ inline void Actor::RemoveComponent() {
 
 
 } // !namespace eng
+
+//#############################################|Comparison Operator overloads|#################################
+
+bool operator==(const eng::Actor& lhs, const eng::Actor& rhs);

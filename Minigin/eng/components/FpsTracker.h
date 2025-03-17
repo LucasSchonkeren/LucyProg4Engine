@@ -5,7 +5,7 @@
 
 class eng::Actor; 
 
-namespace cpt {
+namespace eng::cpt {
 
 class FpsTracker final : public eng::AbstractComponent {
 public: //---------------|Constructor/Destructor/copy/move|--------------

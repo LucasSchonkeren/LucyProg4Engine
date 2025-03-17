@@ -5,17 +5,17 @@
 
 namespace eng::cmd {
 
-class MoveCommand final : public AbstractCommand {
+class Move final : public AbstractCommand {
 public: //---------------|Constructor/Destructor/copy/move|--------------
 	
-	MoveCommand(glm::vec2 velocity);
-	~MoveCommand()	= default;
+	Move(glm::vec2 velocity);
+	~Move()	= default;
 
-	MoveCommand				(const MoveCommand&)	= delete;
-	MoveCommand& operator=	(const MoveCommand&)	= delete;
+	Move				(const Move&)	= delete;
+	Move& operator=	(const Move&)	= delete;
 
-	MoveCommand				(const MoveCommand&&)	= delete;
-	MoveCommand& operator=	(const MoveCommand&&)	= delete;
+	Move				(const Move&&)	= delete;
+	Move& operator=	(const Move&&)	= delete;
 
 public: //---------------------------|Execute|------------------------
 
@@ -28,4 +28,5 @@ private: //---------------------------|Fields|----------------------------
 
 }; // !MoveCommand
 
-} // !_namespace_
+} // !eng::cmd
+

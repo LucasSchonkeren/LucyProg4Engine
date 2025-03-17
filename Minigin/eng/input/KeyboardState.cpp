@@ -17,6 +17,10 @@ SDL_Scancode KeyboardKeyToSdlScancode(KeyboardKeys key) {
 		return SDL_SCANCODE_D;
 	case eng::input::KeyboardKeys::Space:
 		return SDL_SCANCODE_SPACE;
+	case eng::input::KeyboardKeys::Q:
+		return SDL_SCANCODE_Q;
+	case eng::input::KeyboardKeys::E:
+		return SDL_SCANCODE_E;
 	default:
 		assert(false and "Key not implemented by engine");
 		return SDL_SCANCODE_0;

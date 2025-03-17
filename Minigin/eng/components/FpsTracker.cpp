@@ -3,14 +3,14 @@
 #include "../Actor.h"
 #include "TextRenderer.h"
 #include <string>
-#include "../input/InputProcessor.h"
+#include "../input/Input.h"
 
-void cpt::FpsTracker::Start() {
+void eng::cpt::FpsTracker::Start() {
 	assert(GetOwner().GetComponent<TextRenderer>() && "An FpsTracker Component requirs a Text Renderer");
 	m_TextRendererPtr = GetOwner().GetComponent<TextRenderer>();
 }
 
-void cpt::FpsTracker::Update() {
+void eng::cpt::FpsTracker::Update() {
 	//Only update this component every ~0.5 seconds so our fps is actually readable
 	static double f_timePassed{};
 	if (f_timePassed += eng::time::DeltaTime(); f_timePassed < 0.5) return;

@@ -11,7 +11,7 @@ struct TransformData {
 
 } // !eng
 
-namespace cpt {
+namespace eng::cpt {
 
 /// <summary>
 /// A component that allows Actors to store their local transform and observe their global transform.

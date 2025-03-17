@@ -6,7 +6,7 @@
 
 #include <filesystem>
 
-namespace cpt {
+namespace eng::cpt {
 void TextureRenderer::LoadTexture(const std::string& file) {
 	m_TexturePtr = eng::resources::LoadTexture(file);
 }

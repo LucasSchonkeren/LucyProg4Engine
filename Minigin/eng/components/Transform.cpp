@@ -1,7 +1,7 @@
 #include "Transform.h"
 #include "../Actor.h"
 
-namespace cpt {
+namespace eng::cpt {
 void Transform::SetLocalPosition(float x, float y) {
 	m_TransformData.position.x = x;
 	m_TransformData.position.y = y;
@@ -15,7 +15,7 @@ void Transform::SetLocalPosition(glm::vec2 newPosition) {
 	SetLocalPosition(newPosition.x, newPosition.y);
 }
 void Transform::TranslatePosition(glm::vec2 translateVector) {
-	m_TransformData.position += translateVector;
+	SetLocalPosition(m_TransformData.position + translateVector);
 }
 void Transform::FlagForGlobalUpdate() {
 	m_GlobalNeedsUpdate = true;
