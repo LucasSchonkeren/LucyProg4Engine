@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
@@ -17,56 +9,33 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="UnitTest|Win32">
-      <Configuration>UnitTest</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="UnitTest|x64">
       <Configuration>UnitTest</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{41B0EC47-D48C-4B0F-951B-D98595FFAE0A}</ProjectGuid>
+    <ProjectGuid>{C7F4E444-1EDD-4340-B473-8C8240F7F80E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Minigin</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>LucyEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnitTest|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -76,20 +45,6 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\sdl.props" />
-    <Import Project="..\vld.props" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\sdl.props" />
-    <Import Project="..\vld.props" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\sdl.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -106,69 +61,16 @@
     <Import Project="..\sdl.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\</IntDir>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnitTest|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\</IntDir>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)\3rdParty\imgui-1.91.8</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Xinput.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
-    </Link>
-    <PostBuildEvent />
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'">
-    <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;NOSDL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)\3rdParty\imgui-1.91.8</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Xinput.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
-    </Link>
-    <PostBuildEvent />
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
@@ -187,6 +89,9 @@
       <AdditionalDependencies>Xinput.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>xinput.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UnitTest|x64'">
     <ClCompile>
@@ -206,29 +111,9 @@
       <AdditionalDependencies>Xinput.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)\3rdParty\imgui-1.91.8</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Xinput.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
-    </Link>
-    <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>xinput.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -252,16 +137,12 @@
       <AdditionalDependencies>Xinput.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>xinput.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\3rdParty\imgui-1.91.8\backends\imgui_impl_opengl3.h" />
-    <ClInclude Include="..\3rdParty\imgui-1.91.8\backends\imgui_impl_sdl2.h" />
-    <ClInclude Include="..\3rdParty\imgui-1.91.8\imconfig.h" />
-    <ClInclude Include="..\3rdParty\imgui-1.91.8\imgui.h" />
-    <ClInclude Include="..\3rdParty\imgui-1.91.8\imgui_internal.h" />
-    <ClInclude Include="..\3rdParty\imgui-1.91.8\imgui_plot.h" />
-    <ClInclude Include="..\3rdParty\imgui-1.91.8\imstb_rectpack.h" />
-    <ClInclude Include="..\3rdParty\imgui-1.91.8\imstb_textedit.h" />
+    <ClInclude Include="eng\Engine.h" />
     <ClInclude Include="eng\abstract\AbstractCommand.h" />
     <ClInclude Include="eng\abstract\AbstractComponent.h">
       <SubType>
@@ -289,6 +170,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="eng\Game.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="eng\input\CommandBindings.h" />
     <ClInclude Include="eng\input\Input.h">
       <SubType>
@@ -301,10 +186,6 @@
     <ClInclude Include="eng\input\GamepadState.h" />
     <ClInclude Include="eng\input\KeyState.h" />
     <ClInclude Include="eng\utils\SdbmHash.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="game\Components\Rotator.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -328,7 +209,6 @@
     </ClInclude>
     <ClInclude Include="dae\Font.h" />
     <ClInclude Include="dae\InputManager.h" />
-    <ClInclude Include="game\Components\TrashCache.h" />
     <ClInclude Include="Libs\catch.hpp" />
     <ClInclude Include="dae\Minigin.h" />
     <ClInclude Include="dae\Renderer.h" />
@@ -338,14 +218,7 @@
     <ClInclude Include="eng\utils\utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\3rdParty\imgui-1.91.8\backends\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="..\3rdParty\imgui-1.91.8\backends\imgui_impl_sdl2.cpp" />
-    <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui.cpp" />
-    <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_demo.cpp" />
-    <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_draw.cpp" />
-    <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_plot.cpp" />
-    <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_tables.cpp" />
-    <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui_widgets.cpp" />
+    <ClCompile Include="eng\Engine.cpp" />
     <ClCompile Include="eng\abstract\AbstractComponent.cpp" />
     <ClCompile Include="eng\Actor.cpp" />
     <ClCompile Include="dae\Font.cpp" />
@@ -354,7 +227,7 @@
     <ClCompile Include="eng\commands\Move.cpp" />
     <ClCompile Include="eng\components\ResourceDisplayLogic.cpp" />
     <ClCompile Include="eng\components\ResourceTracker.cpp" />
-    <ClCompile Include="eng\Main.cpp" />
+    <ClCompile Include="eng\Game.cpp" />
     <ClCompile Include="dae\Minigin.cpp" />
     <ClCompile Include="dae\Renderer.cpp" />
     <ClCompile Include="dae\ResourceManager.cpp" />
@@ -364,14 +237,12 @@
     <ClCompile Include="eng\input\Input.cpp" />
     <ClCompile Include="eng\input\KeyboardState.cpp" />
     <ClCompile Include="eng\input\GamepadState.cpp" />
-    <ClCompile Include="game\Components\Rotator.cpp" />
     <ClCompile Include="eng\components\TextRenderer.cpp" />
     <ClCompile Include="eng\components\TextureRenderer.cpp" />
     <ClCompile Include="eng\components\Transform.cpp" />
     <ClCompile Include="eng\engine\Resources.cpp" />
     <ClCompile Include="eng\engine\Scenegraph.cpp" />
     <ClCompile Include="eng\engine\Time.cpp" />
-    <ClCompile Include="game\Components\TrashCache.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

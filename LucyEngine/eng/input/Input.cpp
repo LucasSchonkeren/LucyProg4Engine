@@ -13,7 +13,7 @@ namespace eng::input {
 KeyboardState keyboardState{};
 GamepadState gamePadState{};
 
-std::set<CommandBindings*> commandBindingPtrs{};
+std::set<u_ptr<CommandBindings>> commandBindingUptrs{};
 
 bool ProcessInput() {
 	// Poll SDL evdents
@@ -26,13 +26,13 @@ bool ProcessInput() {
 
 		}
 
-		ImGui_ImplSDL2_ProcessEvent(&e);
+		//ImGui_ImplSDL2_ProcessEvent(&e);
 	}
 
 	keyboardState.FetchCurrentState();
 	gamePadState.FetchCurrentState();
 
-	for (auto* bindingPtr : commandBindingPtrs) {
+	for (auto& bindingPtr : commandBindingUptrs) {
 		if (not bindingPtr->GetTargetActor()) break;
 		for (const auto& cmdBinding : bindingPtr->GetCommandBindings()) {
 			if (cmdBinding.first.isKeyboardKey)
@@ -66,12 +66,12 @@ bool ProcessInput() {
 	return true;
 }
 
-void RegisterCommandBinding(CommandBindings* binding) {
-	commandBindingPtrs.emplace(binding);
+void RegisterCommandBinding(u_ptr<CommandBindings> binding) {
+	commandBindingUptrs.emplace(std::move(binding));
 }
 
-void UnregisterCommandBinding(CommandBindings* binding) {
-	commandBindingPtrs.erase(binding);
+void UnregisterCommandBinding(u_ptr<CommandBindings> binding) {
+	commandBindingUptrs.erase(std::move(binding));
 }
 
 }

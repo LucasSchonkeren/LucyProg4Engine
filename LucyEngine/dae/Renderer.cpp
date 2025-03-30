@@ -2,8 +2,8 @@
 #include "Renderer.h"
 #include "Texture2D.h"
 
-#include "backends/imgui_impl_sdl2.h"
-#include "backends/imgui_impl_opengl3.h"
+//#include "backends/imgui_impl_sdl2.h"
+//#include "backends/imgui_impl_opengl3.h"
 
 #include "../eng/Actor.h"
 
@@ -31,10 +31,10 @@ void dae::Renderer::Init(SDL_Window* window)
 	}
 
 	// set up imgui
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGui_ImplSDL2_InitForOpenGL(window, SDL_GL_GetCurrentContext());
-	ImGui_ImplOpenGL3_Init();
+	//IMGUI_CHECKVERSION();
+	//ImGui::CreateContext();
+	//ImGui_ImplSDL2_InitForOpenGL(window, SDL_GL_GetCurrentContext());
+	//ImGui_ImplOpenGL3_Init();
 }
 
 void dae::Renderer::Render(eng::Actor& root) const
@@ -45,22 +45,22 @@ void dae::Renderer::Render(eng::Actor& root) const
 
 	root.Render();
 	
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame();
-	ImGui::NewFrame();
+	//ImGui_ImplOpenGL3_NewFrame();
+	//ImGui_ImplSDL2_NewFrame();
+	//ImGui::NewFrame();
 	//ImGui::ShowDemoWindow();
-	root.RenderImgui();
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	//root.RenderImgui();
+	//ImGui::Render();
+	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	SDL_RenderPresent(m_renderer);
 }
 
 void dae::Renderer::Destroy()
 {
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplSDL2_Shutdown();
-	ImGui::DestroyContext();
+	//ImGui_ImplOpenGL3_Shutdown();
+	//ImGui_ImplSDL2_Shutdown();
+	//ImGui::DestroyContext();
 
 	if (m_renderer != nullptr)
 	{

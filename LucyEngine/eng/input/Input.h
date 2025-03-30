@@ -9,9 +9,9 @@ namespace eng::input {
 
 bool ProcessInput();
 
-void RegisterCommandBinding(CommandBindings* binding);
+void RegisterCommandBinding(u_ptr<CommandBindings> binding);
 
-void UnregisterCommandBinding(CommandBindings* binding);
+void UnregisterCommandBinding(u_ptr<CommandBindings> binding);
 
 } // !eng::input
 

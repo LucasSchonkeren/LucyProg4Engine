@@ -152,11 +152,14 @@
     <ClInclude Include="eng\components\ResourceDisplayLogic.h">
       <Filter>Minigin Files</Filter>
     </ClInclude>
+    <ClInclude Include="eng\Engine.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eng\Game.h">
+      <Filter>Minigin Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="eng\Main.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="..\3rdParty\imgui-1.91.8\imgui.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -238,5 +241,7 @@
     <ClCompile Include="eng\components\ResourceTracker.cpp" />
     <ClCompile Include="eng\commands\ModifyActorResource.cpp" />
     <ClCompile Include="eng\components\ResourceDisplayLogic.cpp" />
+    <ClCompile Include="eng\Engine.cpp" />
+    <ClCompile Include="eng\Game.cpp" />
   </ItemGroup>
 </Project>

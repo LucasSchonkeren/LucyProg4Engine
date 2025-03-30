@@ -1,5 +1,5 @@
 #pragma once
-#include "../../eng/abstract/AbstractComponent.h"
+#include "eng/abstract/AbstractComponent.h"
 
 namespace cpt {
 
