@@ -1,5 +1,6 @@
 #include "ResourceDisplayLogic.h"
 #include "../Actor.h"
+#include "ResourceTracker.h"
 
 #include <algorithm>
 #include <regex>
@@ -16,10 +17,10 @@ void eng::cpt::ResourceDisplayLogic::Init() {
 
 void eng::cpt::ResourceDisplayLogic::OnEvent(Event event) {
     if (event.eventTypeHash != eng::eventHash::actorResourceChanged) return;
-    UpdateTextComponent(&static_cast<ResourceTracker&>(event.sender));
+    UpdateTextComponent(std::any_cast<eng::eventContext::ResourceChanged>(event.context).sender);
 }
 
-void eng::cpt::ResourceDisplayLogic::UpdateTextComponent(ResourceTracker* resourceTrackerPtr) {
+void eng::cpt::ResourceDisplayLogic::UpdateTextComponent(ResourceTracker* const resourceTrackerPtr) {
     std::regex pattern(R"(\{([^}]*)\})");
     std::string f_Result{}, f_Suffix{};
 

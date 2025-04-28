@@ -21,9 +21,14 @@
 #include "../eng/engine/Time.h"
 #include "../eng/engine/Resources.h"
 #include "../eng/input/Input.h"
+#include "../eng/engine/AudioPlayer.h"
+#include "../eng/engine/ConsoleLogger.h"
+
+#include "../eng/engine/Services.h"
 
 #include "../eng/commands/Move.h"
 #include "../eng/commands/ModifyActorResource.h"
+#include <queue>
 
 static SDL_Window* g_window{};
 
@@ -96,8 +101,16 @@ void eng::Engine::Run(std::function<Game()> loadGame) {
 	// Set up scene root
 	eng::Actor& f_Root{game.GetRootActor()};
 
-	auto& renderer = dae::Renderer::GetInstance();
+	// Set up services
+	auto& renderer = dae::Renderer::GetInstance(); //TODO: make service
 
+	eng::ConsoleLogger f_Logger{};
+	eng::service::logger.Subscribe(f_Logger);
+
+	eng::LoggingAudioPlayer f_AudioPlayer{};
+	eng::service::audioPlayer.Subscribe(f_AudioPlayer);
+
+	// Set up time
 	auto lastTime = std::chrono::high_resolution_clock::now();
 
 	bool doContinue = true;
@@ -134,4 +147,34 @@ void eng::Engine::Run(std::function<Game()> loadGame) {
 
 	// Free any remainig resources
 	eng::resources::ClearAllResources();
+}
+
+void RemoveDestroyedChildren(eng::Actor& parent) {
+	for (auto child : parent.GetChildren()) {
+		if (child.get().IsFlagged(eng::Actor::Flags::Destroyed)) {
+			parent.DestroyChildActor(&child.get());
+		}
+		else RemoveDestroyedChildren(child);
+	}
+}
+
+struct ActorMoveInfo {
+	eng::Actor& child, & parent;
+	bool keepWorldTransform;
+};
+
+
+
+void eng::Engine::Cleanup(eng::Actor& sceneRoot) {
+
+	while (not m_ActorsToMove.empty()) {
+		m_ActorsToMove.front().child.SetParent(m_ActorsToMove.front().parent, m_ActorsToMove.front().keepWorldTransform);
+		m_ActorsToMove.pop();
+	}
+
+	RemoveDestroyedChildren(sceneRoot);
+}
+
+void eng::Engine::SetParentInCleanup(Actor& child, Actor& parent, bool keepWorldTransform) {
+	m_ActorsToMove.emplace(ActorMoveInfo{ child, parent, keepWorldTransform });
 }

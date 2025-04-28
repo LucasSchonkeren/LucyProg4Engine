@@ -73,5 +73,4 @@ void RegisterCommandBinding(u_ptr<CommandBindings> binding) {
 void UnregisterCommandBinding(u_ptr<CommandBindings> binding) {
 	commandBindingUptrs.erase(std::move(binding));
 }
-
 }

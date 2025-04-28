@@ -21,9 +21,15 @@
     <ClCompile Include="Components\Rotator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\AudioController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\Rotator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\AudioController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,7 +15,7 @@ class Actor; //forward declaration
 /// <summary>
 /// An abstract base class for Components
 /// </summary>
-class AbstractComponent : public AbstractSubject {
+class AbstractComponent {
 public: //------------------------|Virtual Destructor|------------------------
 	AbstractComponent(Actor& owner);
 	virtual ~AbstractComponent() = default;
@@ -23,14 +23,6 @@ public: //------------------------|Virtual Destructor|------------------------
 public: //----------------------|Serialization methods|------------------------
 	virtual std::string Serialize() { return ""; };
 	virtual void Deserialize(std::string serializationString) {};
-
-public: //--------------------|Subject methods|-----------------------------
-
-	void AddObserver(AbstractObserver& observer) override;
-	void RemoveObserver(AbstractObserver& observer) override;
-
-protected:
-	void DispatchEvent(Event event) override;
 
 public: //--------------------|Gameloop methods|-----------------------------
 
@@ -51,7 +43,7 @@ public: //---------------------|Relationship Methods|-------------------------
 
 private: //--------------------|Fields|--------------------------
 	Actor& m_Owner;
-	std::vector<AbstractObserver*> m_ObserverPtrs{};
+	std::vector<IObserver*> m_ObserverPtrs{};
 }; // !AbstractComponent
 
 } // !cpt

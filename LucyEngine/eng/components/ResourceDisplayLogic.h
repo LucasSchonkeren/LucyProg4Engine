@@ -9,7 +9,7 @@ namespace eng::cpt {
 /// <summary>
 /// A component to keep track of an arbitrary number of in-game 'resources', such as health or stamina. Resources are stored as integers and have are clamped between 0 and a max value. If the max value is set to 0, there is no max value for that resource.
 /// </summary>
-class ResourceDisplayLogic final : public eng::AbstractComponent, public eng::AbstractObserver {
+class ResourceDisplayLogic final : public eng::AbstractComponent, public eng::IObserver {
 public: //---------------|Constructor/Destructor/copy/move|--------------
 
 	ResourceDisplayLogic(eng::Actor& owner, std::string_view formatString) : AbstractComponent(owner), m_FormatString(formatString) {};
@@ -37,7 +37,7 @@ public: //--------------------|Observer methods|-----------------------------
 
 private: //---------------------------|methods|----------------------------
 
-	void UpdateTextComponent(ResourceTracker* resourceTrackerPtr);
+	void UpdateTextComponent(ResourceTracker* const resourceTrackerPtr);
 
 private: //---------------------------|fields|----------------------------
 	

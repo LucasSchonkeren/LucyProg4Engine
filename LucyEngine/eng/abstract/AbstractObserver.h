@@ -1,32 +1,41 @@
 #pragma once
 
 #include <any>
+#include <set>
 
 namespace eng {
 
-class AbstractObserver;
-class AbstractSubject;
+class IObserver;
 
 struct Event {
-	AbstractSubject& sender;
 	unsigned int eventTypeHash;
 	std::any context;
 };
 
-class AbstractSubject {
+//class AbstractSubject {
+//public:
+//	virtual ~AbstractSubject() = default;
+//
+//	virtual void AddObserver(AbstractObserver& observer) = 0;
+//	virtual void RemoveObserver(AbstractObserver& observer) = 0;
+//
+//protected:
+//	virtual void DispatchEvent(Event event) = 0;
+//};
+
+class Subject final {
 public:
-	virtual ~AbstractSubject() = default;
+	void AddObserver(IObserver& observer);
+	void RemoveObserver(IObserver& observer);
+	void DispatchEvent(Event event);
 
-	virtual void AddObserver(AbstractObserver& observer) = 0;
-	virtual void RemoveObserver(AbstractObserver& observer) = 0;
-
-protected:
-	virtual void DispatchEvent(Event event) = 0;
+private:
+	std::set<IObserver*> m_ObserverPtrs;
 };
 
-class AbstractObserver {
+class IObserver {
 public:
-	virtual ~AbstractObserver() = default;
+	virtual ~IObserver() = default;
 	virtual void OnEvent(Event event) = 0;
 };
 

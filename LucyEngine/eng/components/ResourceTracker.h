@@ -4,10 +4,14 @@
 
 #include <unordered_map>
 
+namespace eng::cpt { class ResourceTracker; } //forward decleration
+
+
 namespace eng::eventContext {
 
 struct ResourceChanged {
 	std::string_view resource;
+	cpt::ResourceTracker* const sender;
 	int delta;
 };
 
@@ -16,7 +20,7 @@ struct ResourceChanged {
 namespace eng::cpt {
 
 /// <summary>
-/// A component to keep track of an arbitrary number of in-game 'resources', such as health or stamina. Resources are stored as integers and have are clamped between 0 and a max value. If the max value is set to 0, there is no max value for that resource.
+/// A component to keep track of an arbitrary number of in-game 'resources', such as health or stamina. Resources are stored as integers and are clamped between 0 and a max value. If the max value is set to 0, there is no max value for that resource.
 /// </summary>
 class ResourceTracker final : public eng::AbstractComponent {
 public: //---------------|Constructor/Destructor/copy/move|--------------
@@ -61,15 +65,21 @@ public: //--------------------|Getter methods|-----------------------
 
 	bool IsResourceEmpty(std::string_view resource) const;
 
+public: //--------------------|Subject methods|-----------------------
+
+	void AddObserver(IObserver& observer);
+	void RemoveObserver(IObserver& observer);
+
 public: //--------------------|Gameloop methods|-----------------------
 
 	void Start() override;
 
 /*##################################|PRIVATE|##################################################*/
 
-private: //---------------------------|Hp fiels|----------------------------
+private: //---------------------------|Private fields|----------------------------
 
 	std::unordered_map<std::string_view, int> m_ResourceVals{}, m_MaxResourceVals{};
+	Subject m_ResourceSubject{};
 
 }; // !HealthTracker
 

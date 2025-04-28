@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bomberman", "Bomberman\Bomberman.vcxproj", "{A71C99EB-4353-4BE8-BE5B-465C97780D46}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C7F4E444-1EDD-4340-B473-8C8240F7F80E} = {C7F4E444-1EDD-4340-B473-8C8240F7F80E}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LucyEngine", "LucyEngine\LucyEngine.vcxproj", "{C7F4E444-1EDD-4340-B473-8C8240F7F80E}"
 EndProject
@@ -32,9 +35,8 @@ Global
 		{C7F4E444-1EDD-4340-B473-8C8240F7F80E}.Release|x64.ActiveCfg = Release|x64
 		{C7F4E444-1EDD-4340-B473-8C8240F7F80E}.Release|x64.Build.0 = Release|x64
 		{C7F4E444-1EDD-4340-B473-8C8240F7F80E}.Release|x86.ActiveCfg = Release|x64
-		{C7F4E444-1EDD-4340-B473-8C8240F7F80E}.UnitTest|x64.ActiveCfg = UnitTest|x64
-		{C7F4E444-1EDD-4340-B473-8C8240F7F80E}.UnitTest|x64.Build.0 = UnitTest|x64
-		{C7F4E444-1EDD-4340-B473-8C8240F7F80E}.UnitTest|x86.ActiveCfg = UnitTest|x64
+		{C7F4E444-1EDD-4340-B473-8C8240F7F80E}.UnitTest|x64.ActiveCfg = Release|x64
+		{C7F4E444-1EDD-4340-B473-8C8240F7F80E}.UnitTest|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
