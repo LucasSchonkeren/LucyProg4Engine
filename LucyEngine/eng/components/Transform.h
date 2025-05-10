@@ -35,6 +35,9 @@ public: //---------------|Transform Methods|--------------
 
 	void TranslatePosition(glm::vec2 translateVector);
 
+	void SetGlobalPosition(float x, float y);
+	void SetGlobalPosition(glm::vec2 newPosition);
+
 	void FlagForGlobalUpdate();
 
 	eng::TransformData const& GetLocal() const;

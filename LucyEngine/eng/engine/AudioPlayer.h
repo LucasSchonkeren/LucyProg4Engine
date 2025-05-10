@@ -17,7 +17,8 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 
 public: //---------------|Audio method implementations|--------------
 
-    void PlaySound(std::string sound)	override;
+	/// LoadSound -> id
+    void PlaySound(std::string sound)	override; /// String -> id
 	void StopSound(std::string sound)	override;
 	void StopSound()					override;
 

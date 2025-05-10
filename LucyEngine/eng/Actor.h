@@ -14,16 +14,25 @@
 #include "abstract/AbstractComponent.h"
 #include "components/Transform.h"
 #include "../eng/engine/Time.h"
+#include "Game.h"
 
 namespace eng {
+
+
 
 /// <summary>
 /// The quintessential Game Object. An Actor manages the lifetime and ownership of Components and Child Actors.
 /// </summary>
 class Actor final {
+public: //---------------|Helper struct|------------------------------
+	struct MoveInfo {
+		Actor* newParentPtr{};
+		bool keepWorldTransform{};
+	};
+
 public: //---------------|Constructor/Destructor/copy/move|--------------
 	
-	Actor();
+	Actor(Game& game);
 	~Actor()	= default;
 
 	// Actors cannot be copied
@@ -83,6 +92,8 @@ public: //---------------|Parent Actor Methods|-------------------------
 	/// </summary>
 	void	SetParentToRoot();
 
+	void	MoveToNewParent();
+
 public: //--------------|Component Methods|-----------------------------
 
 	/// <summary>
@@ -115,14 +126,18 @@ public: //--------------|Component Methods|-----------------------------
 
 public: //---------------------|Flag Enum/Methods|-----------------------------
 	enum class Flags {
-		///Flag for destruction at the end of the frame
+		/// If this flag is set, the actor will be destroyed at end of frame
 		Destroyed,
-		///Skip this Actor's Update cycle. Disables Update(), LateUpdate(), and FixedUpdate()
+		/// If this flag is set, the actor will be moved to another parent at end of frame
+		ParentChanged,
+		/// Skip this Actor's Update cycle. Disables Update(), LateUpdate(), and FixedUpdate()
 		NoUpdate,
-		///Skip this Actor's Render cycle. Disable Render().
+		/// Skip this Actor's Render cycle. Disable Render().
 		NoRender,
-		///If not set, runs start methods on its components and sets it at the start of the next frame.
+		/// If not set, runs start methods on its components and sets it at the start of the next frame.
 		Started,
+		/// If set, the component is considered inactive, Controls Enable() and Disable().
+		Disabled,
 
 		SIZE_
 	};
@@ -134,15 +149,26 @@ public: //---------------------|Flag Enum/Methods|-----------------------------
 	/// </summary>
 	void Destroy();
 
+	/// <summary>
+	/// Enable the component, if disabled. Unsets NoUpdate and NoRender and calls OnEnable().
+	/// </summary>
+	void Enable();
+
+	/// <summary>
+	/// Disable the component, if enabled. Sets NoUpdate and NoRender and calls OnDisable()
+	/// </summary>
+	void Disable();
+
 public: //--------------------|Gameloop Methods|--------------------------------
 
-	void Init();
+	void OnEnable();
 	void Start();
 	void Update();
 	void LateUpdate();
 	void FixedUpdate();
 	void Render(); 
 	void RenderImgui();
+	void OnDisable();
 
 /*##################################|PRIVATE|##################################################*/
 
@@ -151,6 +177,8 @@ private: //--------------------|Child/Parent Actor Fields|----------------------
 	Actor* m_ParentPtr{};
 
 	u_ptr_vec<Actor> m_ChildUptrs{};
+
+	MoveInfo m_MoveInfo{};
 
 private: //-----------------------|Component Fields|-------------------------------------
 
@@ -161,6 +189,10 @@ private: //-----------------------|Component Fields|----------------------------
 private: //-----------------------|Flag Fields|-------------------------------------------
 
 	std::bitset<static_cast<int>(Flags::SIZE_)> m_Flags{};
+
+private: //-----------------------|Game Fields|-------------------------------------------
+
+	Game& m_Game;
 
 }; // !Actor
 

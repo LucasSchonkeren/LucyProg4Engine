@@ -93,13 +93,13 @@ eng::Engine::~Engine()
 	SDL_Quit();
 }
 
-void eng::Engine::Run(std::function<Game()> loadGame) {
+void eng::Engine::Run(std::function<u_ptr<Game>()> loadGame) {
 	eng::resources::Init();
 
-	auto game = loadGame();
+	auto f_GameUptr = loadGame();
 
 	// Set up scene root
-	eng::Actor& f_Root{game.GetRootActor()};
+	eng::Actor& f_Root{f_GameUptr->GetRootActor()};
 
 	// Set up services
 	auto& renderer = dae::Renderer::GetInstance(); //TODO: make service
@@ -121,7 +121,6 @@ void eng::Engine::Run(std::function<Game()> loadGame) {
 		lastTime = std::chrono::high_resolution_clock::now();
 
 		eng::time::stage = eng::time::Stages::Start;
-		f_Root.Init();
 		f_Root.Start();
 
 
@@ -138,7 +137,7 @@ void eng::Engine::Run(std::function<Game()> loadGame) {
 		renderer.Render(f_Root);
 
 		eng::time::stage = eng::time::Stages::Cleanup;
-		eng::scenegraph::Cleanup(f_Root);
+		f_GameUptr->Cleanup();
 
 
 		eng::time::stage = eng::time::Stages::None;
@@ -147,34 +146,4 @@ void eng::Engine::Run(std::function<Game()> loadGame) {
 
 	// Free any remainig resources
 	eng::resources::ClearAllResources();
-}
-
-void RemoveDestroyedChildren(eng::Actor& parent) {
-	for (auto child : parent.GetChildren()) {
-		if (child.get().IsFlagged(eng::Actor::Flags::Destroyed)) {
-			parent.DestroyChildActor(&child.get());
-		}
-		else RemoveDestroyedChildren(child);
-	}
-}
-
-struct ActorMoveInfo {
-	eng::Actor& child, & parent;
-	bool keepWorldTransform;
-};
-
-
-
-void eng::Engine::Cleanup(eng::Actor& sceneRoot) {
-
-	while (not m_ActorsToMove.empty()) {
-		m_ActorsToMove.front().child.SetParent(m_ActorsToMove.front().parent, m_ActorsToMove.front().keepWorldTransform);
-		m_ActorsToMove.pop();
-	}
-
-	RemoveDestroyedChildren(sceneRoot);
-}
-
-void eng::Engine::SetParentInCleanup(Actor& child, Actor& parent, bool keepWorldTransform) {
-	m_ActorsToMove.emplace(ActorMoveInfo{ child, parent, keepWorldTransform });
 }

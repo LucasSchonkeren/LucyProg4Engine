@@ -102,6 +102,11 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="eng\components\Grid.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="eng\components\GridTransform.h" />
     <ClInclude Include="eng\Engine.h" />
     <ClInclude Include="eng\abstract\AbstractCommand.h" />
     <ClInclude Include="eng\abstract\AbstractComponent.h">
@@ -168,7 +173,6 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="eng\engine\Resources.h" />
-    <ClInclude Include="eng\engine\Scenegraph.h" />
     <ClInclude Include="eng\engine\Time.h">
       <SubType>
       </SubType>
@@ -185,6 +189,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="eng\abstract\AbstractObserver.cpp" />
+    <ClCompile Include="eng\components\Grid.cpp" />
+    <ClCompile Include="eng\components\GridTransform.cpp" />
     <ClCompile Include="eng\Engine.cpp" />
     <ClCompile Include="eng\abstract\AbstractComponent.cpp" />
     <ClCompile Include="eng\Actor.cpp" />
@@ -210,7 +216,6 @@
     <ClCompile Include="eng\components\TextureRenderer.cpp" />
     <ClCompile Include="eng\components\Transform.cpp" />
     <ClCompile Include="eng\engine\Resources.cpp" />
-    <ClCompile Include="eng\engine\Scenegraph.cpp" />
     <ClCompile Include="eng\engine\Time.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

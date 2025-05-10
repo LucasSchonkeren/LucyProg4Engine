@@ -8,12 +8,13 @@
 
 namespace eng {
 
-Actor::Actor() {   
+Actor::Actor(Game& game) :
+    m_Game(game) {   
     m_TransformPtr = &AddComponent<cpt::Transform>();
 }
 
 Actor& Actor::AddChildActor() {
-    auto& f_NewChild{ m_ChildUptrs.emplace_back(std::make_unique<Actor>()) };
+    auto& f_NewChild{ m_ChildUptrs.emplace_back(std::make_unique<Actor>(m_Game)) };
 
     f_NewChild->m_ParentPtr = this;
 
@@ -56,9 +57,6 @@ void Actor::DestroyChildActor(Actor* childPtr) {
 }
 
 void Actor::SetParent(Actor& newParent, bool keepWorldTransform) {
-    if (eng::time::stage != eng::time::Stages::Cleanup and eng::time::stage != eng::time::Stages::None)
-        eng::scenegraph::SetParentInCleanup(*this, newParent, keepWorldTransform);
-
     // Assert that this call is valid
     assert(m_ParentPtr          and "Root Actors cannot be assigned the child of another actor.");
     assert(&newParent != this   and "An actor cannot be its own parent");
@@ -69,25 +67,10 @@ void Actor::SetParent(Actor& newParent, bool keepWorldTransform) {
         f_Children.pop_back();
     }
 
-    // Allow world transform to be kept consistent
-    if (keepWorldTransform) {
-        GetTransform().SetLocalPosition(GetTransform().GetGlobal().position - newParent.GetTransform().GetGlobal().position);
-    }
-
-    // Fetch the unique pointer that owns this actor and move it into the new parent
-    std::unique_ptr<Actor>& f_OwningPointer = *std::ranges::find_if(m_ParentPtr->m_ChildUptrs, [this](const std::unique_ptr<Actor>& child) {
-        return child.get() == this; });
-    newParent.m_ChildUptrs.emplace_back(std::move(f_OwningPointer));
-
-    // Erase the now empty unique pointer in our old parent
-    std::erase_if(m_ParentPtr->m_ChildUptrs,  [this](const std::unique_ptr<Actor>& child) {
-        return child.get() == nullptr; });
-
-    // Inform this actor of its new parent
-    m_ParentPtr = &newParent;
-
-    // Flag this actor's transform as dirty
-    GetTransform().FlagForGlobalUpdate();
+    m_Game.FlagActorNewParent(this);
+    m_Flags.set(static_cast<int>(Flags::ParentChanged));
+    m_MoveInfo.newParentPtr = &newParent;
+    m_MoveInfo.keepWorldTransform = keepWorldTransform;
 }
 
 void Actor::SetParentToRoot() {
@@ -102,19 +85,48 @@ void Actor::SetParentToRoot() {
     SetParent(*f_RootPtr);
 }
 
+void Actor::MoveToNewParent() {
+    if (m_MoveInfo.newParentPtr == nullptr) return;
+
+    // Allow world transform to be kept consistent
+    if (m_MoveInfo.keepWorldTransform) {
+        GetTransform().SetLocalPosition(GetTransform().GetGlobal().position - m_MoveInfo.newParentPtr->GetTransform().GetGlobal().position);
+    }
+
+    // Fetch the unique pointer that owns this actor and move it into the new parent
+    std::unique_ptr<Actor>& f_OwningPointer = *std::ranges::find_if(m_ParentPtr->m_ChildUptrs, [this](const std::unique_ptr<Actor>& child) {
+        return child.get() == this; });
+    m_MoveInfo.newParentPtr->m_ChildUptrs.emplace_back(std::move(f_OwningPointer));
+
+    // Erase the now empty unique pointer in our old parent
+    std::erase_if(m_ParentPtr->m_ChildUptrs, [this](const std::unique_ptr<Actor>& child) {
+        return child.get() == nullptr; });
+
+    // Inform this actor of its new parent
+    m_ParentPtr = m_MoveInfo.newParentPtr;
+
+    // Flag this actor's transform as dirty
+    GetTransform().FlagForGlobalUpdate();
+
+    // Moving complete
+    m_MoveInfo.newParentPtr = nullptr;
+}
+
 Actor* eng::Actor::GetParent()
 {
     return m_ParentPtr;
 }
 
 bool Actor::IsFlagged(Flags flag) const {
-    return m_Flags[(int)flag];
+    return m_Flags.test(static_cast<int>(flag));
 }
 
 void Actor::Destroy() {
+    if (IsFlagged(Flags::Destroyed) or m_ParentPtr == nullptr) return;
     m_Flags.set(static_cast<int>(Flags::Destroyed));
 
     for (auto& child : m_ChildUptrs) {
+        if (child->IsFlagged(Flags::Destroyed)) m_Game.UnFlagActorDestroy(child.get());
         child->Destroy();
     }
 
@@ -123,15 +135,13 @@ void Actor::Destroy() {
     }
 }
 
-void Actor::Init() {
+void Actor::OnEnable() {
     for (auto& child : m_ChildUptrs) {
-        child->Init();
+        child->OnEnable();
     }
 
-    if (IsFlagged(Flags::Started)) return;
-
     for (auto& compUptr : m_CompUptrs) {
-        compUptr->Init();
+        compUptr->OnEnable();
     }
 }
 
@@ -207,6 +217,16 @@ void Actor::RenderImgui() {
 
     for (auto& childUptr : m_ChildUptrs) {
         childUptr->RenderImgui();
+    }
+}
+
+void Actor::OnDisable() {
+    for (auto& child : m_ChildUptrs) {
+        child->OnDisable();
+    }
+
+    for (auto& compUptr : m_CompUptrs) {
+        compUptr->OnDisable();
     }
 }
 

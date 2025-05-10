@@ -11,12 +11,24 @@ void Transform::SetLocalPosition(float x, float y) {
 		child.get().GetTransform().FlagForGlobalUpdate();
 	}
 }
+
 void Transform::SetLocalPosition(glm::vec2 newPosition) {
 	SetLocalPosition(newPosition.x, newPosition.y);
 }
+
 void Transform::TranslatePosition(glm::vec2 translateVector) {
 	SetLocalPosition(m_TransformData.position + translateVector);
 }
+
+void Transform::SetGlobalPosition(float x, float y){
+	SetGlobalPosition(glm::vec2{x, y});
+}
+
+void Transform::SetGlobalPosition(glm::vec2 newPosition) {
+	auto f_TranslatePosition{newPosition - GetGlobal().position};
+	TranslatePosition(newPosition);
+}
+
 void Transform::FlagForGlobalUpdate() {
 	m_GlobalNeedsUpdate = true;
 }

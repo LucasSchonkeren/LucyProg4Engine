@@ -39,6 +39,16 @@ public:
 
 	~impl() {
 		m_Thread.request_stop();
+
+		for (auto& [key, chunk] : m_SoundChunks) {
+			if (chunk != nullptr) {
+				Mix_FreeChunk(chunk);
+				chunk = nullptr;
+			}
+		}
+		m_SoundChunks.clear();
+
+		Mix_CloseAudio();
 	}
 
 	void PlaySound(std::string sound) {

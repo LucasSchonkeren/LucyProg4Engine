@@ -4,8 +4,8 @@ namespace eng::service {
 
 class NullAudioPlayer final : public IAudioPlayer {
 public:
-	virtual void PlaySound(std::string sound) {};
-	virtual void StopSound(std::string sound) {};
+	virtual void PlaySound(std::string) {};
+	virtual void StopSound(std::string) {};
 	virtual void StopSound() {};
 };
 

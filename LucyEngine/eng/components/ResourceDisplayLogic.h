@@ -27,7 +27,7 @@ public: //--------------------|Setter methods|-----------------------------
 
 public: //--------------------|Gameloop methods|-----------------------------
 
-	void Init() override;
+	void Start() override;
 
 public: //--------------------|Observer methods|-----------------------------
 

@@ -22,7 +22,7 @@ namespace eng::cpt {
 /// <summary>
 /// A component to keep track of an arbitrary number of in-game 'resources', such as health or stamina. Resources are stored as integers and are clamped between 0 and a max value. If the max value is set to 0, there is no max value for that resource.
 /// </summary>
-class ResourceTracker final : public eng::AbstractComponent {
+class ResourceTracker final : public AbstractComponent {
 public: //---------------|Constructor/Destructor/copy/move|--------------
 	
 	ResourceTracker(eng::Actor& owner) : AbstractComponent(owner) {};

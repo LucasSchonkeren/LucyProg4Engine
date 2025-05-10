@@ -24,14 +24,14 @@ public: //---------------|Constructor/destructor|---------------------------
 
 public: //---------------|Methods|---------------------------
 
-	void Run(std::function<Game()> loadGame);
+	void Run(std::function<u_ptr<Game>()> loadGame);
 
 private:
-	void Cleanup(eng::Actor& sceneRoot);
+	//void Cleanup(eng::Actor& sceneRoot);
 
-	void SetParentInCleanup(Actor& child, Actor& parent, bool keepWorldTransform);
+	//void SetParentInCleanup(Actor& child, Actor& parent, bool keepWorldTransform);
 
-	std::queue<ActorMoveInfo> m_ActorsToMove{};
+	//std::queue<ActorMoveInfo> m_ActorsToMove{};
 };
 
 }

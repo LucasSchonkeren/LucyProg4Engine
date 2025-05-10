@@ -21,7 +21,7 @@ public:
 		return *m_ServicePtr;
 	};
 private:
-	T* m_ServicePtr;
+	T* m_ServicePtr; // -> Unique ptr?
 	std::unique_ptr<T> m_DefaultServiceUptr;
 };
 

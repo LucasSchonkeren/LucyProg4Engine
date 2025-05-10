@@ -26,16 +26,17 @@ public: //----------------------|Serialization methods|------------------------
 
 public: //--------------------|Gameloop methods|-----------------------------
 
-	virtual void Init() {};
+	virtual void OnEnable() {};
 	virtual void Start() {};
 
-	virtual void Update() {};
-	virtual void LateUpdate() {};
-	virtual void FixedUpdate() {};
+	virtual void Update() {}; 
+	virtual void LateUpdate() {}; 
+	virtual void FixedUpdate() {}; 
 
 	virtual void Render() {};
 	virtual void RenderImgui() {};
 
+	virtual void OnDisable() {};
 	virtual void OnDestroy() {};
 
 public: //---------------------|Relationship Methods|-------------------------
@@ -43,7 +44,6 @@ public: //---------------------|Relationship Methods|-------------------------
 
 private: //--------------------|Fields|--------------------------
 	Actor& m_Owner;
-	std::vector<IObserver*> m_ObserverPtrs{};
 }; // !AbstractComponent
 
-} // !cpt
+} // !eng
