@@ -8,47 +8,41 @@
 #include "../../dae/Texture2D.h"
 #include "../../dae/Font.h"
 
-namespace eng::resources {
+namespace eng {
 
-//-------------------|Namespace variables|--------------------
-
-
-std::map<std::string, u_ptr<dae::Texture2D>> textureUptrs{};
-std::map<std::pair<std::string, uint8_t>, u_ptr<dae::Font>> fontUptrs{};
-
-//---------------------|Namespace methods|--------------------
-
-void eng::resources::Init() {
+eng::SdlResourceLoader::SdlResourceLoader() {
 	if (TTF_Init() != 0) {
 		throw std::runtime_error(std::string("Failed to load support for fonts: ") + SDL_GetError());
 	}
 }
 
-dae::Texture2D* LoadTexture(const std::string& file) {
+eng::SdlResourceLoader::~SdlResourceLoader() {
+	m_TextureUptrs.clear();
+	m_FontUptrs.clear();
+}
+
+dae::Texture2D* eng::SdlResourceLoader::LoadTexture(const std::string& file)
+{
 	const auto fullPath = "../Data/" + file;
 
 	const auto filename = std::filesystem::path(fullPath).filename().string();
 
-	if (textureUptrs.find(filename) == textureUptrs.end()) textureUptrs.insert(std::pair(filename, std::make_unique<dae::Texture2D>(fullPath)));
+	if (m_TextureUptrs.find(filename) == m_TextureUptrs.end()) m_TextureUptrs.insert(std::pair(filename, std::make_unique<dae::Texture2D>(fullPath)));
 
-	return textureUptrs.at(filename).get() ;
+	return m_TextureUptrs.at(filename).get();
 }
 
-dae::Font* LoadFont(const std::string& file, uint8_t size) {
+dae::Font* eng::SdlResourceLoader::LoadFont(const std::string& file, uint8_t size)
+{
 	const auto fullPath = "../Data/" + file;
 
 	const auto filename = std::filesystem::path(fullPath).filename().string();
 
 	const auto key = std::pair<std::string, uint8_t>(filename, size);
 
-	if (fontUptrs.find(key) == fontUptrs.end()) fontUptrs.insert(std::pair(key, std::make_unique<dae::Font>(fullPath, size)));
+	if (m_FontUptrs.find(key) == m_FontUptrs.end()) m_FontUptrs.insert(std::make_pair(key, std::make_unique<dae::Font>(fullPath, size)));
 
-	return fontUptrs.at(key).get();
-}
-
-void ClearAllResources() {
-	textureUptrs.clear();
-	fontUptrs.clear();
+	return m_FontUptrs.at(key).get();
 }
 
 }

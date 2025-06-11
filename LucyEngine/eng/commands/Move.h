@@ -5,7 +5,7 @@
 
 namespace eng::cmd {
 
-class Move final : public AbstractCommand {
+class Move final : public ICommand {
 public: //---------------|Constructor/Destructor/copy/move|--------------
 	
 	Move(glm::vec2 velocity);

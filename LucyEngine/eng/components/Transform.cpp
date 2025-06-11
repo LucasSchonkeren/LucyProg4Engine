@@ -2,14 +2,26 @@
 #include "../Actor.h"
 
 namespace eng::cpt {
+
 void Transform::SetLocalPosition(float x, float y) {
+	glm::vec2 f_OldPos{ m_TransformData.position };
+
 	m_TransformData.position.x = x;
 	m_TransformData.position.y = y;
 
 	m_GlobalNeedsUpdate = true;
-	for (auto child : GetOwner().GetAllChildren()) {
+	for (auto child : Owner().GetAllChildren()) {
 		child.get().GetTransform().FlagForGlobalUpdate();
 	}
+
+	m_Subject.DispatchEvent(Event{
+		eng::eventHash::PositionChanged,
+		std::make_any<eng::eventContext::PositionChanged>(
+			this,
+			f_OldPos,
+			m_TransformData.position
+		)
+	});
 }
 
 void Transform::SetLocalPosition(glm::vec2 newPosition) {
@@ -38,12 +50,20 @@ eng::TransformData const& Transform::GetLocal() const
 }
 
 eng::TransformData const& Transform::GetGlobal() {
-	if (!GetOwner().GetParent()) return m_TransformData;
+	if (!Owner().GetParent()) return m_TransformData;
 	if (!m_GlobalNeedsUpdate) return m_GlobalTransformData;
 
-	m_GlobalTransformData = GetLocal() + GetOwner().GetParent()->GetTransform().GetGlobal();
+	m_GlobalTransformData = GetLocal() + Owner().GetParent()->GetTransform().GetGlobal();
 
 	return m_GlobalTransformData;
+}
+
+void Transform::AddObserver(IObserver& observer) {
+	m_Subject.AddObserver(observer);
+}
+
+void Transform::RemoveObserver(IObserver& observer) {
+	m_Subject.RemoveObserver(observer);
 }
 
 } // !cpt

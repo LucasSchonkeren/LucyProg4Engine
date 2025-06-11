@@ -15,7 +15,7 @@ GamepadState gamePadState{};
 
 std::set<u_ptr<CommandBindings>> commandBindingUptrs{};
 
-bool ProcessInput() {
+bool Input::ProcessInput() {
 	// Poll SDL evdents
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
@@ -66,11 +66,11 @@ bool ProcessInput() {
 	return true;
 }
 
-void RegisterCommandBinding(u_ptr<CommandBindings> binding) {
+void Input::RegisterCommandBinding(u_ptr<CommandBindings> binding) {
 	commandBindingUptrs.emplace(std::move(binding));
 }
 
-void UnregisterCommandBinding(u_ptr<CommandBindings> binding) {
+void Input::UnregisterCommandBinding(u_ptr<CommandBindings> binding) {
 	commandBindingUptrs.erase(std::move(binding));
 }
 }

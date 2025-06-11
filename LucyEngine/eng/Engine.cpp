@@ -10,7 +10,6 @@
 #include <thread>
 #include <functional>
 #include "../dae/Renderer.h"
-#include "../eng/engine/Scenegraph.h"
 
 #include "../eng/components/TextureRenderer.h"
 #include "../eng/components/TextRenderer.h"
@@ -18,7 +17,6 @@
 #include "../eng/components/Transform.h"
 #include "../eng/components/FpsTracker.h"
 #include "../eng/components/ResourceDisplayLogic.h"
-#include "../eng/engine/Time.h"
 #include "../eng/engine/Resources.h"
 #include "../eng/input/Input.h"
 #include "../eng/engine/AudioPlayer.h"
@@ -94,21 +92,12 @@ eng::Engine::~Engine()
 }
 
 void eng::Engine::Run(std::function<u_ptr<Game>()> loadGame) {
-	eng::resources::Init();
-
 	auto f_GameUptr = loadGame();
-
-	// Set up scene root
-	eng::Actor& f_Root{f_GameUptr->GetRootActor()};
 
 	// Set up services
 	auto& renderer = dae::Renderer::GetInstance(); //TODO: make service
 
-	eng::ConsoleLogger f_Logger{};
-	eng::service::logger.Subscribe(f_Logger);
-
-	eng::LoggingAudioPlayer f_AudioPlayer{};
-	eng::service::audioPlayer.Subscribe(f_AudioPlayer);
+	auto& f_Input{ eng::service::input.Get() };
 
 	// Set up time
 	auto lastTime = std::chrono::high_resolution_clock::now();
@@ -116,34 +105,25 @@ void eng::Engine::Run(std::function<u_ptr<Game>()> loadGame) {
 	bool doContinue = true;
 	while (doContinue)
 	{
+		eng::Actor& f_Root{ f_GameUptr->RootActor() };
 
-		eng::time::UpdateDeltaTime(lastTime);
+		f_GameUptr->UpdateDeltaTime(lastTime);
 		lastTime = std::chrono::high_resolution_clock::now();
 
-		eng::time::stage = eng::time::Stages::Start;
 		f_Root.Start();
 
+		doContinue = f_Input.ProcessInput();
 
-		eng::time::stage = eng::time::Stages::Input;
-		doContinue = eng::input::ProcessInput();
-
-
-		eng::time::stage = eng::time::Stages::Update;
 		f_Root.Update();
-		f_Root.LateUpdate();
-			// Todo if needed: Add Fixed Update
 
-		eng::time::stage = eng::time::Stages::Render;
+
+
+		f_Root.LateUpdate();
+
 		renderer.Render(f_Root);
 
-		eng::time::stage = eng::time::Stages::Cleanup;
 		f_GameUptr->Cleanup();
 
-
-		eng::time::stage = eng::time::Stages::None;
-		std::this_thread::sleep_for(lastTime + std::chrono::nanoseconds(eng::time::MinNanoSecPerFrame()) - std::chrono::high_resolution_clock::now());
+		std::this_thread::sleep_for(lastTime + std::chrono::milliseconds(f_GameUptr->MinMilliSecPerFrame()) - std::chrono::high_resolution_clock::now());
 	}
-
-	// Free any remainig resources
-	eng::resources::ClearAllResources();
 }

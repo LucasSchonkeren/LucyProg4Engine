@@ -17,35 +17,35 @@ public:
 		}
 
 		m_Thread = std::jthread{ [&](std::stop_token stopToken) {
-			while (!stopToken.stop_requested()) {
+			std::unique_lock f_Lock{m_Mutex};
+			while (true) {
+				m_Cv.wait(f_Lock, [this, &stopToken]() -> bool { return !m_SoundsToPlay.empty() or stopToken.stop_requested(); });
+				if (stopToken.stop_requested()) break;
+
 				if (!m_SoundsToPlay.empty()) {
-					std::unique_lock f_QueueLock{ m_QueueMutex };
 					std::string f_Sound{ m_SoundsToPlay.front() };
 					m_SoundsToPlay.pop();
-					f_QueueLock.unlock();
-
-					std::unique_lock f_SoundLock{ m_SoundMutex };
 
 					if (m_SoundChunks.count(f_Sound) == 0) {
 						m_SoundChunks[f_Sound] = Mix_LoadWAV(("../Data/" + f_Sound).c_str());
 					}
 					Mix_PlayChannel(-1, m_SoundChunks[f_Sound], 0);
 				}
-				else std::this_thread::sleep_for(std::chrono::milliseconds(10));
-				}
 			}
-		};
+		} };
 	};
 
 	~impl() {
 		m_Thread.request_stop();
+		m_Cv.notify_one();
+		m_Thread.join();
 
 		for (auto& [key, chunk] : m_SoundChunks) {
 			if (chunk != nullptr) {
 				Mix_FreeChunk(chunk);
 				chunk = nullptr;
 			}
-		}
+		} 
 		m_SoundChunks.clear();
 
 		Mix_CloseAudio();
@@ -53,6 +53,7 @@ public:
 
 	void PlaySound(std::string sound) {
 		m_SoundsToPlay.push(sound);
+		m_Cv.notify_one();
 	}
 
 	void StopSound(std::string sound) {
@@ -66,8 +67,8 @@ private:
 	std::map<std::string, Mix_Chunk*> m_SoundChunks{};
 	std::queue<std::string> m_SoundsToPlay{};
 	std::jthread m_Thread;
-	std::mutex m_QueueMutex;
-	std::mutex m_SoundMutex;
+	std::mutex m_Mutex;
+	std::condition_variable m_Cv;
 };
 
 eng::AudioPlayer::AudioPlayer() : m_ImplUptr(std::make_unique<impl>()) {
@@ -86,8 +87,7 @@ void eng::AudioPlayer::StopSound(std::string sound) {
 void eng::AudioPlayer::StopSound() {	
 	m_ImplUptr->StopSound();
 }					   
-					   
-
+					  
 
 eng::LoggingAudioPlayer::LoggingAudioPlayer() {
 }
@@ -106,3 +106,4 @@ void eng::LoggingAudioPlayer::StopSound() {
 	service::logger.Get().Log("All sound stopped");
 	m_AudioPlayer.StopSound();
 }
+

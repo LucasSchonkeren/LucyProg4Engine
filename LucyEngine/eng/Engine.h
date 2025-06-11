@@ -22,16 +22,11 @@ public: //---------------|Constructor/destructor|---------------------------
 	Engine& operator=(const Engine& other) = delete;
 	Engine& operator=(Engine&& other) = delete;
 
-public: //---------------|Methods|---------------------------
+public: //---------------|Run method|---------------------------
 
 	void Run(std::function<u_ptr<Game>()> loadGame);
 
-private:
-	//void Cleanup(eng::Actor& sceneRoot);
 
-	//void SetParentInCleanup(Actor& child, Actor& parent, bool keepWorldTransform);
-
-	//std::queue<ActorMoveInfo> m_ActorsToMove{};
 };
 
 }

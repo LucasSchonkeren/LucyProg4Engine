@@ -12,17 +12,6 @@ struct Event {
 	std::any context;
 };
 
-//class AbstractSubject {
-//public:
-//	virtual ~AbstractSubject() = default;
-//
-//	virtual void AddObserver(AbstractObserver& observer) = 0;
-//	virtual void RemoveObserver(AbstractObserver& observer) = 0;
-//
-//protected:
-//	virtual void DispatchEvent(Event event) = 0;
-//};
-
 class Subject final {
 public:
 	void AddObserver(IObserver& observer);

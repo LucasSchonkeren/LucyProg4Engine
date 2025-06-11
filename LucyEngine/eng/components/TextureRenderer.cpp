@@ -8,10 +8,10 @@
 
 namespace eng::cpt {
 void TextureRenderer::LoadTexture(const std::string& file) {
-	m_TexturePtr = eng::resources::LoadTexture(file);
+	m_TexturePtr = eng::service::resources.Get().LoadTexture(file);
 }
 void TextureRenderer::Render() {
-	const auto& f_Pos = GetOwner().GetTransform().GetGlobal().position;
+	const auto& f_Pos = Owner().GetTransform().GetGlobal().position;
 
 	dae::Renderer::GetInstance().RenderTexture(*m_TexturePtr, f_Pos.x, f_Pos.y);
 }

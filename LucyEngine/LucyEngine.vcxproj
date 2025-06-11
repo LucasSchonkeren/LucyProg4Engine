@@ -102,6 +102,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="eng\commands\MoveAlongGrid.h" />
     <ClInclude Include="eng\components\Grid.h">
       <SubType>
       </SubType>
@@ -156,6 +157,7 @@
     </ClInclude>
     <ClInclude Include="eng\input\GamepadState.h" />
     <ClInclude Include="eng\input\KeyState.h" />
+    <ClInclude Include="eng\physics\Collisions.h" />
     <ClInclude Include="eng\utils\SdbmHash.h">
       <SubType>
       </SubType>
@@ -173,10 +175,6 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="eng\engine\Resources.h" />
-    <ClInclude Include="eng\engine\Time.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="dae\Font.h" />
     <ClInclude Include="dae\InputManager.h" />
     <ClInclude Include="Libs\catch.hpp" />
@@ -189,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="eng\abstract\AbstractObserver.cpp" />
+    <ClCompile Include="eng\commands\MoveAlongGrid.cpp" />
     <ClCompile Include="eng\components\Grid.cpp" />
     <ClCompile Include="eng\components\GridTransform.cpp" />
     <ClCompile Include="eng\Engine.cpp" />
@@ -216,7 +215,7 @@
     <ClCompile Include="eng\components\TextureRenderer.cpp" />
     <ClCompile Include="eng\components\Transform.cpp" />
     <ClCompile Include="eng\engine\Resources.cpp" />
-    <ClCompile Include="eng\engine\Time.cpp" />
+    <ClCompile Include="eng\physics\Collisions.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

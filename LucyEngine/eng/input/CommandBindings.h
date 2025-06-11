@@ -30,8 +30,8 @@ public:
 
 	//-------------|Command methods|-------------------------------------
 
-	template <std::derived_from<AbstractCommand> commandT, typename... argsT> 
-	AbstractCommand* NewCommand(std::string_view commandName, Keystate keystatePtr, argsT... args) {
+	template <std::derived_from<ICommand> commandT, typename... argsT> 
+	ICommand* NewCommand(std::string_view commandName, Keystate keystatePtr, argsT... args) {
 		m_CommandUptrs.emplace(commandName, std::make_unique<commandT>(args...));
 		BindCommand(keystatePtr, commandName);
 		return m_CommandUptrs[commandName].get();
@@ -45,7 +45,7 @@ public:
 	void				UnBindCommand(std::string_view commandName);
 	void				UnbindKey(Keystate keystate);
 
-	const std::map<Keystate, AbstractCommand*>& GetCommandBindings();
+	const std::map<Keystate, ICommand*>& GetCommandBindings();
 
 	//------------------|Target methods|------------------------------
 
@@ -53,8 +53,8 @@ public:
 	Actor*				GetTargetActor();
 private:
 	Actor* m_Target{};
-	std::unordered_map<std::string_view, u_ptr<AbstractCommand>> m_CommandUptrs{};
-	std::map<Keystate, AbstractCommand*> m_CommandBindings{};
+	std::unordered_map<std::string_view, u_ptr<ICommand>> m_CommandUptrs{};
+	std::map<Keystate, ICommand*> m_CommandBindings{};
 };
 
 } // !eng::input

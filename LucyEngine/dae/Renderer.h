@@ -3,6 +3,12 @@
 #include "Singleton.h"
 #include "../eng/Actor.h"
 
+struct SdlRendererDeleter {
+	void operator()(SDL_Renderer* p) const {
+		SDL_DestroyRenderer(p);
+	}
+};
+
 namespace dae
 {
 	class Texture2D;
@@ -11,7 +17,7 @@ namespace dae
 	 */
 	class Renderer final : public Singleton<Renderer>
 	{
-		SDL_Renderer* m_renderer{};
+		std::unique_ptr<SDL_Renderer, SdlRendererDeleter> m_renderer{};
 		SDL_Window* m_window{};
 		SDL_Color m_clearColor{};	
 	public:

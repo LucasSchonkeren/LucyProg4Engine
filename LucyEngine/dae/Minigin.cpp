@@ -283,32 +283,32 @@
 //	while (doContinue)
 //	{
 //
-//		eng::time::UpdateDeltaTime(lastTime);
+//		GetOwner().UpdateDeltaTime(lastTime);
 //		lastTime = std::chrono::high_resolution_clock::now();
 //
-//		eng::time::stage = eng::time::Stages::Start;
+//		GetOwner().stage = GetOwner().Stages::Start;
 //		f_Root.Init();
 //		f_Root.Start();
 //
 //
-//		eng::time::stage = eng::time::Stages::Input;
+//		GetOwner().stage = GetOwner().Stages::Input;
 //		doContinue = eng::input::ProcessInput();
 //
 //
-//		eng::time::stage = eng::time::Stages::Update;
+//		GetOwner().stage = GetOwner().Stages::Update;
 //		f_Root.Update();
 //		f_Root.LateUpdate();
 //			// Todo if needed: Add Fixed Update
 //
-//		eng::time::stage = eng::time::Stages::Render;
+//		GetOwner().stage = GetOwner().Stages::Render;
 //		renderer.Render(f_Root);
 //
-//		eng::time::stage = eng::time::Stages::Cleanup;
+//		GetOwner().stage = GetOwner().Stages::Cleanup;
 //		eng::scenegraph::Cleanup(f_Root);
 //
 //
-//		eng::time::stage = eng::time::Stages::None;
-//		std::this_thread::sleep_for(lastTime + std::chrono::nanoseconds(eng::time::MinNanoSecPerFrame()) - std::chrono::high_resolution_clock::now());
+//		GetOwner().stage = GetOwner().Stages::None;
+//		std::this_thread::sleep_for(lastTime + std::chrono::nanoseconds(GetOwner().MinNanoSecPerFrame()) - std::chrono::high_resolution_clock::now());
 //	}
 //
 //	// Free any remainig resources

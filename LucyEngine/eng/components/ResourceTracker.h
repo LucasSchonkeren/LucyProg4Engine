@@ -10,7 +10,7 @@ namespace eng::cpt { class ResourceTracker; } //forward decleration
 namespace eng::eventContext {
 
 struct ResourceChanged {
-	std::string_view resource;
+	std::string resource;
 	cpt::ResourceTracker* const sender;
 	int delta;
 };
@@ -36,34 +36,34 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 
 public: //--------------------|Meta methods|-----------------------
 
-	void NewResource(std::string_view resource, unsigned int maxValue, bool startEmpty = false);
+	void NewResource(std::string resource, unsigned int maxValue, bool startEmpty = false);
 
 public: //--------------------|Setter methods|-----------------------
 
 	/// <summary>
 	/// increase or decrease a resource of this Actor, clamped by 0 and its max valaue. Sends an "ActorResourceChanged" event if the resource is altered in this way.
 	/// </summary>
-	void ModifyResource(std::string_view resource, int value);
+	void ModifyResource(std::string resource, int value);
 
 	/// <summary>
 	/// Sets the resource value. Sends an "ActorResourceChanged" event if the resource is altered in this way.
 	/// </summary>
-	void SetResource(std::string_view resource, int value);
+	void SetResource(std::string resource, int value);
 
 	/// <summary>
 	/// Sets the resource to its max value. Sends an "ActorResourceChanged" event if the resource is altered in this way.
 	/// </summary>
-	void FillResource(std::string_view resource);
+	void FillResource(std::string resource);
 
-	void SetMaxResource(std::string_view resource, unsigned int value);
+	void SetMaxResource(std::string resource, unsigned int value);
 
 public: //--------------------|Getter methods|-----------------------
 
-	int GetResource(std::string_view resource) const;
+	int GetResource(std::string resource) const;
 
-	bool IsResourceFull(std::string_view resource) const;
+	bool IsResourceFull(std::string resource) const;
 
-	bool IsResourceEmpty(std::string_view resource) const;
+	bool IsResourceEmpty(std::string resource) const;
 
 public: //--------------------|Subject methods|-----------------------
 
@@ -78,7 +78,8 @@ public: //--------------------|Gameloop methods|-----------------------
 
 private: //---------------------------|Private fields|----------------------------
 
-	std::unordered_map<std::string_view, int> m_ResourceVals{}, m_MaxResourceVals{};
+	std::unordered_map<std::string, int> m_ResourceVals{};
+	std::unordered_map<std::string, int>m_MaxResourceVals{};
 	Subject m_ResourceSubject{};
 
 }; // !HealthTracker

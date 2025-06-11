@@ -11,7 +11,7 @@ void eng::cpt::ResourceDisplayLogic::SetText(std::string_view formatString) {
 }
 
 void eng::cpt::ResourceDisplayLogic::Start() {
-    m_TextRendererPtr = GetOwner().GetComponent<TextRenderer>();
+    m_TextRendererPtr = Owner().GetComponent<TextRenderer>();
     assert(m_TextRendererPtr and "This actor requires a Text Renderer Component");
 }
 

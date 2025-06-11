@@ -13,12 +13,22 @@
 #include "utils/utils.h"
 #include "abstract/AbstractComponent.h"
 #include "components/Transform.h"
-#include "../eng/engine/Time.h"
 #include "Game.h"
 
+namespace eng::eventHash {
+
+/// <summary>
+/// Event sent by an Actor when it becomes enabled. The EventContext is a pointer to the Actor.
+/// </summary>
+constexpr unsigned int ActorEnabled{ make_sdbm_hash("ActorEnabled") };
+/// <summary>
+/// Event sent by an Actor when it becomes disabled. The EventContext is a pointer to the Actor.
+/// </summary>
+constexpr unsigned int ActorDisabled{ make_sdbm_hash("ActorDisabled") };
+
+}
+
 namespace eng {
-
-
 
 /// <summary>
 /// The quintessential Game Object. An Actor manages the lifetime and ownership of Components and Child Actors.
@@ -56,12 +66,6 @@ public: //--------------|Child Actor Methods|------------------
 	/// <returns> a reference to the created child actor</returns>
 	Actor&			AddChildActor();
 
-	///// <summary>
-	///// Move construct a child actor
-	///// </summary>
-	///// <returns> a reference to the created child actor</returns>
-	//Actor&			AddChildActor(Actor&& child);
-
 	/// <returns>
 	/// Shallow search, gets only the children of this object. Empty if this Actor has no children.
 	/// </returns>
@@ -75,7 +79,7 @@ public: //--------------|Child Actor Methods|------------------
 	/// <summary>
 	/// Remove a child actor. This destroys the child. May only be used during cleanup.
 	/// </summary>
-	void DestroyChildActor(Actor* childPtr);
+	void EraseChildActor(Actor* childPtr);
 
 public: //---------------|Parent Actor Methods|-------------------------
 
@@ -136,8 +140,10 @@ public: //---------------------|Flag Enum/Methods|-----------------------------
 		NoRender,
 		/// If not set, runs start methods on its components and sets it at the start of the next frame.
 		Started,
-		/// If set, the component is considered inactive, Controls Enable() and Disable().
+		/// If set, the actor is considered inactive, Controls Enable() and Disable().
 		Disabled,
+		/// If set, the actor will start disabled. Disable() will be called in Start(). Setting this flag has no effect if the Started flag has already been set.
+		DisableOnStart,
 
 		SIZE_
 	};
@@ -150,25 +156,37 @@ public: //---------------------|Flag Enum/Methods|-----------------------------
 	void Destroy();
 
 	/// <summary>
-	/// Enable the component, if disabled. Unsets NoUpdate and NoRender and calls OnEnable().
+	/// Enable the actor and its children, if disabled. Unsets NoUpdate and NoRender and calls OnEnable().
 	/// </summary>
 	void Enable();
 
 	/// <summary>
-	/// Disable the component, if enabled. Sets NoUpdate and NoRender and calls OnDisable()
-	/// </summary>
+	/// Disable the actor and its children, if enabled. Sets NoUpdate and NoRender and calls OnDisable()
+	/// </summary> 
 	void Disable();
+
+	/// <summary>
+	/// Set this Actor to start enabled or disabled. By default, actors are enabled on start.
+	/// </summary>
+	void EnableOnStart(bool enable);
+
+public: //--------------------|Observer Methods|--------------------------------
+
+	void AddToggleObserver(IObserver& observer);
+	void RemoveToggleObserver(IObserver& observer);
 
 public: //--------------------|Gameloop Methods|--------------------------------
 
-	void OnEnable();
 	void Start();
 	void Update();
 	void LateUpdate();
 	void FixedUpdate();
 	void Render(); 
 	void RenderImgui();
-	void OnDisable();
+
+public: //--------------------|Game Methods|--------------------------------
+
+	double DeltaTime();
 
 /*##################################|PRIVATE|##################################################*/
 
@@ -194,6 +212,10 @@ private: //-----------------------|Game Fields|---------------------------------
 
 	Game& m_Game;
 
+private: //-----------------------|Subject Fields|-------------------------------------------
+
+	Subject m_ToggleSubject{};
+
 }; // !Actor
 
 
@@ -201,6 +223,7 @@ private: //-----------------------|Game Fields|---------------------------------
 //----------------------------------------------------------------------------------------
 //---------------------|Template implementation|------------------------------------------
 //----------------------------------------------------------------------------------------
+#pragma region Template implementation
 
 template<std::derived_from<AbstractComponent> CompT, typename... ArgsT>
 CompT& Actor::AddComponent(ArgsT... args)
@@ -240,6 +263,7 @@ inline void Actor::RemoveComponent() {
 		});
 }
 
+#pragma endregion
 
 } // !namespace eng
 

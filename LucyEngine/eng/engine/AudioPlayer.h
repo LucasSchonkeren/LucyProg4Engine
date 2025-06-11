@@ -41,7 +41,7 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 	LoggingAudioPlayer(const LoggingAudioPlayer&&) = delete;
 	LoggingAudioPlayer& operator=	(const LoggingAudioPlayer&&) = delete;
 
-public: //---------------|Audio method implementations|--------------
+public: //---------------|Audio method implementations|-------------- 
 
 	void PlaySound(std::string sound)	override;
 	void StopSound(std::string sound)	override;

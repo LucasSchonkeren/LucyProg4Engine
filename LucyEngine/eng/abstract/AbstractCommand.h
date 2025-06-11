@@ -4,9 +4,9 @@
 
 namespace eng {
 
-class AbstractCommand {
+class ICommand {
 public:
-	virtual ~AbstractCommand() = default;
+	virtual ~ICommand() = default;
 	virtual bool Execute(Actor& target) = 0;
 };
 

@@ -4,7 +4,7 @@
 
 namespace eng::cmd {
 
-class ModifyActorResource final : public AbstractCommand {
+class ModifyActorResource final : public ICommand {
 public: //---------------|Constructor/Destructor/copy/move|--------------
 	
 	ModifyActorResource(std::string_view resource, int value) : m_Resource(resource), m_Value(value) {};
@@ -24,7 +24,7 @@ public: //---------------------------|Execute|-------------------------
 /*##################################|PRIVATE|##################################################*/
 
 private: //---------------------------|Fields|----------------------------
-	std::string_view m_Resource;
+	std::string m_Resource;
 	int m_Value;
 	cpt::ResourceTracker* m_ResourceTrackerPtr{};
 

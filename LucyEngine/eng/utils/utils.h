@@ -50,8 +50,15 @@ concept RangeOf = std::ranges::range<R> && std::same_as<std::ranges::range_value
 /// Predefined event hashes for engine-wide events, to avoid possible misspellings of strings in hash functions and to ensure all hashes are unique
 
 namespace eng::eventHash {
-
+/// <summary>
+/// 
+/// </summary>
 constexpr unsigned int actorResourceChanged{ make_sdbm_hash("ActorResourceChanged") };
+/// <summary>
+/// 
+/// </summary>
+constexpr unsigned int PositionChanged{ make_sdbm_hash("PositionChanged") };
+
 
 }
 

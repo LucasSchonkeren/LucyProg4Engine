@@ -4,8 +4,6 @@
 
 #include <iostream>
 
-#include "../eng/engine/Scenegraph.h"
-
 namespace eng {
 
 Actor::Actor(Game& game) :
@@ -20,14 +18,6 @@ Actor& Actor::AddChildActor() {
 
     return *m_ChildUptrs.back();
 }
-
-//Actor& Actor::AddChildActor(Actor&& child) {
-//    m_ChildUptrs.push_back(std::make_unique<Actor>(std::move(child)));
-//    
-//    m_ChildUptrs.back()->m_ParentPtr = this;
-//
-//    return *m_ChildUptrs.back();
-//}
 
 ref_vec<Actor> Actor::GetChildren() const {
     ref_vec<Actor> f_Result{};
@@ -48,9 +38,7 @@ ref_vec<Actor> Actor::GetAllChildren() const {
     return f_Result;
 }
 
-void Actor::DestroyChildActor(Actor* childPtr) {
-    assert(time::stage == time::Stages::Cleanup or time::stage == time::Stages::None and "Do not call RemoveChildActor outside of cleanup");
-
+void Actor::EraseChildActor(Actor* childPtr) {
     std::erase_if(m_ChildUptrs, [childPtr](const u_ptr<Actor>& child) {
         return child.get() == childPtr;
     });
@@ -130,19 +118,65 @@ void Actor::Destroy() {
         child->Destroy();
     }
 
+    Disable();
+
     for (auto& compUptr : m_CompUptrs) {
         compUptr->OnDestroy();
     }
 }
 
-void Actor::OnEnable() {
+void Actor::Enable() {
     for (auto& child : m_ChildUptrs) {
-        child->OnEnable();
+        child->Enable();
     }
+
+    if (not IsFlagged(Flags::Disabled) and not IsFlagged(Flags::Started)) return;
+
+    m_Flags.reset(static_cast<int>(Flags::Disabled));
+    m_Flags.reset(static_cast<int>(Flags::NoRender));
+    m_Flags.reset(static_cast<int>(Flags::NoUpdate));
 
     for (auto& compUptr : m_CompUptrs) {
         compUptr->OnEnable();
     }
+
+    m_ToggleSubject.DispatchEvent({
+        eventHash::ActorEnabled,
+        std::make_any<Actor*>(this)
+    });
+}
+
+void Actor::Disable() {
+    for (auto& child : m_ChildUptrs) {
+        child->Disable();
+    }
+
+    if (IsFlagged(Flags::Disabled)) return;
+
+    m_Flags.set(static_cast<int>(Flags::NoRender));
+    m_Flags.set(static_cast<int>(Flags::Disabled));
+    m_Flags.set(static_cast<int>(Flags::NoUpdate));
+
+    for (auto& compUptr : m_CompUptrs) {
+        compUptr->OnDisable();
+    }
+
+    m_ToggleSubject.DispatchEvent({
+        eventHash::ActorDisabled,
+        std::make_any<Actor*>(this)
+        });
+}
+
+void Actor::EnableOnStart(bool enable) {
+    m_Flags[static_cast<int>(Flags::DisableOnStart)] = !enable;
+}
+
+void Actor::AddToggleObserver(IObserver& observer) {
+    m_ToggleSubject.AddObserver(observer);
+}
+
+void Actor::RemoveToggleObserver(IObserver& observer) {
+    m_ToggleSubject.AddObserver(observer);
 }
 
 void Actor::Start() {
@@ -155,6 +189,9 @@ void Actor::Start() {
     for (auto& compUptr : m_CompUptrs) {
         compUptr->Start();
     }
+
+    Enable();
+    if (IsFlagged(Flags::DisableOnStart)) Disable();
 
     m_Flags[static_cast<int>(Flags::Started)] = true;
 }
@@ -220,14 +257,8 @@ void Actor::RenderImgui() {
     }
 }
 
-void Actor::OnDisable() {
-    for (auto& child : m_ChildUptrs) {
-        child->OnDisable();
-    }
-
-    for (auto& compUptr : m_CompUptrs) {
-        compUptr->OnDisable();
-    }
+double Actor::DeltaTime() {
+    return m_Game.DeltaTime();
 }
 
 ref_vec<AbstractComponent> Actor::GetAbstractComponents()

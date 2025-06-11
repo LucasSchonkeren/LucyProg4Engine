@@ -40,7 +40,7 @@ void CommandBindings::UnbindKey(Keystate keystate) {
 		});
 }
 
-const std::map<Keystate, AbstractCommand*>& CommandBindings::GetCommandBindings() {
+const std::map<Keystate, ICommand*>& CommandBindings::GetCommandBindings() {
 	return m_CommandBindings;
 }
 

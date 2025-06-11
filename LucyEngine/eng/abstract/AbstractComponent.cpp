@@ -9,7 +9,7 @@ AbstractComponent::AbstractComponent(Actor& owner) :
     m_Owner(owner) {
 }
 
-eng::Actor& AbstractComponent::GetOwner() {
+eng::Actor& AbstractComponent::Owner() {
     return m_Owner;
 }
 
