@@ -86,11 +86,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BombermanGame.cpp" />
     <ClCompile Include="Components\AudioController.cpp" />
     <ClCompile Include="Components\Rotator.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BombermanGame.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Components\AudioController.h" />
     <ClInclude Include="Components\Rotator.h" />
   </ItemGroup>

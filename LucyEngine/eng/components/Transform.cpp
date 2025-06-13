@@ -29,6 +29,7 @@ void Transform::SetLocalPosition(glm::vec2 newPosition) {
 }
 
 void Transform::TranslatePosition(glm::vec2 translateVector) {
+	if (translateVector == glm::vec2{}) return;
 	SetLocalPosition(m_TransformData.position + translateVector);
 }
 

@@ -35,4 +35,21 @@ public:
 
 Service<IInput> input{ std::make_unique<NullInput>() };
 
+class NullRenderer final : public IRenderer {
+public:
+	virtual void Render(eng::Actor&) const {}
+
+	virtual void RenderTexture(const dae::Texture2D &, const SDL_Rect &, const SDL_Rect &) const {}
+
+	virtual SDL_Renderer* GetSDLRenderer() const { return nullptr; }
+
+	virtual const SDL_Color& GetBackgroundColor() const { return m_Color; }
+	virtual void SetBackgroundColor(const SDL_Color&) {}
+private:
+	SDL_Color m_Color{};
+};
+
+Service<IRenderer> renderer{ std::make_unique<NullRenderer>() };
+
+
 }

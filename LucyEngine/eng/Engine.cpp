@@ -9,7 +9,6 @@
 #include <chrono>
 #include <thread>
 #include <functional>
-#include "../dae/Renderer.h"
 
 #include "../eng/components/TextureRenderer.h"
 #include "../eng/components/TextRenderer.h"
@@ -27,6 +26,7 @@
 #include "../eng/commands/Move.h"
 #include "../eng/commands/ModifyActorResource.h"
 #include <queue>
+#include "engine/Renderer.h"
 
 static SDL_Window* g_window{};
 
@@ -80,22 +80,21 @@ eng::Engine::Engine(const std::string&)
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
-	dae::Renderer::GetInstance().Init(g_window);
+	eng::service::renderer.Register(std::make_unique<eng::Renderer>(g_window));
 }
 
 eng::Engine::~Engine()
 {
-	dae::Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(g_window);
 	g_window = nullptr;
 	SDL_Quit();
 }
 
-void eng::Engine::Run(std::function<u_ptr<Game>()> loadGame) {
+void eng::Engine::Run(std::function<u_ptr<AbstractGame>()> loadGame) {
 	auto f_GameUptr = loadGame();
 
 	// Set up services
-	auto& renderer = dae::Renderer::GetInstance(); //TODO: make service
+	auto& renderer = eng::service::renderer.Get(); //TODO: make service
 
 	auto& f_Input{ eng::service::input.Get() };
 
@@ -107,7 +106,7 @@ void eng::Engine::Run(std::function<u_ptr<Game>()> loadGame) {
 	{
 		eng::Actor& f_Root{ f_GameUptr->RootActor() };
 
-		f_GameUptr->UpdateDeltaTime(lastTime);
+		f_GameUptr->Time().UpdateDeltaTime(lastTime);
 		lastTime = std::chrono::high_resolution_clock::now();
 
 		f_Root.Start();
@@ -116,14 +115,14 @@ void eng::Engine::Run(std::function<u_ptr<Game>()> loadGame) {
 
 		f_Root.Update();
 
-
+		f_GameUptr->Physics().NotifyCollisions();
 
 		f_Root.LateUpdate();
 
 		renderer.Render(f_Root);
 
-		f_GameUptr->Cleanup();
+		f_GameUptr->ActorGraph().Cleanup();
 
-		std::this_thread::sleep_for(lastTime + std::chrono::milliseconds(f_GameUptr->MinMilliSecPerFrame()) - std::chrono::high_resolution_clock::now());
+		std::this_thread::sleep_for(lastTime + std::chrono::milliseconds(f_GameUptr->Time().MinMilliSecPerFrame()) - std::chrono::high_resolution_clock::now());
 	}
 }

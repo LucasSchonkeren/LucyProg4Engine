@@ -13,11 +13,11 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 	FpsTracker(eng::Actor& owner) : AbstractComponent(owner) {};
 	~FpsTracker() = default;
 
-	FpsTracker(const FpsTracker&) = default;
-	FpsTracker& operator=	(const FpsTracker&) = default;
+	FpsTracker(const FpsTracker&) = delete;
+	FpsTracker& operator=	(const FpsTracker&) = delete;
 
-	FpsTracker(FpsTracker&&) = default;
-	FpsTracker& operator=	(FpsTracker&&) = default;
+	FpsTracker(FpsTracker&&) = delete;
+	FpsTracker& operator=	(FpsTracker&&) = delete;
 
 public: //------------------|Gameloop Methods|--------------------------
 	void Start() override;

@@ -22,7 +22,6 @@ public: //------------------------|Virtual Destructor|------------------------
 
 public: //----------------------|Serialization methods|------------------------
 	virtual std::string Serialize() { return ""; };
-	virtual void Deserialize(std::string serializationString) {};
 
 public: //--------------------|Gameloop methods|-----------------------------
 

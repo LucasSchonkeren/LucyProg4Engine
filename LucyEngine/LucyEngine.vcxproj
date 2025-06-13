@@ -103,11 +103,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="eng\commands\MoveAlongGrid.h" />
+    <ClInclude Include="eng\components\BoxCollider.h" />
     <ClInclude Include="eng\components\Grid.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="eng\components\GridTransform.h" />
+    <ClInclude Include="eng\components\MovementHandler.h" />
+    <ClInclude Include="eng\components\SpriteController.h" />
     <ClInclude Include="eng\Engine.h" />
     <ClInclude Include="eng\abstract\AbstractCommand.h" />
     <ClInclude Include="eng\abstract\AbstractComponent.h">
@@ -141,11 +144,14 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="eng\engine\ConsoleLogger.h" />
+    <ClInclude Include="eng\engine\Renderer.h" />
     <ClInclude Include="eng\engine\Services.h" />
-    <ClInclude Include="eng\Game.h">
+    <ClInclude Include="eng\Game\ActorGraph.h" />
+    <ClInclude Include="eng\Game\AbstractGame.h">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="eng\Game\GameTime.h" />
     <ClInclude Include="eng\input\CommandBindings.h" />
     <ClInclude Include="eng\input\Input.h">
       <SubType>
@@ -158,6 +164,10 @@
     <ClInclude Include="eng\input\GamepadState.h" />
     <ClInclude Include="eng\input\KeyState.h" />
     <ClInclude Include="eng\physics\Collisions.h" />
+    <ClInclude Include="eng\Game\GamePhysics.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="eng\utils\SdbmHash.h">
       <SubType>
       </SubType>
@@ -179,7 +189,6 @@
     <ClInclude Include="dae\InputManager.h" />
     <ClInclude Include="Libs\catch.hpp" />
     <ClInclude Include="dae\Minigin.h" />
-    <ClInclude Include="dae\Renderer.h" />
     <ClInclude Include="dae\ResourceManager.h" />
     <ClInclude Include="dae\Singleton.h" />
     <ClInclude Include="dae\Texture2D.h" />
@@ -188,8 +197,11 @@
   <ItemGroup>
     <ClCompile Include="eng\abstract\AbstractObserver.cpp" />
     <ClCompile Include="eng\commands\MoveAlongGrid.cpp" />
+    <ClCompile Include="eng\components\BoxCollider.cpp" />
     <ClCompile Include="eng\components\Grid.cpp" />
     <ClCompile Include="eng\components\GridTransform.cpp" />
+    <ClCompile Include="eng\components\MovementHandler.cpp" />
+    <ClCompile Include="eng\components\SpriteController.cpp" />
     <ClCompile Include="eng\Engine.cpp" />
     <ClCompile Include="eng\abstract\AbstractComponent.cpp" />
     <ClCompile Include="eng\Actor.cpp" />
@@ -200,13 +212,16 @@
     <ClCompile Include="eng\components\ResourceDisplayLogic.cpp" />
     <ClCompile Include="eng\components\ResourceTracker.cpp" />
     <ClCompile Include="eng\engine\AudioPlayer.cpp" />
+    <ClCompile Include="eng\engine\Renderer.cpp" />
     <ClCompile Include="eng\engine\Services.cpp" />
-    <ClCompile Include="eng\Game.cpp" />
+    <ClCompile Include="eng\Game\ActorGraph.cpp" />
     <ClCompile Include="dae\Minigin.cpp" />
-    <ClCompile Include="dae\Renderer.cpp" />
     <ClCompile Include="dae\ResourceManager.cpp" />
     <ClCompile Include="dae\Texture2D.cpp" />
     <ClCompile Include="eng\components\FpsTracker.cpp" />
+    <ClCompile Include="eng\Game\AbstractGame.cpp" />
+    <ClCompile Include="eng\Game\GamePhysics.cpp" />
+    <ClCompile Include="eng\Game\GameTime.cpp" />
     <ClCompile Include="eng\input\CommandBindings.cpp" />
     <ClCompile Include="eng\input\Input.cpp" />
     <ClCompile Include="eng\input\KeyboardState.cpp" />

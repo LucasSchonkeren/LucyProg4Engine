@@ -8,6 +8,7 @@
 #include "../input/CommandBindings.h"
 #include "../input/KeyboardState.h"
 #include "../input/GamepadState.h"
+#include "SDL.h"
 
 namespace eng::service {
 //----------------------------------------|Service class|---------------------------------------
@@ -72,5 +73,20 @@ public:
 };
 
 extern Service<IInput> input;
+
+class IRenderer {
+public:
+	virtual ~IRenderer() = default;
+
+	virtual void Render(eng::Actor&) const = 0;
+	virtual void RenderTexture(const dae::Texture2D& texture, const SDL_Rect& screenRect, const SDL_Rect& sourceRect) const = 0;
+
+	virtual SDL_Renderer* GetSDLRenderer() const = 0;
+
+	virtual const SDL_Color& GetBackgroundColor() const = 0;
+	virtual void SetBackgroundColor(const SDL_Color& color) = 0;
+};
+
+extern Service<IRenderer> renderer;
 
 }

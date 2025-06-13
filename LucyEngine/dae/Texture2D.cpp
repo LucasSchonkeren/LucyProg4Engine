@@ -1,8 +1,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "Texture2D.h"
-#include "Renderer.h"
 #include <stdexcept>
+#include "../eng/engine/Services.h"
 
 dae::Texture2D::~Texture2D()
 {
@@ -23,7 +23,7 @@ SDL_Texture* dae::Texture2D::GetSDLTexture() const
 
 dae::Texture2D::Texture2D(const std::string &fullPath)
 {
-	m_texture = IMG_LoadTexture(Renderer::GetInstance().GetSDLRenderer(), fullPath.c_str());
+	m_texture = IMG_LoadTexture(eng::service::renderer.Get().GetSDLRenderer(), fullPath.c_str());
 	if (m_texture == nullptr)
 		throw std::runtime_error(std::string("Failed to load texture: ") + SDL_GetError());
 }

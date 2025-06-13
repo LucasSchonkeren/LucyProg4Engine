@@ -1,7 +1,6 @@
 #include "TextRenderer.h"
 #include <stdexcept>
 #include <SDL_ttf.h>
-#include "../../dae/Renderer.h"
 #include "../../dae/Font.h"
 #include "../../dae/Texture2D.h"
 #include "../components/Transform.h"
@@ -24,18 +23,14 @@ void eng::cpt::TextRenderer::SetText(const std::string& text) {
 
 void eng::cpt::TextRenderer::Update() {
 	if (m_NeedsUpdate) {
-		const SDL_Color color = { 255,255,255,255 }; // only white text is supported now
-				//	
-				// Font and Size currently hardcoded, font is broken and I do not know why
-				//
-		const auto f_Surf = TTF_RenderText_Blended(m_FontPtr->GetFont(), m_Text.c_str(), color);
+		const auto f_Surf = TTF_RenderText_Blended(m_FontPtr->GetFont(), m_Text.c_str(), m_Color);
 
 		if (f_Surf == nullptr)
 		{
 			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
 		}
 
-		auto texture = SDL_CreateTextureFromSurface(dae::Renderer::GetInstance().GetSDLRenderer(), f_Surf);
+		auto texture = SDL_CreateTextureFromSurface(eng::service::renderer.Get().GetSDLRenderer(), f_Surf);
 
 		if (texture == nullptr)
 		{
@@ -51,7 +46,8 @@ void eng::cpt::TextRenderer::Update() {
 void eng::cpt::TextRenderer::Render() {
 	if (m_TextTextureUptr == nullptr) return;
 
-	const auto& pos = Owner().GetTransform().GetLocal().position;
-	dae::Renderer::GetInstance().RenderTexture(*m_TextTextureUptr, pos.x, pos.y);
+	const glm::ivec2 f_Pos{ Owner().GetTransform().GetLocal().position };
+	const auto f_Size{ m_TextTextureUptr->GetSize() };
+	eng::service::renderer.Get().RenderTexture(*m_TextTextureUptr, SDL_Rect{ f_Pos.x, f_Pos.y, f_Size.x, f_Size.y }, SDL_Rect{0, 0, f_Size.x, f_Size.y});
 
 }

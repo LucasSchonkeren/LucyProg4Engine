@@ -10,11 +10,6 @@
 #include <optional>
 #include <ranges>
 
-//------------------|Defines|-----------------
-
-#define val_get() value().get()
-
-
 //-------------|Typedefs|------------------
 
 // Unique Pointer aliases because typenames get looooong

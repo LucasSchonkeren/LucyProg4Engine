@@ -3,6 +3,7 @@
 #include "../abstract/AbstractComponent.h"
 #include "../../dae/Texture2D.h"
 #include "../../dae/Font.h"
+#include <SDL.h>
 
 #include <string>
 
@@ -31,6 +32,7 @@ public: //------------------|Gameloop methods|--------------------------
 /*##################################|PRIVATE|##################################################*/
 
 private: //---------------------------|Fields|----------------------------
+	SDL_Color m_Color{ 255,255,255,255 }; // white
 	std::string m_Text;
 	bool m_NeedsUpdate{};
 	dae::Font* m_FontPtr;

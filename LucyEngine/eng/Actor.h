@@ -13,7 +13,7 @@
 #include "utils/utils.h"
 #include "abstract/AbstractComponent.h"
 #include "components/Transform.h"
-#include "Game.h"
+#include "Game/AbstractGame.h"
 
 namespace eng::eventHash {
 
@@ -42,7 +42,7 @@ public: //---------------|Helper struct|------------------------------
 
 public: //---------------|Constructor/Destructor/copy/move|--------------
 	
-	Actor(Game& game);
+	Actor(AbstractGame& game);
 	~Actor()	= default;
 
 	// Actors cannot be copied
@@ -186,7 +186,8 @@ public: //--------------------|Gameloop Methods|--------------------------------
 
 public: //--------------------|Game Methods|--------------------------------
 
-	double DeltaTime();
+	AbstractGame& Game();
+	float DeltaTime();
 
 /*##################################|PRIVATE|##################################################*/
 
@@ -210,7 +211,7 @@ private: //-----------------------|Flag Fields|---------------------------------
 
 private: //-----------------------|Game Fields|-------------------------------------------
 
-	Game& m_Game;
+	AbstractGame& m_Game;
 
 private: //-----------------------|Subject Fields|-------------------------------------------
 

@@ -6,7 +6,7 @@
 
 namespace eng {
 
-Actor::Actor(Game& game) :
+Actor::Actor(AbstractGame& game) :
     m_Game(game) {   
     m_TransformPtr = &AddComponent<cpt::Transform>();
 }
@@ -55,7 +55,7 @@ void Actor::SetParent(Actor& newParent, bool keepWorldTransform) {
         f_Children.pop_back();
     }
 
-    m_Game.FlagActorNewParent(this);
+    m_Game.ActorGraph().FlagActorNewParent(this);
     m_Flags.set(static_cast<int>(Flags::ParentChanged));
     m_MoveInfo.newParentPtr = &newParent;
     m_MoveInfo.keepWorldTransform = keepWorldTransform;
@@ -114,7 +114,7 @@ void Actor::Destroy() {
     m_Flags.set(static_cast<int>(Flags::Destroyed));
 
     for (auto& child : m_ChildUptrs) {
-        if (child->IsFlagged(Flags::Destroyed)) m_Game.UnFlagActorDestroy(child.get());
+        if (child->IsFlagged(Flags::Destroyed)) m_Game.ActorGraph().UnFlagActorDestroy(child.get());
         child->Destroy();
     }
 
@@ -257,8 +257,12 @@ void Actor::RenderImgui() {
     }
 }
 
-double Actor::DeltaTime() {
-    return m_Game.DeltaTime();
+AbstractGame& Actor::Game() {
+    return m_Game;
+}
+
+float Actor::DeltaTime() {
+    return static_cast<float>(m_Game.Time().DeltaTime());
 }
 
 ref_vec<AbstractComponent> Actor::GetAbstractComponents()

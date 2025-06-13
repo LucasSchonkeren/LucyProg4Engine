@@ -20,10 +20,11 @@ class IAABBCollider {
 public:
 	virtual ~IAABBCollider() = default;
 
-	virtual const Boundsf& Bounds() = 0;
-	virtual void			OnCollisionEnter(IAABBCollider* other) = 0;
-	virtual void			OnCollision(IAABBCollider* other) = 0;
-	virtual void			OnCollisionExit(IAABBCollider* other) = 0;
+	virtual const Boundsf&	Bounds()								= 0;
+	virtual void			OnCollisionEnter(IAABBCollider* other)	= 0;
+	virtual void			OnCollision(IAABBCollider* other)		= 0;
+	virtual void			OnCollisionExit(IAABBCollider* other)	= 0;
+	virtual const bool		IsSolid()								= 0;
 };
 
 class AABBCollisionHandler final {
@@ -36,7 +37,6 @@ public:
 	void RegisterCollider(IAABBCollider& collider);
 	void UnRegisterCollider(IAABBCollider& collider);
 	void NotifyCollisions();
-
 private:
 	std::vector<BoundData> m_ColliderXBounds{};
 	std::vector<BoundData> m_ColliderYBounds{};

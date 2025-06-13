@@ -26,16 +26,20 @@ void eng::physics::AABBCollisionHandler::NotifyCollisions() {
     } };
 
     static auto f_PairCmp = [](const auto& a, const auto& b) {
-        return std::tie(a.first, a.second) < std::tie(b.first, b.second);
+        auto lhs_min = std::min(a.first, a.second);
+        auto lhs_max = std::max(a.first, a.second);
+        auto rhs_min = std::min(b.first, b.second);
+        auto rhs_max = std::max(b.first, b.second);
+
+        return std::tie(lhs_min, lhs_max) < std::tie(rhs_min, rhs_max);
         };
 
     std::ranges::sort(m_ColliderXBounds, f_BoundCmp);
     std::ranges::sort(m_ColliderYBounds, f_BoundCmp);
 
-
-
     auto f_AxisCollisionLambda{ [](std::vector<BoundData>& input) {
         std::set<IAABBCollider*> f_ActiveColliders{};
+
         std::vector<std::pair<IAABBCollider*, IAABBCollider*>> f_Output{};
         for (auto& boundData : input) {
             if (boundData.first) {

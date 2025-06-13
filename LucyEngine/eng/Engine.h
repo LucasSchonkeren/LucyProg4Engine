@@ -2,7 +2,7 @@
 #include <string>
 #include <functional>
 #include <queue>
-#include "Game.h"
+#include "game/AbstractGame.h"
 
 namespace eng {
 
@@ -24,7 +24,7 @@ public: //---------------|Constructor/destructor|---------------------------
 
 public: //---------------|Run method|---------------------------
 
-	void Run(std::function<u_ptr<Game>()> loadGame);
+	void Run(std::function<u_ptr<AbstractGame>()> loadGame);
 
 
 };
