@@ -14,6 +14,7 @@
 #include "abstract/AbstractComponent.h"
 #include "components/Transform.h"
 #include "Game/AbstractGame.h"
+#include "engine/Serialization.h"
 
 namespace eng::eventHash {
 
@@ -53,10 +54,11 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 	Actor(Actor&&)				= default;
 	Actor& operator=(Actor&&)	= default;
 
-	///<summary>
-	/// Create an exact duplicate of this actor and return a reference to the duplicate. 
-	/// </summary>
-	/*Actor& Clone();*/ //TODO
+public: //--------------|Serialization Methods|------------------
+
+	nlohmann::ordered_json GetJson();
+	void Serialize(const std::string& filePath);
+	void DeserializeChild(const std::string& filepath);
 
 public: //--------------|Child Actor Methods|------------------
 	
@@ -69,12 +71,12 @@ public: //--------------|Child Actor Methods|------------------
 	/// <returns>
 	/// Shallow search, gets only the children of this object. Empty if this Actor has no children.
 	/// </returns>
-	ref_vec<Actor>	GetChildren()								const;
+	std::vector<Actor*>	GetChildren()								const;
 
 	/// <returns>
 	/// Deep search, gets the children of this object, and their children, recursively. Empty if this Actor has no children.
 	/// </returns>
-	ref_vec<Actor>	GetAllChildren()							const;
+	std::vector<Actor*>	GetAllChildren()							const;
 
 	/// <summary>
 	/// Remove a child actor. This destroys the child. May only be used during cleanup.
@@ -115,9 +117,9 @@ public: //--------------|Component Methods|-----------------------------
 	CompT* GetComponent();
 
 	/// <returns>
-	/// A list of all componenets attached to this Actor.
+	/// A list of all components attached to this Actor.
 	/// </returns>
-	ref_vec<AbstractComponent> GetAbstractComponents();
+	std::vector<AbstractComponent*> GetAbstractComponents();
 
 	///
 	template <std::derived_from<AbstractComponent> CompT>
@@ -188,6 +190,10 @@ public: //--------------------|Game Methods|--------------------------------
 
 	AbstractGame& Game();
 	float DeltaTime();
+
+public: //--------------------|static fields|--------------------------------
+
+	static const std::string ACTOR_JSON_PATH;
 
 /*##################################|PRIVATE|##################################################*/
 

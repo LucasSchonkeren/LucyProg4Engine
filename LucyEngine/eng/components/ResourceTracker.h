@@ -34,6 +34,13 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 	ResourceTracker(const ResourceTracker&&)	= delete;
 	ResourceTracker& operator=	(const ResourceTracker&&)	= delete;
 
+public: //---------------|Serialization Methods|--------------
+
+	std::string TypeName() override { return "ResourceTracker"; }
+	nlohmann::ordered_json Serialize() override;
+	static std::unique_ptr<ResourceTracker> Deserialize(Actor& owner, const nlohmann::json& json);
+
+
 public: //--------------------|Meta methods|-----------------------
 
 	void NewResource(std::string resource, unsigned int maxValue, bool startEmpty = false);
@@ -69,10 +76,6 @@ public: //--------------------|Subject methods|-----------------------
 
 	void AddObserver(IObserver& observer);
 	void RemoveObserver(IObserver& observer);
-
-public: //--------------------|Gameloop methods|-----------------------
-
-	void Start() override;
 
 /*##################################|PRIVATE|##################################################*/
 

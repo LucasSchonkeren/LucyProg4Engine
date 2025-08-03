@@ -20,6 +20,12 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 	MovementHandler(MovementHandler&&) = delete;
 	MovementHandler& operator=	(MovementHandler&&) = delete;
 
+public: //---------------|Serialization Methods|--------------
+
+	std::string TypeName() override { return "MovementHandler"; }
+	nlohmann::ordered_json Serialize() override;
+	static std::unique_ptr<MovementHandler> Deserialize(Actor& owner, const nlohmann::json& json);
+
 public: //------------------|Gameloop Methods|--------------------------
 
 	void Start() override;
@@ -39,8 +45,6 @@ public: //------------------|Collider Methods|--------------------------
 	void			OnCollisionEnter(IAABBCollider* other) override;
 	void			OnCollision(IAABBCollider* other) override;
 	void			OnCollisionExit(IAABBCollider* other) override;
-
-	const bool IsSolid() override;
 
 /*##################################|PRIVATE|##################################################*/
 

@@ -87,8 +87,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BombermanGame.cpp" />
-    <ClCompile Include="Components\AudioController.cpp" />
-    <ClCompile Include="Components\Rotator.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -96,8 +94,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Components\AudioController.h" />
-    <ClInclude Include="Components\Rotator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,13 +6,34 @@
 #include "../components/Transform.h"
 #include <cstdint>
 #include "../engine/Resources.h"
-
-
 #include <filesystem>
 
-eng::cpt::TextRenderer::TextRenderer(eng::Actor& owner, const std::string& text, const std::string& fontPath, unsigned int size) :
+namespace eng::cpt {
+
+REGISTER_COMPONENT(TextRenderer)
+
+nlohmann::ordered_json TextRenderer::Serialize() {
+	nlohmann::ordered_json f_Json{};
+
+	f_Json["Color"] = m_Color;
+	f_Json["Text"] = m_Text;
+	f_Json["Font"] = m_FontPath;
+	f_Json["Size"] = m_Size;
+
+	return f_Json;
+}
+
+std::unique_ptr<TextRenderer> TextRenderer::Deserialize(Actor& owner, const nlohmann::json& json) {
+	auto f_Uptr{ std::make_unique<TextRenderer>(owner, json.value("Text", ""), json.value("Font", "Lingua.ttf"), json.value("Size", 36U), json.value("Color", SDL_Color{255,255,255,255})) };
+	return f_Uptr;
+}
+
+TextRenderer::TextRenderer(eng::Actor& owner, const std::string& text, const std::string& fontPath, unsigned int size, SDL_Color color) :
 	AbstractComponent(owner),
-	m_Text(text), m_NeedsUpdate(true) {
+	m_Text(text), m_NeedsUpdate(true),
+	m_Size(size),
+	m_FontPath(fontPath),
+	m_Color(color) {
 	m_FontPtr = eng::service::resources.Get().LoadFont(fontPath, static_cast<uint8_t>(size));
 }
 
@@ -48,6 +69,8 @@ void eng::cpt::TextRenderer::Render() {
 
 	const glm::ivec2 f_Pos{ Owner().GetTransform().GetLocal().position };
 	const auto f_Size{ m_TextTextureUptr->GetSize() };
-	eng::service::renderer.Get().RenderTexture(*m_TextTextureUptr, SDL_Rect{ f_Pos.x, f_Pos.y, f_Size.x, f_Size.y }, SDL_Rect{0, 0, f_Size.x, f_Size.y});
+	eng::service::renderer.Get().RenderTexture(*m_TextTextureUptr, SDL_Rect{ f_Pos.x, f_Pos.y, f_Size.x, f_Size.y }, SDL_Rect{ 0, 0, f_Size.x, f_Size.y });
 
 }
+
+} // !eng::cpt

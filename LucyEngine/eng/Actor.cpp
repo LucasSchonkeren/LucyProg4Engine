@@ -1,14 +1,58 @@
 #include "Actor.h"
 
 #include <algorithm>
-
 #include <iostream>
+#include <fstream>
+#include "engine/Serialization.h"
+
 
 namespace eng {
+
+const std::string Actor::ACTOR_JSON_PATH{"../Data/json/actors/"};
 
 Actor::Actor(AbstractGame& game) :
     m_Game(game) {   
     m_TransformPtr = &AddComponent<cpt::Transform>();
+}
+
+nlohmann::ordered_json Actor::GetJson() {
+    nlohmann::ordered_json f_Json{};
+
+    f_Json["Flags"] = m_Flags.to_ulong();
+
+    for (auto& comp : GetAbstractComponents()) {
+        if (not serialization::IsComponentRegistered(comp->TypeName())) continue;
+
+        f_Json["Components"].emplace_back(nlohmann::ordered_json{ 
+            {"Type", comp->TypeName()},
+            {"Json", comp->Serialize()}
+        });
+    }
+
+    for (auto& child : GetChildren()) {
+        f_Json["Children"].emplace_back(child->GetJson());
+    }
+
+    return f_Json;
+}
+
+void Actor::Serialize(const std::string& filePath) {
+    std::ofstream file(ACTOR_JSON_PATH + filePath, std::ios::out | std::ios::trunc);  // overwrite mode
+
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open file " << ACTOR_JSON_PATH + filePath << " for writing.\n";
+        return;
+    }
+
+    file << GetJson().dump(4);
+
+    if (!file) {
+        std::cerr << "Error: Failed to write to file " << ACTOR_JSON_PATH + filePath << ".\n";
+    }
+}
+
+void Actor::DeserializeChild(const std::string&) {
+
 }
 
 Actor& Actor::AddChildActor() {
@@ -19,19 +63,19 @@ Actor& Actor::AddChildActor() {
     return *m_ChildUptrs.back();
 }
 
-ref_vec<Actor> Actor::GetChildren() const {
-    ref_vec<Actor> f_Result{};
+std::vector<Actor*> Actor::GetChildren() const {
+    std::vector<Actor*> f_Result{};
     for (const auto& childUptr : m_ChildUptrs) {
-        f_Result.push_back(*childUptr);
+        f_Result.emplace_back(childUptr.get());
     }
     return f_Result;
 }
 
-ref_vec<Actor> Actor::GetAllChildren() const {
-    ref_vec<Actor> f_Result = GetChildren();
+std::vector<Actor*> Actor::GetAllChildren() const {
+    std::vector<Actor*> f_Result = GetChildren();
 
     for (size_t i{}; i < f_Result.size(); ++i) {
-        auto f_ChildChildren{ f_Result[i].get().GetChildren() };
+        auto f_ChildChildren{ f_Result[i]->GetChildren() };
         f_Result.insert(f_Result.end(), f_ChildChildren.begin(), f_ChildChildren.end());
     }
 
@@ -51,7 +95,7 @@ void Actor::SetParent(Actor& newParent, bool keepWorldTransform) {
 
     auto f_Children{ GetAllChildren() };
     while (!f_Children.empty()) {
-        assert(&f_Children.back().get() != this and "An actor cannot be a child of its children");
+        assert(f_Children.back() != this and "An actor cannot be a child of its children");
         f_Children.pop_back();
     }
 
@@ -265,12 +309,12 @@ float Actor::DeltaTime() {
     return static_cast<float>(m_Game.Time().DeltaTime());
 }
 
-ref_vec<AbstractComponent> Actor::GetAbstractComponents()
+std::vector<AbstractComponent*> Actor::GetAbstractComponents()
 {
-    ref_vec<AbstractComponent> f_Result{};
+    std::vector<AbstractComponent*> f_Result{};
 
     for (auto& compUptr : m_CompUptrs) {
-        f_Result.emplace_back(*compUptr);
+        f_Result.emplace_back(compUptr.get());
     }
 
     return f_Result;

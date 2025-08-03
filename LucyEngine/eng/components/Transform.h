@@ -2,8 +2,8 @@
 #include <glm.hpp>
 
 #include "../abstract/AbstractComponent.h"
-
 #include "../abstract/AbstractObserver.h"
+#include "../../../3rdParty/json.hpp"
 
 namespace eng {
 
@@ -32,7 +32,14 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 	Transform(const Transform&&) = delete;
 	Transform& operator=	(const Transform&&) = delete;
 
+public: //---------------|Serialization Methods|--------------
+	 
+	std::string TypeName() override { return "Transform"; }
+	nlohmann::ordered_json Serialize() override;
+	static std::unique_ptr<Transform> Deserialize(Actor& owner, const nlohmann::json& json);
+
 public: //---------------|Transform Methods|--------------
+
 
 	void SetLocalPosition(float x, float y);
 	void SetLocalPosition(glm::vec2 newPosition);

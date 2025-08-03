@@ -7,6 +7,7 @@
 
 #include "../utils/utils.h"
 #include "AbstractObserver.h"
+#include "../json.hpp"
 
 namespace eng {
 
@@ -20,8 +21,10 @@ public: //------------------------|Virtual Destructor|------------------------
 	AbstractComponent(Actor& owner);
 	virtual ~AbstractComponent() = default;
 
-public: //----------------------|Serialization methods|------------------------
-	virtual std::string Serialize() { return ""; };
+public: //--------------------|Serialization|-----------------------------
+
+	virtual nlohmann::ordered_json Serialize() { return nlohmann::json{}; }
+	virtual std::string TypeName() = 0;
 
 public: //--------------------|Gameloop methods|-----------------------------
 
@@ -81,3 +84,13 @@ public:
 };
 
 } // !eng
+
+
+#define SERIALIZECPP(x) nlohmann::ordered_json x::Serialize() { \
+nlohmann::ordered_json f_Json; \
+return f_Json; \
+}
+
+#define SERIALIZEH nlohmann::ordered_json Serialize() override;
+
+#define DESERIALIZEH(x) static std::unique_ptr<x> Deserialize(Actor& owner, const nlohmann::json& json);

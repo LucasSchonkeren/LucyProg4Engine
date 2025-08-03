@@ -30,7 +30,7 @@ namespace eng::cpt {
 class BoxCollider final : public eng::AbstractComponent, public eng::physics::IAABBCollider, public IObserver {
 public: //---------------|Constructor/Destructor/copy/move|--------------
 
-	BoxCollider(eng::Actor& owner, glm::vec2 size, glm::vec2 pivot = glm::vec2{}, bool solid = {false}) : AbstractComponent(owner), m_Size(size), m_Pivot(pivot), m_Solid(solid) {};
+	BoxCollider(eng::Actor& owner, glm::vec2 size, glm::vec2 pivot = glm::vec2{}) : AbstractComponent(owner), m_Size(size), m_Pivot(pivot) {};
 	~BoxCollider() = default;
 
 	BoxCollider(const BoxCollider&) = delete;
@@ -38,6 +38,12 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 
 	BoxCollider(BoxCollider&&) = delete;
 	BoxCollider& operator=	(BoxCollider&&) = delete;
+
+public: //---------------|Serialization|--------------
+	nlohmann::ordered_json Serialize() override;
+	static std::unique_ptr<BoxCollider> Deserialize(Actor& owner, const nlohmann::json& json);
+
+	std::string TypeName() override { return "BoxCollider"; }
 
 public: //------------------|Gameloop Methods|--------------------------
 	
@@ -55,10 +61,6 @@ public: //------------------|Collider Methods|--------------------------
 	 void			OnCollisionEnter(IAABBCollider* other);
 	 void			OnCollision(IAABBCollider* other);
 	 void			OnCollisionExit(IAABBCollider* other);
-
-public: //------------------|Getter Methods|--------------------------
-
-	const bool IsSolid() override;
 
 public: //------------------|Observer Methods|--------------------------
 
@@ -78,7 +80,6 @@ private: //---------------------------|collider fields|-------------------------
 private: //---------------------------|Observer fields|----------------------------
 
 	Subject m_Subject{};
-	bool m_Solid{ false };
 
 }; // !FpsTracker
 

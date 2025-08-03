@@ -5,6 +5,20 @@
 #include <algorithm>
 #include <regex>
 
+namespace eng::cpt {
+
+REGISTER_COMPONENT(ResourceDisplayLogic)
+
+nlohmann::ordered_json eng::cpt::ResourceDisplayLogic::Serialize() {
+    nlohmann::ordered_json f_Json{};
+    f_Json["FormatString"] = m_FormatString;
+    return f_Json;
+}
+
+std::unique_ptr<ResourceDisplayLogic> eng::cpt::ResourceDisplayLogic::Deserialize(Actor& owner, const nlohmann::json& json) {
+    std::string f_FormatString{json.value("FormatString", "")};
+    return std::make_unique<ResourceDisplayLogic>(owner, f_FormatString);
+}
 
 void eng::cpt::ResourceDisplayLogic::SetText(std::string_view formatString) {
     m_FormatString = formatString;
@@ -29,7 +43,7 @@ void eng::cpt::ResourceDisplayLogic::UpdateTextComponent(ResourceTracker* const 
 
         std::string content = it->str(1);
 
-        
+
 
         if (int value{ resourceTrackerPtr->GetResource(content) }; value >= 0) {
             f_Result.append(std::to_string(value));
@@ -45,3 +59,5 @@ void eng::cpt::ResourceDisplayLogic::UpdateTextComponent(ResourceTracker* const 
 
     m_TextRendererPtr->SetText(f_Result);
 }
+
+} // !eng::cpt

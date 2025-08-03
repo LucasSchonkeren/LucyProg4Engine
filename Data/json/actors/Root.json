@@ -1,0 +1,482 @@
+{
+    "Flags": 0,
+    "Components": [
+        {
+            "Type": "Transform",
+            "Json": {
+                "Position": [
+                    0.0,
+                    0.0
+                ]
+            }
+        }
+    ],
+    "Children": [
+        {
+            "Flags": 0,
+            "Components": [
+                {
+                    "Type": "Transform",
+                    "Json": {
+                        "Position": [
+                            0.0,
+                            0.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "TextureRenderer",
+                    "Json": {
+                        "TexturePath": "background.tga",
+                        "Size": [
+                            640,
+                            480
+                        ],
+                        "SourceRect": [
+                            0,
+                            0,
+                            640,
+                            480
+                        ]
+                    }
+                }
+            ],
+            "Children": [
+                {
+                    "Flags": 0,
+                    "Components": [
+                        {
+                            "Type": "Transform",
+                            "Json": {
+                                "Position": [
+                                    216.0,
+                                    220.0
+                                ]
+                            }
+                        },
+                        {
+                            "Type": "TextureRenderer",
+                            "Json": {
+                                "TexturePath": "logo.tga",
+                                "Size": [
+                                    207,
+                                    48
+                                ],
+                                "SourceRect": [
+                                    0,
+                                    0,
+                                    207,
+                                    48
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Flags": 0,
+            "Components": [
+                {
+                    "Type": "Transform",
+                    "Json": {
+                        "Position": [
+                            80.0,
+                            20.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "TextRenderer",
+                    "Json": {
+                        "Color": [
+                            255,
+                            255,
+                            255,
+                            255
+                        ],
+                        "Text": "Programming 4 Assignment",
+                        "Font": "Lingua.otf",
+                        "Size": 36
+                    }
+                }
+            ]
+        },
+        {
+            "Flags": 0,
+            "Components": [
+                {
+                    "Type": "Transform",
+                    "Json": {
+                        "Position": [
+                            10.0,
+                            60.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "TextRenderer",
+                    "Json": {
+                        "Color": [
+                            255,
+                            255,
+                            255,
+                            255
+                        ],
+                        "Text": "Keyboard player: WASD to move, Q to lose lives, E to gain points AND play a sound!",
+                        "Font": "Lingua.otf",
+                        "Size": 17
+                    }
+                }
+            ]
+        },
+        {
+            "Flags": 0,
+            "Components": [
+                {
+                    "Type": "Transform",
+                    "Json": {
+                        "Position": [
+                            10.0,
+                            78.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "TextRenderer",
+                    "Json": {
+                        "Color": [
+                            255,
+                            255,
+                            255,
+                            255
+                        ],
+                        "Text": "Gamepad player: D-pad to move, A to lose lives, B or Y to gain points",
+                        "Font": "Lingua.otf",
+                        "Size": 17
+                    }
+                }
+            ]
+        },
+        {
+            "Flags": 0,
+            "Components": [
+                {
+                    "Type": "Transform",
+                    "Json": {
+                        "Position": [
+                            10.0,
+                            100.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "TextRenderer",
+                    "Json": {
+                        "Color": [
+                            255,
+                            255,
+                            255,
+                            255
+                        ],
+                        "Text": "Keyboard player lives: 3",
+                        "Font": "Lingua.otf",
+                        "Size": 24
+                    }
+                },
+                {
+                    "Type": "ResourceDisplayLogic",
+                    "Json": {
+                        "FormatString": "Keyboard player lives: {hp}"
+                    }
+                }
+            ]
+        },
+        {
+            "Flags": 0,
+            "Components": [
+                {
+                    "Type": "Transform",
+                    "Json": {
+                        "Position": [
+                            10.0,
+                            125.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "TextRenderer",
+                    "Json": {
+                        "Color": [
+                            255,
+                            255,
+                            255,
+                            255
+                        ],
+                        "Text": "Keyboard player Score: 0",
+                        "Font": "Lingua.otf",
+                        "Size": 24
+                    }
+                },
+                {
+                    "Type": "ResourceDisplayLogic",
+                    "Json": {
+                        "FormatString": "Keyboard player Score: {score}"
+                    }
+                }
+            ]
+        },
+        {
+            "Flags": 0,
+            "Components": [
+                {
+                    "Type": "Transform",
+                    "Json": {
+                        "Position": [
+                            10.0,
+                            150.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "TextRenderer",
+                    "Json": {
+                        "Color": [
+                            255,
+                            255,
+                            255,
+                            255
+                        ],
+                        "Text": "Gamepad player lives: 3",
+                        "Font": "Lingua.otf",
+                        "Size": 24
+                    }
+                },
+                {
+                    "Type": "ResourceDisplayLogic",
+                    "Json": {
+                        "FormatString": "Gamepad player lives: {hp}"
+                    }
+                }
+            ]
+        },
+        {
+            "Flags": 0,
+            "Components": [
+                {
+                    "Type": "Transform",
+                    "Json": {
+                        "Position": [
+                            10.0,
+                            175.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "TextRenderer",
+                    "Json": {
+                        "Color": [
+                            255,
+                            255,
+                            255,
+                            255
+                        ],
+                        "Text": "Gamepad player Score: 0",
+                        "Font": "Lingua.otf",
+                        "Size": 24
+                    }
+                },
+                {
+                    "Type": "ResourceDisplayLogic",
+                    "Json": {
+                        "FormatString": "Gamepad player Score: {score}"
+                    }
+                }
+            ]
+        },
+        {
+            "Flags": 0,
+            "Components": [
+                {
+                    "Type": "Transform",
+                    "Json": {
+                        "Position": [
+                            10.0,
+                            10.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "TextRenderer",
+                    "Json": {
+                        "Color": [
+                            255,
+                            255,
+                            255,
+                            255
+                        ],
+                        "Text": "fps: ",
+                        "Font": "Lingua.otf",
+                        "Size": 16
+                    }
+                },
+                {
+                    "Type": "FpsTracker",
+                    "Json": null
+                }
+            ]
+        },
+        {
+            "Flags": 0,
+            "Components": [
+                {
+                    "Type": "Transform",
+                    "Json": {
+                        "Position": [
+                            100.0,
+                            400.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "TextureRenderer",
+                    "Json": {
+                        "TexturePath": "Player.png",
+                        "Size": [
+                            48,
+                            48
+                        ],
+                        "SourceRect": [
+                            0,
+                            0,
+                            112,
+                            48
+                        ]
+                    }
+                },
+                {
+                    "Type": "ResourceTracker",
+                    "Json": {
+                        "score": {
+                            "Value": 0,
+                            "Max": 2147483647
+                        },
+                        "hp": {
+                            "Value": 5,
+                            "Max": 5
+                        }
+                    }
+                },
+                {
+                    "Type": "BoxCollider",
+                    "Json": {
+                        "Size": [
+                            47.0,
+                            47.0
+                        ],
+                        "Pivot": [
+                            0.0,
+                            0.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "MovementHandler",
+                    "Json": {
+                        "Speed": 10.0
+                    }
+                },
+                {
+                    "Type": "SpriteController",
+                    "Json": {
+                        "Sprite": "WalkLeft",
+                        "Frame": 0,
+                        "Size": [
+                            16,
+                            16
+                        ],
+                        "SecPerFrame": 0.20000000298023224,
+                        "SourcePositions": {
+                            "WalkLeft": [
+                                [
+                                    0,
+                                    0
+                                ],
+                                [
+                                    16,
+                                    0
+                                ],
+                                [
+                                    32,
+                                    0
+                                ]
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "Flags": 0,
+            "Components": [
+                {
+                    "Type": "Transform",
+                    "Json": {
+                        "Position": [
+                            150.0,
+                            400.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "TextureRenderer",
+                    "Json": {
+                        "TexturePath": "BigBomb.png",
+                        "Size": [
+                            16,
+                            16
+                        ],
+                        "SourceRect": [
+                            0,
+                            0,
+                            16,
+                            16
+                        ]
+                    }
+                },
+                {
+                    "Type": "ResourceTracker",
+                    "Json": {
+                        "score": {
+                            "Value": 0,
+                            "Max": 2147483647
+                        },
+                        "hp": {
+                            "Value": 3,
+                            "Max": 3
+                        }
+                    }
+                },
+                {
+                    "Type": "BoxCollider",
+                    "Json": {
+                        "Size": [
+                            32.0,
+                            32.0
+                        ],
+                        "Pivot": [
+                            0.0,
+                            0.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "MovementHandler",
+                    "Json": {
+                        "Speed": 0.0
+                    }
+                }
+            ]
+        }
+    ]
+}

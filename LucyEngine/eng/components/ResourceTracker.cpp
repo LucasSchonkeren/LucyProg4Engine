@@ -1,7 +1,37 @@
 #include "ResourceTracker.h"
 #include "../utils/SdbmHash.h"
+#include "../engine/serialization.h"
 
 #include <algorithm>
+
+namespace eng::cpt {
+REGISTER_COMPONENT(ResourceTracker)
+
+nlohmann::ordered_json eng::cpt::ResourceTracker::Serialize() {
+	nlohmann::ordered_json f_Json;
+
+	for (auto& [name, value] : m_ResourceVals) {
+		f_Json[name]["Value"] = value;
+	}
+	for (auto& [name, value] : m_MaxResourceVals) {
+		f_Json[name]["Max"] = value;
+	}
+
+	return f_Json;
+}
+
+std::unique_ptr<ResourceTracker> eng::cpt::ResourceTracker::Deserialize(Actor& owner, const nlohmann::json& json) {
+	auto f_Uptr{std::make_unique<ResourceTracker>(owner)};
+
+	if (!json.is_object()) return f_Uptr;
+
+	for (auto& [name, value] : json.items()) {
+		f_Uptr->m_ResourceVals[name] = value.value("Value", 0);
+		f_Uptr->m_MaxResourceVals[name] = value.value("Max", INT_MAX);
+	}
+
+	return std::move(f_Uptr);
+}
 
 void eng::cpt::ResourceTracker::NewResource(std::string resource, unsigned int maxValue, bool startEmpty) {
 	if (maxValue == 0) maxValue = INT_MAX;
@@ -29,7 +59,7 @@ void eng::cpt::ResourceTracker::ModifyResource(std::string resource, int value) 
 				this,
 				f_OldVal - m_ResourceVals.at(resource)
 			)
-		});
+			});
 	}
 }
 
@@ -41,10 +71,10 @@ void eng::cpt::ResourceTracker::SetResource(std::string resource, int value) {
 			eng::eventHash::actorResourceChanged,
 			std::make_any<eng::eventContext::ResourceChanged>(
 				resource,
-				this, 
+				this,
 				f_OldVal - m_ResourceVals.at(resource)
 			)
-		});
+			});
 	}
 }
 
@@ -59,7 +89,7 @@ void eng::cpt::ResourceTracker::FillResource(std::string resource) {
 				this,
 				f_OldVal - m_ResourceVals.at(resource)
 			)
-		});
+			});
 	}
 }
 
@@ -89,14 +119,4 @@ void eng::cpt::ResourceTracker::RemoveObserver(IObserver& observer) {
 	m_ResourceSubject.RemoveObserver(observer);
 }
 
-void eng::cpt::ResourceTracker::Start() {
-	for (auto& pair : m_ResourceVals)
-		m_ResourceSubject.DispatchEvent({
-			eng::eventHash::actorResourceChanged,
-			std::make_any<eng::eventContext::ResourceChanged>(
-				pair.first,
-				this,
-				0
-			)
-		});
-}
+} // !eng::cpt

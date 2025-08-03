@@ -3,6 +3,20 @@
 #include <iostream>
 #include "../engine/Services.h"
 
+namespace eng::cpt {
+REGISTER_COMPONENT(MovementHandler)
+
+nlohmann::ordered_json MovementHandler::Serialize() {
+	nlohmann::ordered_json f_Json;
+	f_Json["Speed"] = m_Speed;
+	return f_Json;
+}
+
+std::unique_ptr<MovementHandler> MovementHandler::Deserialize(Actor& owner, const nlohmann::json& json) {
+	float f_Speed{ json.value("Speed", 0.f)};
+	return std::make_unique<MovementHandler>(owner, f_Speed);
+}
+
 void eng::cpt::MovementHandler::Start() {
 	m_BoxColliderPtr = Owner().GetComponent<BoxCollider>();
 	Owner().Game().Physics().RegisterCollider(*this);
@@ -13,7 +27,7 @@ void eng::cpt::MovementHandler::Update() {
 }
 
 void eng::cpt::MovementHandler::LateUpdate() {
-	
+
 	if (m_Direction == glm::vec2{} or m_Speed == 0) return;
 	Owner().GetTransform().TranslatePosition(glm::normalize(m_Direction) * m_Speed);
 	m_Direction = glm::vec2{ 0,0 };
@@ -43,18 +57,17 @@ const eng::physics::Boundsf& eng::cpt::MovementHandler::Bounds() {
 	m_Bounds = m_BoxColliderPtr->Bounds();
 	auto f_Velocity = glm::normalize(m_LastDirection) * m_Speed;
 
-	m_Bounds.top += f_Velocity.y -1;
-	m_Bounds.bottom += f_Velocity.y +1;
-	m_Bounds.left +=  f_Velocity.x -1;
-	m_Bounds.right +=  f_Velocity.x +1;
+	m_Bounds.top += f_Velocity.y + 1;
+	m_Bounds.bottom += f_Velocity.y - 1;
+	m_Bounds.left += f_Velocity.x + 1;
+	m_Bounds.right += f_Velocity.x - 1;
 	return m_Bounds;
 }
 
-void eng::cpt::MovementHandler::OnCollisionEnter(IAABBCollider* ) {
+void eng::cpt::MovementHandler::OnCollisionEnter(IAABBCollider*) {
 }
 
 void eng::cpt::MovementHandler::OnCollision(IAABBCollider* other) {
-	if (!other->IsSolid()) return;
 	auto f_BoxCollider{ dynamic_cast<BoxCollider*>(other) };
 	if (f_BoxCollider and f_BoxCollider->Owner() == Owner()) return;
 	m_Direction = glm::vec2{};
@@ -63,6 +76,5 @@ void eng::cpt::MovementHandler::OnCollision(IAABBCollider* other) {
 void eng::cpt::MovementHandler::OnCollisionExit(IAABBCollider*) {
 }
 
-const bool eng::cpt::MovementHandler::IsSolid() {
-	return false;
-}
+
+} // !eng::cpt

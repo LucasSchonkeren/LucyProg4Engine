@@ -24,7 +24,6 @@ public:
 	virtual void			OnCollisionEnter(IAABBCollider* other)	= 0;
 	virtual void			OnCollision(IAABBCollider* other)		= 0;
 	virtual void			OnCollisionExit(IAABBCollider* other)	= 0;
-	virtual const bool		IsSolid()								= 0;
 };
 
 class AABBCollisionHandler final {

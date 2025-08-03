@@ -102,13 +102,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="eng\commands\MoveAlongGrid.h" />
     <ClInclude Include="eng\components\BoxCollider.h" />
-    <ClInclude Include="eng\components\Grid.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="eng\components\GridTransform.h" />
     <ClInclude Include="eng\components\MovementHandler.h" />
     <ClInclude Include="eng\components\SpriteController.h" />
     <ClInclude Include="eng\Engine.h" />
@@ -145,6 +139,7 @@
     </ClInclude>
     <ClInclude Include="eng\engine\ConsoleLogger.h" />
     <ClInclude Include="eng\engine\Renderer.h" />
+    <ClInclude Include="eng\engine\Serialization.h" />
     <ClInclude Include="eng\engine\Services.h" />
     <ClInclude Include="eng\Game\ActorGraph.h" />
     <ClInclude Include="eng\Game\AbstractGame.h">
@@ -196,10 +191,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="eng\abstract\AbstractObserver.cpp" />
-    <ClCompile Include="eng\commands\MoveAlongGrid.cpp" />
     <ClCompile Include="eng\components\BoxCollider.cpp" />
-    <ClCompile Include="eng\components\Grid.cpp" />
-    <ClCompile Include="eng\components\GridTransform.cpp" />
     <ClCompile Include="eng\components\MovementHandler.cpp" />
     <ClCompile Include="eng\components\SpriteController.cpp" />
     <ClCompile Include="eng\Engine.cpp" />
@@ -213,6 +205,7 @@
     <ClCompile Include="eng\components\ResourceTracker.cpp" />
     <ClCompile Include="eng\engine\AudioPlayer.cpp" />
     <ClCompile Include="eng\engine\Renderer.cpp" />
+    <ClCompile Include="eng\engine\Serialization.cpp" />
     <ClCompile Include="eng\engine\Services.cpp" />
     <ClCompile Include="eng\Game\ActorGraph.cpp" />
     <ClCompile Include="dae\Minigin.cpp" />

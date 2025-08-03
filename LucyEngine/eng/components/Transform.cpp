@@ -1,7 +1,28 @@
 #include "Transform.h"
 #include "../Actor.h"
+#include "../engine/Serialization.h"
+#include <iostream>
 
 namespace eng::cpt {
+
+REGISTER_COMPONENT(Transform)
+
+nlohmann::ordered_json Transform::Serialize()
+{
+	nlohmann::ordered_json f_Json{};
+	
+	f_Json["Position"] = m_TransformData.position;
+	
+	return f_Json;
+}
+
+std::unique_ptr<Transform> Transform::Deserialize(Actor& owner, const nlohmann::json& json) {
+	std::unique_ptr<Transform> f_Uptr{ std::make_unique<Transform>(owner) };
+
+	f_Uptr->SetLocalPosition(json.value("Position", glm::vec2{}));
+
+	return std::move(f_Uptr);
+}
 
 void Transform::SetLocalPosition(float x, float y) {
 	glm::vec2 f_OldPos{ m_TransformData.position };
@@ -11,7 +32,7 @@ void Transform::SetLocalPosition(float x, float y) {
 
 	m_GlobalNeedsUpdate = true;
 	for (auto child : Owner().GetAllChildren()) {
-		child.get().GetTransform().FlagForGlobalUpdate();
+		child->GetTransform().FlagForGlobalUpdate();
 	}
 
 	m_Subject.DispatchEvent(Event{
@@ -71,4 +92,5 @@ void Transform::RemoveObserver(IObserver& observer) {
 
 eng::TransformData operator+(const eng::TransformData& lhs, const eng::TransformData& rhs) {
 	return eng::TransformData{ lhs.position + rhs.position };
+
 }

@@ -21,6 +21,12 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 	ResourceDisplayLogic			(const ResourceDisplayLogic&&) = delete;
 	ResourceDisplayLogic& operator=	(const ResourceDisplayLogic&&) = delete;
 
+public: //---------------|Serialization Methods|--------------
+
+	std::string TypeName() override { return "ResourceDisplayLogic"; }
+	nlohmann::ordered_json Serialize() override;
+	static std::unique_ptr<ResourceDisplayLogic> Deserialize(Actor& owner, const nlohmann::json& json);
+
 public: //--------------------|Setter methods|-----------------------------
 
 	void SetText(std::string_view formatString);

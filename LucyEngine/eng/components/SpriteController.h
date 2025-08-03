@@ -19,14 +19,18 @@ public: //---------------|Constructor/Destructor/copy/move|--------------
 	SpriteController(SpriteController&&) = delete;
 	SpriteController& operator=	(SpriteController&&) = delete;
 
+public: //---------------|Serialization Methods|--------------
+
+	std::string TypeName() override { return "SpriteController"; }
+	nlohmann::ordered_json Serialize() override;
+	static std::unique_ptr<SpriteController> Deserialize(Actor& owner, const nlohmann::json& json);
+
 public: //------------------|Gameloop Methods|--------------------------
 	void Start() override;
 	void Update() override;
 
 public: //------------------|Sprite Methods|--------------------------
 	void SetSprite(const std::string& spriteName);
-
-/*##################################|PRIVATE|##################################################*/
 
 private: //---------------------------|Component references|----------------------------
 

@@ -1,0 +1,9 @@
+{
+    "Components": [
+        {
+            "Json": "Testtest123",
+            "Type": "BoxCollider"
+        }
+    ],
+    "Flags": 0
+}
