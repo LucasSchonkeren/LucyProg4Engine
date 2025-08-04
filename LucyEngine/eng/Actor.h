@@ -58,7 +58,7 @@ public: //--------------|Serialization Methods|------------------
 
 	nlohmann::ordered_json GetJson();
 	void Serialize(const std::string& filePath);
-	void DeserializeChild(const std::string& filepath);
+	void DeserializeChild(const nlohmann::json& json);
 
 public: //--------------|Child Actor Methods|------------------
 	
@@ -108,7 +108,7 @@ public: //--------------|Component Methods|-----------------------------
 	/// <typeparam name="CompT">The Component type. Must derive from cpt::AbstractComponent. Must be have valid copy/move constructors and assignment operators in order for the Actor to be able to be cloned</typeparam>
 	/// <returns>A reference to the newly added component</returns>
 	template <std::derived_from<AbstractComponent> CompT, typename... ArgsT>
-	CompT&				AddComponent(ArgsT... args);
+	CompT&	AddComponent(ArgsT... args);
 
 	/// <returns>
 	/// An (optional) reference to this Actor's component of type CompT. Return value is empty if no such component exists.
@@ -265,9 +265,12 @@ inline CompT* Actor::GetComponent()
 
 template<std::derived_from<AbstractComponent> CompT>
 inline void Actor::RemoveComponent() {
-	std::ranges::remove_if(m_CompUptrs, [](u_ptr<AbstractComponent>& compUptr) {
-		dynamic_cast<CompT>(compUptr);
-		});
+	m_CompUptrs.erase(
+		std::ranges::remove_if(m_CompUptrs, [](u_ptr<AbstractComponent>& compUptr) {
+			return dynamic_cast<CompT*>(compUptr.get()) != nullptr;
+		}).begin(),
+			m_CompUptrs.end()
+			);
 }
 
 #pragma endregion

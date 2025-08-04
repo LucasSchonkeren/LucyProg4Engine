@@ -11,10 +11,6 @@ REGISTER_COMPONENT(TextureRenderer)
 nlohmann::ordered_json TextureRenderer::Serialize() {
 	nlohmann::ordered_json f_Json{};
 
-	/*std::string m_TexturePath;
-	glm::ivec2 m_Size{};
-	SDL_Rect m_SourceRect{};*/
-
 	f_Json["TexturePath"] = m_TexturePath;
 	f_Json["Size"] = m_Size;
 	f_Json["SourceRect"] = m_SourceRect;

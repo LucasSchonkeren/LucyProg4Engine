@@ -51,8 +51,30 @@ void Actor::Serialize(const std::string& filePath) {
     }
 }
 
-void Actor::DeserializeChild(const std::string&) {
+void Actor::DeserializeChild(const nlohmann::json& json) {
+    auto& f_Child{ AddChildActor() };
 
+    f_Child.m_Flags = json.value("Flags", 0);
+
+    if (json.contains("Components")) {
+        for (auto& [key, compJson] : json["Components"].items()) {
+            if (!compJson.contains("Type") or !compJson.contains("Json")) continue;
+            if (!serialization::IsComponentRegistered(compJson["Type"])) continue;
+            if (compJson["Type"] == "Transform") {
+                // Special case for Transforms. The default one has to be removed and the m_TransformPtr has to be updated. This solution isn't entirely elegant, but good enough.
+                f_Child.RemoveComponent<cpt::Transform>();
+                f_Child.m_TransformPtr = dynamic_cast<cpt::Transform*>(f_Child.m_CompUptrs.emplace_back(serialization::DeserializeComponent(f_Child, compJson["Type"], compJson["Json"])).get());
+                continue;
+            }
+            f_Child.m_CompUptrs.emplace_back(serialization::DeserializeComponent(f_Child, compJson["Type"], compJson["Json"]));
+        }
+    }
+
+    if (!json.contains("Children")) return;
+
+    for (auto& [key, childJson] : json["Children"].items()) {
+        f_Child.DeserializeChild(childJson);
+    }
 }
 
 Actor& Actor::AddChildActor() {

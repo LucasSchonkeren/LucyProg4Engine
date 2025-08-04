@@ -333,14 +333,14 @@
                     "Type": "Transform",
                     "Json": {
                         "Position": [
-                            100.0,
-                            400.0
+                            300.0,
+                            100.0
                         ]
                     }
                 },
                 {
                     "Type": "TextureRenderer",
-                    "Json": {
+                    "Json": { 
                         "TexturePath": "Player.png",
                         "Size": [
                             48,
@@ -474,6 +474,49 @@
                     "Type": "MovementHandler",
                     "Json": {
                         "Speed": 0.0
+                    }
+                }
+            ]
+        },
+        {
+            "Flags": 0,
+            "Components": [
+                {
+                    "Type": "Transform",
+                    "Json": {
+                        "Position": [
+                            300.0,
+                            50.0
+                        ]
+                    }
+                },
+                {
+                    "Type": "TextureRenderer",
+                    "Json": {
+                        "TexturePath": "Castolfo.png",
+                        "Size": [
+                            284,
+                            379
+                        ],
+                        "SourceRect": [
+                            0,
+                            0,
+                            284,
+                            379
+                        ]
+                    }
+                },
+                {
+                    "Type": "BoxCollider",
+                    "Json": {
+                        "Size": [
+                            284.0,
+                            379.0
+                        ],
+                        "Pivot": [
+                            0.0,
+                            0.0
+                        ]
                     }
                 }
             ]

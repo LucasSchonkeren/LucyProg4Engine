@@ -91,6 +91,7 @@ eng::Engine::~Engine()
 }
 
 void eng::Engine::Run(std::function<u_ptr<AbstractGame>()> loadGame) {
+
 	auto f_GameUptr = loadGame();
 
 	// Set up services

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../utils/utils.h"
+
 namespace eng::input {
 
 enum class KeyPhase {
@@ -7,6 +9,8 @@ enum class KeyPhase {
 	Pressed,
 	Up
 };
+
+ENUM_TOSTRING_DECL(KeyPhase)
 
 enum class KeyboardKeys {
 	W,
@@ -19,6 +23,8 @@ enum class KeyboardKeys {
 
 	SIZE
 };
+
+ENUM_TOSTRING_DECL(KeyboardKeys)
 
 enum class GamepadKeys {
 	Up,
@@ -39,6 +45,8 @@ enum class GamepadKeys {
 	SIZE
 };
 
+ENUM_TOSTRING_DECL(GamepadKeys)
+
 struct Keystate {
 	Keystate(KeyboardKeys key, KeyPhase keyPhase) :
 		isKeyboardKey(true), keyboardKey(key), phase(keyPhase) {
@@ -47,22 +55,24 @@ struct Keystate {
 		isKeyboardKey(false), gamepadKey(key), phase(keyPhase) {
 	}
 
-	bool isKeyboardKey;
+	const bool isKeyboardKey;
 	union {
 		KeyboardKeys keyboardKey;
 		GamepadKeys gamepadKey;
 	};
 	KeyPhase phase;
 
-	// Define the <=> operator for Keystate
+	// Define the <=> operator for Keystate. This is necessary to create a total ordering between keystates (for use in ordered containers)
 	auto operator<=>(const Keystate& other) const {
 		if (auto cmp = isKeyboardKey <=> other.isKeyboardKey; cmp != 0) return cmp;
+
 		if (isKeyboardKey) {
 			if (auto cmp = keyboardKey <=> other.keyboardKey; cmp != 0) return cmp;
 		}
 		else {
 			if (auto cmp = gamepadKey <=> other.gamepadKey; cmp != 0) return cmp;
 		}
+
 		return phase <=> other.phase;
 	}
 

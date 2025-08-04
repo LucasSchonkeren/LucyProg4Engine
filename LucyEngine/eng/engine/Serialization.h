@@ -143,8 +143,8 @@ struct nlohmann::adl_serializer<SDL_Rect> {
 		if (j.is_array() && j.size() >= 2) {
 			rect.x = eng::serialization::JsonArrayGet(j, 0, static_cast<Uint8>(0));
 			rect.y = eng::serialization::JsonArrayGet(j, 1, static_cast<Uint8>(0));
-			rect.w = eng::serialization::JsonArrayGet(j, 0, static_cast<Uint8>(0));
-			rect.h = eng::serialization::JsonArrayGet(j, 1, static_cast<Uint8>(0));
+			rect.w = eng::serialization::JsonArrayGet(j, 2, static_cast<Uint8>(0));
+			rect.h = eng::serialization::JsonArrayGet(j, 3, static_cast<Uint8>(0));
 		}
 	}
 
@@ -156,8 +156,8 @@ struct nlohmann::adl_serializer<SDL_Rect> {
 		if (j.is_array() && j.size() >= 2) {
 			rect.x = eng::serialization::JsonArrayGet(j, 0, static_cast<Uint8>(0));
 			rect.y = eng::serialization::JsonArrayGet(j, 1, static_cast<Uint8>(0));
-			rect.w = eng::serialization::JsonArrayGet(j, 0, static_cast<Uint8>(0));
-			rect.h = eng::serialization::JsonArrayGet(j, 1, static_cast<Uint8>(0));
+			rect.w = eng::serialization::JsonArrayGet(j, 2, static_cast<Uint8>(0));
+			rect.h = eng::serialization::JsonArrayGet(j, 3, static_cast<Uint8>(0));
 		}
 	}
 

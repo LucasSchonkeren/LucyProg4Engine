@@ -9,6 +9,17 @@
 #include <unordered_map>
 #include <optional>
 #include <ranges>
+#include <string>
+#include <map>
+
+//-------------|Macros|------------------
+
+// String/enum macros to easily create enum/string switch cases
+
+#define ENUM_TOSTRING_DECL(x) ::std::string ToString(x arg);
+#define ENUM_TOSTRING_START ::std::string ToString(ENUM_NAME arg) { switch (arg) {
+#define ENUM_TOSTRING_CASE(arg) case ENUM_NAME##::arg: return #arg;
+#define ENUM_TOSTRING_END default: return "";}} 
 
 //-------------|Typedefs|------------------
 
